@@ -2,6 +2,7 @@ package tw.gov.ey.nici;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -23,10 +24,10 @@ public class NICIHomeActivity extends AppCompatActivity implements View.OnClickL
             getSupportActionBar().setTitle(getString(R.string.app_name));
         }
 
-        Button showIntroBtn = (Button) findViewById(R.id.show_intro_btn);
-        Button showProjectBtn = (Button) findViewById(R.id.show_project_btn);
-        Button showMeetingBtn = (Button) findViewById(R.id.show_meeting_btn);
-        Button showInfoBtn = (Button) findViewById(R.id.show_info_btn);
+        FloatingActionButton showIntroBtn = (FloatingActionButton) findViewById(R.id.show_intro_btn);
+        FloatingActionButton showProjectBtn = (FloatingActionButton) findViewById(R.id.show_project_btn);
+        FloatingActionButton showMeetingBtn = (FloatingActionButton) findViewById(R.id.show_meeting_btn);
+        FloatingActionButton showInfoBtn = (FloatingActionButton) findViewById(R.id.show_info_btn);
         if (showIntroBtn != null) {
             showIntroBtn.setOnClickListener(this);
         }

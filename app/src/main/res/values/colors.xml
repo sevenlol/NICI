@@ -8,4 +8,9 @@
     <color name="bottomBarProject">@color/colorAccent</color>
     <color name="bottomBarInfo">@color/colorPrimary</color>
     <color name="bottomBarMeeting">@color/colorAccent</color>
+
+    <color name="showIntroIcon">@color/colorPrimary</color>
+    <color name="showProjectIcon">@color/colorAccent</color>
+    <color name="showMeetingIcon">@color/colorAccent</color>
+    <color name="showInfoIcon">@color/colorPrimary</color>
 </resources>
