@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/bottomBarHome"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/bottom_bar_home_title" />
-    <item
         android:id="@+id/bottomBarIntro"
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/bottom_bar_intro_title" />
     <item
-        android:id="@+id/bottomBarTeam"
+        android:id="@+id/bottomBarProject"
         android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/bottom_bar_team_title" />
-    <item
-        android:id="@+id/bottomBarInfo"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/bottom_bar_info_title" />
+        android:title="@string/bottom_bar_project_title" />
     <item
         android:id="@+id/bottomBarMeeting"
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/bottom_bar_meeting_title" />
+    <item
+        android:id="@+id/bottomBarInfo"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/bottom_bar_info_title" />
 </menu>

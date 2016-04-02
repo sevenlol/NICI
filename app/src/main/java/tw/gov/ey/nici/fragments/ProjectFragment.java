@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 
 import tw.gov.ey.nici.R;
 
-public class TeamFragment extends Fragment {
+public class ProjectFragment extends Fragment {
 
-    public static TeamFragment newInstance() {
-        return new TeamFragment();
+    public static ProjectFragment newInstance() {
+        return new ProjectFragment();
     }
 
     @Override

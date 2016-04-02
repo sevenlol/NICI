@@ -4,9 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="bottomBarHome">@color/colorPrimary</color>
     <color name="bottomBarIntro">@color/colorPrimaryDark</color>
-    <color name="bottomBarTeam">@color/colorAccent</color>
+    <color name="bottomBarProject">@color/colorAccent</color>
     <color name="bottomBarInfo">@color/colorPrimary</color>
     <color name="bottomBarMeeting">@color/colorAccent</color>
 </resources>

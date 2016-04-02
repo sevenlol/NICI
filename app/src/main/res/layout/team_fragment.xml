@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:text="@string/bottom_bar_team_title"
+        android:text="@string/bottom_bar_project_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

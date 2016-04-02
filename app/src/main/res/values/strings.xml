@@ -3,11 +3,15 @@
     <string name="action_settings">Setting</string>
     <string name="action_about">About</string>
 
-    <string name="bottom_bar_home_title">Home</string>
+    <string name="show_intro_page">Show Intro</string>
+    <string name="show_project_page">Show Project</string>
+    <string name="show_meeting_page">Show Meeting</string>
+    <string name="show_info_page">Show Info</string>
+
     <string name="bottom_bar_intro_title">Intro</string>
-    <string name="bottom_bar_team_title">Team</string>
-    <string name="bottom_bar_info_title">Info</string>
+    <string name="bottom_bar_project_title">Project</string>
     <string name="bottom_bar_meeting_title">Meeting</string>
+    <string name="bottom_bar_info_title">Info</string>
 
     <string name="setting_title">Setting</string>
     <string name="about_title">About</string>
