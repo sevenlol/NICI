@@ -25,4 +25,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.roughike:bottom-bar:1.2.4'
     compile 'com.google.code.gson:gson:2.6.2'
+    compile 'org.greenrobot:eventbus:3.0.0'
 }
