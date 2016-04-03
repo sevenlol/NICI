@@ -8,6 +8,8 @@
     <string name="show_meeting_page">Show Meeting</string>
     <string name="show_info_page">Show Info</string>
 
+    <string name="show_facebook_page">Show Facebook Page</string>
+
     <string name="bottom_bar_intro_title">Intro</string>
     <string name="bottom_bar_project_title">Project</string>
     <string name="bottom_bar_meeting_title">Meeting</string>

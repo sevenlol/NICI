@@ -13,4 +13,7 @@
     <color name="showProjectIcon">@color/colorAccent</color>
     <color name="showMeetingIcon">@color/colorAccent</color>
     <color name="showInfoIcon">@color/colorPrimary</color>
+
+    <color name="showFacebookPageBtn">#3B5998</color>
+    <color name="showFacebookPageText">#FFFFFF</color>
 </resources>

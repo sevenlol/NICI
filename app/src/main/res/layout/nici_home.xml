@@ -26,6 +26,7 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingBottom="@dimen/activity_vertical_margin">
         <TableLayout
+            android:id="@+id/show_icon_table"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:stretchColumns="*">
@@ -112,5 +113,15 @@
                 </LinearLayout>
             </TableRow>
         </TableLayout>
+
+        <Button
+            android:id="@+id/show_facebook_page_btn"
+            android:text="@string/show_facebook_page"
+            android:textColor="@color/showFacebookPageText"
+            android:background="@color/showFacebookPageBtn"
+            android:layout_below="@id/show_icon_table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="showFacebookPage"/>
     </RelativeLayout>
 </LinearLayout>
