@@ -10,6 +10,9 @@
 
     <string name="show_facebook_page">Show Facebook Page</string>
 
+    <string name="show_more_info">Show More Info</string>
+    <string name="no_more_info">No More Info to Show</string>
+
     <string name="bottom_bar_intro_title">Intro</string>
     <string name="bottom_bar_project_title">Project</string>
     <string name="bottom_bar_meeting_title">Meeting</string>

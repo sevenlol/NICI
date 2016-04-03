@@ -16,13 +16,16 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
 import tw.gov.ey.nici.fragments.InfoFragment;
+import tw.gov.ey.nici.fragments.InfoModelFragment;
 import tw.gov.ey.nici.fragments.IntroFragment;
 import tw.gov.ey.nici.fragments.MeetingFragment;
 import tw.gov.ey.nici.fragments.ProjectFragment;
+import tw.gov.ey.nici.network.NiciClientFactory;
 
 public class NICIMainActivity extends AppCompatActivity
         implements OnMenuTabClickListener, View.OnClickListener {
     public static final String PAGE_TYPE_KEY = "niciPageTypeKey";
+    public static final String INFO_MODEL_FRAGMENT_TAG = "niciInfoModelFragment";
     public enum PageType {
         INTRO(0), PROJECT(1), MEETING(2), INFO(3);
 
@@ -133,7 +136,21 @@ public class NICIMainActivity extends AppCompatActivity
                 replaceCurrentFragment(MeetingFragment.newInstance());
                 break;
             case R.id.bottomBarInfo:
-                replaceCurrentFragment(InfoFragment.newInstance());
+
+                // set model
+                InfoModelFragment infoModelFragment = (InfoModelFragment)
+                        getFragmentFromTag(INFO_MODEL_FRAGMENT_TAG);
+                if (infoModelFragment == null) {
+                    infoModelFragment = InfoModelFragment.newInstance(
+                            NiciClientFactory.getClient(NiciClientFactory.ClientType.TESTING));
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .add(infoModelFragment, INFO_MODEL_FRAGMENT_TAG)
+                            .commit();
+                }
+                replaceCurrentFragment(InfoFragment.newInstance()
+                        .setModel(infoModelFragment.getModel())
+                        .setTotal(infoModelFragment.getTotal()));
                 break;
             default:
         }
@@ -149,6 +166,11 @@ public class NICIMainActivity extends AppCompatActivity
                 .beginTransaction()
                 .replace(R.id.main_fragment, fragment)
                 .commit();
+    }
+
+    private Fragment getFragmentFromTag(String tag) {
+        return getSupportFragmentManager()
+                .findFragmentByTag(tag);
     }
 
     @Override
