@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import tw.gov.ey.nici.R;
 import tw.gov.ey.nici.models.NiciInfo;
@@ -15,6 +17,7 @@ import tw.gov.ey.nici.models.NiciInfo;
 public class NiciInfoAdapter extends ArrayAdapter<NiciInfo> {
     private static class ViewHolder {
         TextView title;
+        TextView date;
         TextView location;
     }
 
@@ -34,6 +37,7 @@ public class NiciInfoAdapter extends ArrayAdapter<NiciInfo> {
                     .inflate(R.layout.info_list_item, parent, false);
 
             viewHolder.title = (TextView) convertView.findViewById(R.id.info_title);
+            viewHolder.date = (TextView) convertView.findViewById(R.id.info_date);
             viewHolder.location = (TextView) convertView.findViewById(R.id.info_location);
 
             // set view holder
@@ -44,7 +48,19 @@ public class NiciInfoAdapter extends ArrayAdapter<NiciInfo> {
 
         // set required view
         viewHolder.title.setText(info.getTitle() == null ? "" : info.getTitle());
-        viewHolder.location.setText(info.getLocation() == null ? "" : info.getLocation());
+        viewHolder.location.setText(String.format(
+                getContext().getString(R.string.info_location_str_format),
+                info.getLocation() == null ? "" : info.getLocation()));
+        String dateStr = "";
+        if (info.getDate() != null) {
+            try {
+                SimpleDateFormat format = new SimpleDateFormat(
+                        getContext().getString(R.string.info_date_format), Locale.getDefault());
+                dateStr = format.format(info.getDate());
+            } catch (Exception e) { /* do nothing */ }
+        }
+        viewHolder.date.setText(String.format(
+                getContext().getString(R.string.info_date_str_format), dateStr));
 
         return convertView;
     }

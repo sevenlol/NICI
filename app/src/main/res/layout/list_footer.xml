@@ -4,7 +4,6 @@
     >
     <Button
         android:id="@+id/show_more_btn"
-        android:text="@string/show_more_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"/>

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -28,7 +29,7 @@ import tw.gov.ey.nici.models.NiciInfo;
 import tw.gov.ey.nici.utils.RandomStringGenerator;
 import tw.gov.ey.nici.views.NiciInfoAdapter;
 
-public class InfoFragment extends Fragment implements View.OnClickListener {
+public class InfoFragment extends Fragment implements View.OnClickListener, ListView.OnItemClickListener {
     public static final int DEFAULT_SHOW_MORE_DATA_COUNT = 3;
     public static final int DEFAULT_EVENT_ID_LENGTH = 20;
 
@@ -76,6 +77,7 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
                 .inflate(R.layout.list_footer, null);
         showMoreInfoBtn = (Button) footerLayout.findViewById(R.id.show_more_btn);
         if (showMoreInfoBtn != null) {
+            showMoreInfoBtn.setText(getString(R.string.show_more_info));
             showMoreInfoBtn.setOnClickListener(this);
         }
         showMoreInfoProgress = (ProgressBar) footerLayout.findViewById(R.id.show_more_progress);
@@ -91,6 +93,7 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
         // set listview and adapter
         adapter = new NiciInfoAdapter(getActivity(), model);
         listView = (ListView) root.findViewById(R.id.info_list);
+        listView.setOnItemClickListener(this);
         listView.setAdapter(adapter);
         listView.addFooterView(footerLayout);
 
@@ -126,7 +129,6 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
     // info data request failed
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(InfoDataErrorEvent event) {
-        Log.d("Info Event", "Data Request Error");
         if (event == null) {
             return;
         }
@@ -141,8 +143,15 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    // show more info data btn clicked
     public void onClick(View v) {
         showMoreInfoData(v);
+    }
+
+    @Override
+    // info item clicked
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Log.d("Info Event", "Item Position: " + position);
     }
 
     public InfoFragment setModel(ArrayList<NiciInfo> model) {

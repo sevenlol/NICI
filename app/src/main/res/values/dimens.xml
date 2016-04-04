@@ -7,6 +7,10 @@
     <dimen name="show_icon_elevation">0dp</dimen>
     <dimen name="show_icon_text_margin">8dp</dimen>
 
-    <dimen name="list_item_min_height">72dp</dimen>
+    <dimen name="list_item_min_height">96dp</dimen>
+    <dimen name="list_item_padding">5dp</dimen>
     <dimen name="list_divider_height">10dp</dimen>
+
+    <dimen name="list_item_primary">24sp</dimen>
+    <dimen name="list_item_secondary">14sp</dimen>
 </resources>
