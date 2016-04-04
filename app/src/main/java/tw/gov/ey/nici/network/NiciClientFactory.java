@@ -36,7 +36,7 @@ public class NiciClientFactory {
                     .setLocation("Location " + i)
                     .setDate(new Date())
                     .setDescription("Description " + i)
-                    .setLinkUrl("Link " + i));
+                    .setLinkUrl("https://www.google.com?testId=" + i));
             }
         }
 

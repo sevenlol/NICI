@@ -1,6 +1,8 @@
 package tw.gov.ey.nici.fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -152,6 +154,22 @@ public class InfoFragment extends Fragment implements View.OnClickListener, List
     // info item clicked
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d("Info Event", "Item Position: " + position);
+        if (model == null || model.size() <= position) {
+            return;
+        }
+
+        NiciInfo info = model.get(position);
+        if (info == null || info.getLinkUrl() == null) {
+            return;
+        }
+        try {
+            Uri uri = Uri.parse(info.getLinkUrl());
+            Intent viewIntent = new Intent(Intent.ACTION_VIEW);
+            viewIntent.setData(uri);
+            startActivity(viewIntent);
+        } catch (Exception e) {
+            // TODO handle parse error
+        }
     }
 
     public InfoFragment setModel(ArrayList<NiciInfo> model) {
