@@ -93,6 +93,9 @@ public class NICIMainActivity extends AppCompatActivity
         mBottomBar.mapColorForTab(PageType.PROJECT.position, ContextCompat.getColor(this, R.color.bottomBarProject));
         mBottomBar.mapColorForTab(PageType.MEETING.position, ContextCompat.getColor(this, R.color.bottomBarMeeting));
         mBottomBar.mapColorForTab(PageType.INFO.position, ContextCompat.getColor(this, R.color.bottomBarInfo));
+
+        // update model for orientation change
+        updateModelForCurrentFragment();
     }
 
     @Override
@@ -136,7 +139,6 @@ public class NICIMainActivity extends AppCompatActivity
                 replaceCurrentFragment(MeetingFragment.newInstance());
                 break;
             case R.id.bottomBarInfo:
-
                 // set model
                 InfoModelFragment infoModelFragment = (InfoModelFragment)
                         getFragmentFromTag(INFO_MODEL_FRAGMENT_TAG);
@@ -171,6 +173,27 @@ public class NICIMainActivity extends AppCompatActivity
     private Fragment getFragmentFromTag(String tag) {
         return getSupportFragmentManager()
                 .findFragmentByTag(tag);
+    }
+
+    private void updateModelForCurrentFragment() {
+        switch (mBottomBar.getCurrentTabPosition()) {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                InfoModelFragment infoModelFragment = (InfoModelFragment) getSupportFragmentManager()
+                        .findFragmentByTag(INFO_MODEL_FRAGMENT_TAG);
+                InfoFragment infoFragment = (InfoFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.main_fragment);
+                if (infoModelFragment != null && infoFragment != null) {
+                    infoFragment.setModel(infoModelFragment.getModel());
+                }
+                break;
+            default:
+        }
     }
 
     @Override

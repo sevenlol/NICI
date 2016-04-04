@@ -6,4 +6,7 @@
     <dimen name="show_icon_row_bottom_margin">24dp</dimen>
     <dimen name="show_icon_elevation">0dp</dimen>
     <dimen name="show_icon_text_margin">8dp</dimen>
+
+    <dimen name="list_item_min_height">72dp</dimen>
+    <dimen name="list_divider_height">10dp</dimen>
 </resources>

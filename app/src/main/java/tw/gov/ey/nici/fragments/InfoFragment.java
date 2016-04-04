@@ -7,11 +7,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +26,7 @@ import tw.gov.ey.nici.events.InfoDataReadyEvent;
 import tw.gov.ey.nici.events.InfoDataRequestEvent;
 import tw.gov.ey.nici.models.NiciInfo;
 import tw.gov.ey.nici.utils.RandomStringGenerator;
+import tw.gov.ey.nici.views.NiciInfoAdapter;
 
 public class InfoFragment extends Fragment implements View.OnClickListener {
     public static final int DEFAULT_SHOW_MORE_DATA_COUNT = 3;
@@ -29,8 +34,10 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
 
     private Button showMoreInfoBtn = null;
     private ProgressBar showMoreInfoProgress = null;
+    private ListView listView = null;
 
     private int total = 0;
+    private ArrayAdapter<NiciInfo> adapter = null;
     private ArrayList<NiciInfo> model = null;
 
     private boolean isSendingRequest = false;
@@ -63,11 +70,15 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
             ViewGroup container,
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.info_fragment, container, false);
-        showMoreInfoBtn = (Button) root.findViewById(R.id.show_more_info_btn);
+
+        // inflate footer layout
+        FrameLayout footerLayout = (FrameLayout) LayoutInflater.from(getContext())
+                .inflate(R.layout.list_footer, null);
+        showMoreInfoBtn = (Button) footerLayout.findViewById(R.id.show_more_btn);
         if (showMoreInfoBtn != null) {
             showMoreInfoBtn.setOnClickListener(this);
         }
-        showMoreInfoProgress = (ProgressBar) root.findViewById(R.id.show_more_info_progress);
+        showMoreInfoProgress = (ProgressBar) footerLayout.findViewById(R.id.show_more_progress);
         if (model != null && model.size() > 0) {
             // some data is already loaded
             setShowMoreInfoBtnProgressBar(true, false);
@@ -76,12 +87,19 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
                 setShowMoreBtnEnabled(false);
             }
         }
+
+        // set listview and adapter
+        adapter = new NiciInfoAdapter(getActivity(), model);
+        listView = (ListView) root.findViewById(R.id.info_list);
+        listView.setAdapter(adapter);
+        listView.addFooterView(footerLayout);
+
         return root;
     }
 
     // receive new info data
-    @Subscribe
-    public void onEventMainThread(InfoDataReadyEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(InfoDataReadyEvent event) {
         // update total and model
         // and set show more btn status
         if (event != null) {
@@ -89,9 +107,9 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
                 total = event.getTotal();
             }
 
-            if (model != null && event.getInfoList() != null) {
+            if (adapter != null && event.getInfoList() != null) {
                 for (int i = 0; i < event.getInfoList().size(); i++) {
-                    model.add(event.getInfoList().get(i));
+                    adapter.add(event.getInfoList().get(i));
                 }
 
                 // set show more btn availablity
@@ -106,8 +124,8 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
     }
 
     // info data request failed
-    @Subscribe
-    public void onEventMainThread(InfoDataErrorEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(InfoDataErrorEvent event) {
         Log.d("Info Event", "Data Request Error");
         if (event == null) {
             return;
