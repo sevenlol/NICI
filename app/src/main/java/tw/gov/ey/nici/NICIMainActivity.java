@@ -20,11 +20,13 @@ import tw.gov.ey.nici.fragments.InfoModelFragment;
 import tw.gov.ey.nici.fragments.IntroFragment;
 import tw.gov.ey.nici.fragments.MeetingFragment;
 import tw.gov.ey.nici.fragments.ProjectFragment;
+import tw.gov.ey.nici.fragments.ProjectModelFragment;
 import tw.gov.ey.nici.network.NiciClientFactory;
 
 public class NICIMainActivity extends AppCompatActivity
         implements OnMenuTabClickListener, View.OnClickListener {
     public static final String PAGE_TYPE_KEY = "niciPageTypeKey";
+    public static final String PROJECT_MODEL_FRAGMENT_TAG = "niciProjectModelFragment";
     public static final String INFO_MODEL_FRAGMENT_TAG = "niciInfoModelFragment";
     public enum PageType {
         INTRO(0), PROJECT(1), MEETING(2), INFO(3);
@@ -133,7 +135,19 @@ public class NICIMainActivity extends AppCompatActivity
                 replaceCurrentFragment(IntroFragment.newInstance());
                 break;
             case R.id.bottomBarProject:
-                replaceCurrentFragment(ProjectFragment.newInstance());
+                // set model
+                ProjectModelFragment projectModelFragment = (ProjectModelFragment)
+                        getFragmentFromTag(PROJECT_MODEL_FRAGMENT_TAG);
+                if (projectModelFragment == null) {
+                    projectModelFragment = ProjectModelFragment.newInstance(
+                            NiciClientFactory.getClient(NiciClientFactory.ClientType.TESTING));
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .add(projectModelFragment, PROJECT_MODEL_FRAGMENT_TAG)
+                            .commit();
+                }
+                replaceCurrentFragment(ProjectFragment.newInstance()
+                        .setModel(projectModelFragment.getModel()));
                 break;
             case R.id.bottomBarMeeting:
                 replaceCurrentFragment(MeetingFragment.newInstance());
