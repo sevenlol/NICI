@@ -43,8 +43,8 @@ public class InfoFragment extends Fragment implements View.OnClickListener, List
     private ArrayAdapter<NiciInfo> adapter = null;
     private ArrayList<NiciInfo> model = null;
 
-    private boolean isSendingRequest = false;
-    private String currentRequestId = null;
+    private boolean isSendingRequest = true;
+    private String currentRequestId = InfoModelFragment.FIRST_REQUEST_ID;
 
     public static InfoFragment newInstance() {
         return new InfoFragment();
@@ -135,10 +135,15 @@ public class InfoFragment extends Fragment implements View.OnClickListener, List
             return;
         }
 
-        // the request id is not null (not the first request)
-        // and the id is not matched, exit
+        // the id is not matched, exit
         if (currentRequestId != null && !currentRequestId.equals(event.getId())) {
             return;
+        }
+
+        if (InfoModelFragment.FIRST_REQUEST_ID.equals(currentRequestId)) {
+            // TODO handle the first request failing
+            // TODO disable show more info action and only allow reload
+            // TODO show error text
         }
 
         clearRequestFlags();

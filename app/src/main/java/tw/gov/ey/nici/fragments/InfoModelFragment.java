@@ -18,13 +18,14 @@ import tw.gov.ey.nici.network.NiciClient;
 
 public class InfoModelFragment extends Fragment {
     public static final int DEFAULT_INIT_LOAD_COUNT = 5;
+    public static final String FIRST_REQUEST_ID = "first_info_request";
 
     private int initLoadCount = DEFAULT_INIT_LOAD_COUNT;
     private NiciClient client = null;
     private Integer total = null;
     private ArrayList<NiciInfo> model = new ArrayList<NiciInfo>();
     private boolean isStarting = false;
-    private String currentRequestId = null;
+    private String currentRequestId = FIRST_REQUEST_ID;
 
     public static InfoModelFragment newInstance(NiciClient client) {
         if (client == null) {
@@ -94,6 +95,7 @@ public class InfoModelFragment extends Fragment {
         public void run() {
             if (client == null) {
                 isStarting = false;
+                currentRequestId = null;
                 return;
             }
 
