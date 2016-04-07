@@ -1,7 +1,14 @@
 package tw.gov.ey.nici.fragments;
 
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -17,6 +25,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +41,9 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
     public static final int DEFAULT_EVENT_ID_LENGTH = 20;
 
     // TODO implement reload mechanism
+    // TODO implement timer thread for download
+
+    private DownloadManager downloadManager = null;
 
     private ProgressBar loadingProgress = null;
     private LinearLayout projectContainer = null;
@@ -43,6 +55,8 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
     private boolean isSendingRequest = true;
     private String currentRequestId = ProjectModelFragment.FIRST_REQUEST_ID;
 
+    private Long currentDownloadId = null;
+
     public static ProjectFragment newInstance() {
         return new ProjectFragment();
     }
@@ -50,6 +64,21 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+        getActivity().registerReceiver(downloadEventReceiver, filter);
+    }
+
+    @Override
+    public void onPause() {
+        getActivity().unregisterReceiver(downloadEventReceiver);
+
+        super.onPause();
     }
 
     @Override
@@ -69,6 +98,10 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
             LayoutInflater inflater,
             ViewGroup container,
             Bundle savedInstanceState) {
+        // get project manager
+        downloadManager = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+
+        // setup views
         View view = inflater.inflate(R.layout.project_fragment, container, false);
         projectContainer = (LinearLayout) view.findViewById(R.id.project_container);
         loadingProgress = (ProgressBar) view.findViewById(R.id.project_loading_progress);
@@ -77,6 +110,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
         // set download btn listener
         if (downloadBtn != null) {
             downloadBtn.setOnClickListener(this);
+            downloadBtn.setEnabled(false);
         }
 
         // already has model, stop loading
@@ -84,6 +118,13 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
             clearRequestFlags();
             // update view with model
             updateContainer();
+
+            // enable download
+            if (model.getProjectFileUrl() != null &&
+                !model.getProjectFileUrl().equals("") &&
+                downloadBtn != null) {
+                downloadBtn.setEnabled(true);
+            }
         }
 
         return view;
@@ -104,6 +145,13 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
             return;
         }
         model = project;
+
+        // enable download
+        if (model.getProjectFileUrl() != null &&
+            !model.getProjectFileUrl().equals("") &&
+            downloadBtn != null) {
+            downloadBtn.setEnabled(true);
+        }
 
         // update view
         updateContainer();
@@ -165,8 +213,6 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
             }
         }
 
-        // TODO set project file url for download
-
         // TODO change image setting and check url
         for (NiciImage image : imageList) {
             Picasso.with(getActivity())
@@ -198,14 +244,90 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
                 }
 
                 loadingProgress.setVisibility(isVisible ?
-                    View.VISIBLE : View.GONE);
+                        View.VISIBLE : View.GONE);
             }
         });
     }
 
     @Override
     public void onClick(View v) {
-        Log.d("Project", "Download FAB Clicked");
+        if (model == null || model.getProjectFileUrl() == null ||
+            model.getProjectFileUrl().equals("")) {
+            Toast.makeText(
+                    getContext(),
+                    getString(R.string.no_project_file),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (downloadManager == null) {
+            Toast.makeText(
+                    getContext(),
+                    getString(R.string.download_failed),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // is already downloading, return
+        if (currentDownloadId != null) {
+            Toast.makeText(
+                    getContext(),
+                    getString(R.string.already_downloading),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // TODO download project file
+        Uri uri = null;
+        try {
+            uri = Uri.parse(model.getProjectFileUrl());
+        } catch (Exception e) {
+            Toast.makeText(
+                    getContext(),
+                    getString(R.string.no_project_file),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        DownloadManager.Request req = new DownloadManager.Request(uri);
+
+        // download settings
+        req.setAllowedNetworkTypes(
+                DownloadManager.Request.NETWORK_MOBILE |
+                DownloadManager.Request.NETWORK_WIFI)
+            .setAllowedOverRoaming(false)
+            .setTitle(getString(R.string.project_title))
+            .setDescription(getString(R.string.project_desc))
+            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, getName(uri));
+
+        downloadBtn.setEnabled(false);
+        currentDownloadId = downloadManager.enqueue(req);
+    }
+
+    private BroadcastReceiver downloadEventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(intent.getAction())) {
+                if (currentDownloadId == null) {
+                    return;
+                }
+                Bundle extras = intent.getExtras();
+                Long id = extras.getLong(DownloadManager.EXTRA_DOWNLOAD_ID);
+                if (currentDownloadId.equals(id)) {
+                    // download complete
+                    currentDownloadId = null;
+                    downloadBtn.setEnabled(true);
+                    Toast.makeText(
+                            getContext(),
+                            getString(R.string.download_complete),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    };
+
+    private String getName(Uri uri) {
+        File file = new File(uri.toString());
+        return file.getName();
     }
 }

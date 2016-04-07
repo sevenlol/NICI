@@ -10,6 +10,13 @@
 
     <string name="show_facebook_page">Show Facebook Page</string>
 
+    <string name="project_title">數位匯流計畫</string>
+    <string name="project_desc">數位匯流計畫簡介</string>
+    <string name="no_project_file">計畫檔案不存在</string>
+    <string name="download_complete">下載檔案成功</string>
+    <string name="download_failed">下載檔案失敗</string>
+    <string name="already_downloading">檔案已經在下載中</string>
+
     <string name="info_date_format">yyyy-MM-dd</string>
     <string name="info_date_str_format">時間：%s</string>
     <string name="info_location_str_format">地點：%s</string>

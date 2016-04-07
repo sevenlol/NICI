@@ -48,9 +48,10 @@ public class NiciList extends NiciText {
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         listLayout.setLayoutParams(params);
 
-        for (CharSequence seq : list) {
+        for (int i = 0 ; i < list.size(); i ++) {
+            CharSequence seq = list.get(i);
             TextView textView = new TextView(context);
-            textView.setText(TextUtils.concat(getPrefix(listType), seq));
+            textView.setText(TextUtils.concat(getPrefix(listType, i), seq));
             textView.setTextSize(NiciText.DEFAULT_UNIT, getTextSize(setting));
             listLayout.addView(textView);
         }
@@ -58,12 +59,12 @@ public class NiciList extends NiciText {
         return listLayout;
     }
 
-    private String getPrefix(ListType type) {
+    private String getPrefix(ListType type, int index) {
         switch (type) {
             case BULLET:
                 return BULLET_PREFIX;
             case NUMBER:
-                return NUMBER_PREFIX;
+                return String.format(NUMBER_PREFIX, index + 1);
             default:
                 return BULLET_PREFIX;
         }

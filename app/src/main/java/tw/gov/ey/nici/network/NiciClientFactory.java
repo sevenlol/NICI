@@ -103,6 +103,8 @@ public class NiciClientFactory {
             }
             NiciList list1 = new NiciList(items);
             contentList.add(list1);
+            NiciList list2 = new NiciList(items, NiciList.ListType.NUMBER);
+            contentList.add(list2);
 
             // add delay for testing
             try {

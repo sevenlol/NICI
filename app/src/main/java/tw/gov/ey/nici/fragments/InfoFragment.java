@@ -97,7 +97,7 @@ public class InfoFragment extends Fragment implements View.OnClickListener, List
 
         // TODO add a thread in case the first request timeout
         if (model != null && model.size() == 0) {
-            
+
         }
 
         // set listview and adapter
