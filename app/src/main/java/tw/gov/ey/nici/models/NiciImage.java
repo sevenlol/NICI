@@ -2,6 +2,7 @@ package tw.gov.ey.nici.models;
 
 import android.content.Context;
 import android.text.Html;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -39,11 +40,15 @@ public class NiciImage extends NiciText {
         // create linear layout
         LinearLayout imageLayout = new LinearLayout(context);
         imageLayout.setOrientation(LinearLayout.VERTICAL);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         imageLayout.setLayoutParams(params);
 
         if (imageView == null) {
             imageView = getBaseImageView(context);
+        }
+        if (imageView.getParent() != null) {
+            ((ViewGroup) imageView.getParent()).removeView(imageView);
         }
         imageLayout.addView(imageView);
 
@@ -51,6 +56,11 @@ public class NiciImage extends NiciText {
             TextView textView = new TextView(context);
             textView.setText(imageDescription);
             textView.setTextSize(NiciText.DEFAULT_UNIT, getTextSize(setting));
+            // center description text
+            LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            textParams.gravity = Gravity.CENTER_HORIZONTAL;
+            textView.setLayoutParams(textParams);
             imageLayout.addView(textView);
         }
 

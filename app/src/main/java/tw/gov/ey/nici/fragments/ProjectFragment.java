@@ -2,6 +2,7 @@ package tw.gov.ey.nici.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -25,7 +28,7 @@ import tw.gov.ey.nici.models.NiciImage;
 import tw.gov.ey.nici.models.NiciProject;
 import tw.gov.ey.nici.utils.RandomStringGenerator;
 
-public class ProjectFragment extends Fragment {
+public class ProjectFragment extends Fragment implements View.OnClickListener {
     public static final int DEFAULT_EVENT_ID_LENGTH = 20;
 
     // TODO implement reload mechanism
@@ -33,6 +36,7 @@ public class ProjectFragment extends Fragment {
     private ProgressBar loadingProgress = null;
     private LinearLayout projectContainer = null;
     private List<NiciImage> imageList = new ArrayList<>();
+    private FloatingActionButton downloadBtn = null;
 
     private NiciProject model = null;
 
@@ -68,6 +72,12 @@ public class ProjectFragment extends Fragment {
         View view = inflater.inflate(R.layout.project_fragment, container, false);
         projectContainer = (LinearLayout) view.findViewById(R.id.project_container);
         loadingProgress = (ProgressBar) view.findViewById(R.id.project_loading_progress);
+        downloadBtn = (FloatingActionButton) view.findViewById(R.id.download_project_file_btn);
+
+        // set download btn listener
+        if (downloadBtn != null) {
+            downloadBtn.setOnClickListener(this);
+        }
 
         // already has model, stop loading
         if (model != null) {
@@ -157,9 +167,11 @@ public class ProjectFragment extends Fragment {
 
         // TODO set project file url for download
 
-        // TODO load images
+        // TODO change image setting and check url
         for (NiciImage image : imageList) {
-
+            Picasso.with(getActivity())
+                    .load(image.getImageUrl())
+                    .into(image.getImageView(getActivity()));
         }
     }
 
@@ -189,5 +201,11 @@ public class ProjectFragment extends Fragment {
                     View.VISIBLE : View.GONE);
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        Log.d("Project", "Download FAB Clicked");
+        // TODO download project file
     }
 }

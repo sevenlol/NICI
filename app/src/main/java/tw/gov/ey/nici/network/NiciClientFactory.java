@@ -6,7 +6,9 @@ import java.util.List;
 
 import tw.gov.ey.nici.models.NiciContent;
 import tw.gov.ey.nici.models.NiciHeading;
+import tw.gov.ey.nici.models.NiciImage;
 import tw.gov.ey.nici.models.NiciInfo;
+import tw.gov.ey.nici.models.NiciList;
 import tw.gov.ey.nici.models.NiciParagraph;
 import tw.gov.ey.nici.models.NiciProject;
 
@@ -88,6 +90,19 @@ public class NiciClientFactory {
             contentList.add(paragraph3);
             contentList.add(paragraph4);
             contentList.add(paragraph5);
+
+            // test image
+            NiciImage image1 = new NiciImage("http://www.nici.ey.gov.tw/Upload/UserFiles/" +
+                    "images/ideataiwan-M.jpg", "DESCRIPTION");
+            contentList.add(image1);
+
+            // test list
+            List<String> items = new ArrayList<String>();
+            for (int i = 0; i < 5; i++) {
+                items.add("Item " + i);
+            }
+            NiciList list1 = new NiciList(items);
+            contentList.add(list1);
 
             // add delay for testing
             try {
