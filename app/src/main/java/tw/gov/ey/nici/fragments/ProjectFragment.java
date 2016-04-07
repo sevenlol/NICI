@@ -298,12 +298,14 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
             .setAllowedOverRoaming(false)
             .setTitle(getString(R.string.project_title))
             .setDescription(getString(R.string.project_desc))
-            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, getName(uri));
+            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, getName(uri))
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
         downloadBtn.setEnabled(false);
         currentDownloadId = downloadManager.enqueue(req);
     }
 
+    // TODO handle download notification clicked event
     private BroadcastReceiver downloadEventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
