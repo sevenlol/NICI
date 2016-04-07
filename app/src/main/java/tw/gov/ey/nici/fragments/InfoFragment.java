@@ -90,6 +90,14 @@ public class InfoFragment extends Fragment implements View.OnClickListener, List
             if (model.size() >= total) {
                 setShowMoreBtnEnabled(false);
             }
+
+            // if some data is already loaded, not sending request
+            clearRequestFlags();
+        }
+
+        // TODO add a thread in case the first request timeout
+        if (model != null && model.size() == 0) {
+            
         }
 
         // set listview and adapter
@@ -188,6 +196,8 @@ public class InfoFragment extends Fragment implements View.OnClickListener, List
     }
 
     private void showMoreInfoData(View view) {
+        Log.d("Info Event", "Total: " + total);
+        Log.d("Info Event", "IsSendingReq: " + isSendingRequest);
         Log.d("Info Event", "Show More Info Data: " + (model == null ? 0 : model.size()));
         if (total <= 0) {
             return;
