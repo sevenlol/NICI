@@ -21,6 +21,7 @@ import tw.gov.ey.nici.fragments.IntroFragment;
 import tw.gov.ey.nici.fragments.MeetingFragment;
 import tw.gov.ey.nici.fragments.ProjectFragment;
 import tw.gov.ey.nici.fragments.ProjectModelFragment;
+import tw.gov.ey.nici.network.NiciClient;
 import tw.gov.ey.nici.network.NiciClientFactory;
 
 public class NICIMainActivity extends AppCompatActivity
@@ -38,11 +39,15 @@ public class NICIMainActivity extends AppCompatActivity
     }
 
     private BottomBar mBottomBar;
+    private NiciClient niciClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nici_main);
+
+        // get nici client
+        niciClient = NiciClientFactory.getClient(NiciClientFactory.ClientType.TESTING);
 
         // initiate action bar
         Toolbar actionBar = (Toolbar) findViewById(R.id.main_action_bar);
@@ -139,8 +144,7 @@ public class NICIMainActivity extends AppCompatActivity
                 ProjectModelFragment projectModelFragment = (ProjectModelFragment)
                         getFragmentFromTag(PROJECT_MODEL_FRAGMENT_TAG);
                 if (projectModelFragment == null) {
-                    projectModelFragment = ProjectModelFragment.newInstance(
-                            NiciClientFactory.getClient(NiciClientFactory.ClientType.TESTING));
+                    projectModelFragment = ProjectModelFragment.newInstance(niciClient);
                     getSupportFragmentManager()
                             .beginTransaction()
                             .add(projectModelFragment, PROJECT_MODEL_FRAGMENT_TAG)
@@ -157,8 +161,7 @@ public class NICIMainActivity extends AppCompatActivity
                 InfoModelFragment infoModelFragment = (InfoModelFragment)
                         getFragmentFromTag(INFO_MODEL_FRAGMENT_TAG);
                 if (infoModelFragment == null) {
-                    infoModelFragment = InfoModelFragment.newInstance(
-                            NiciClientFactory.getClient(NiciClientFactory.ClientType.TESTING));
+                    infoModelFragment = InfoModelFragment.newInstance(niciClient);
                     getSupportFragmentManager()
                             .beginTransaction()
                             .add(infoModelFragment, INFO_MODEL_FRAGMENT_TAG)
@@ -175,6 +178,47 @@ public class NICIMainActivity extends AppCompatActivity
     @Override
     public void onMenuTabReSelected(int menuItemId) {
         // do nothing at the moment
+    }
+
+    // remove the current model fragment and create a new one
+    public void reloadCurrentModel() {
+        switch (mBottomBar.getCurrentTabPosition()) {
+            case 0:
+                break;
+            case 1:
+                ProjectModelFragment projectModelFragment = (ProjectModelFragment)
+                        getFragmentFromTag(PROJECT_MODEL_FRAGMENT_TAG);
+                if (projectModelFragment != null) {
+                    getSupportFragmentManager()
+                        .beginTransaction()
+                        .remove(projectModelFragment)
+                        .commit();
+                }
+                projectModelFragment = ProjectModelFragment.newInstance(niciClient);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(projectModelFragment, PROJECT_MODEL_FRAGMENT_TAG)
+                        .commit();
+                break;
+            case 2:
+                break;
+            case 3:
+                InfoModelFragment infoModelFragment = (InfoModelFragment)
+                        getFragmentFromTag(INFO_MODEL_FRAGMENT_TAG);
+                if (infoModelFragment != null) {
+                    getSupportFragmentManager()
+                        .beginTransaction()
+                        .remove(infoModelFragment)
+                        .commit();
+                }
+                infoModelFragment = InfoModelFragment.newInstance(niciClient);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(infoModelFragment, INFO_MODEL_FRAGMENT_TAG)
+                        .commit();
+                break;
+            default:
+        }
     }
 
     private void replaceCurrentFragment(Fragment fragment) {
@@ -194,6 +238,13 @@ public class NICIMainActivity extends AppCompatActivity
             case 0:
                 break;
             case 1:
+                ProjectModelFragment projectModelFragment = (ProjectModelFragment) getSupportFragmentManager()
+                        .findFragmentByTag(PROJECT_MODEL_FRAGMENT_TAG);
+                ProjectFragment projectFragment = (ProjectFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.main_fragment);
+                if (projectFragment != null && projectModelFragment != null) {
+                    projectFragment.setModel(projectModelFragment.getModel());
+                }
                 break;
             case 2:
                 break;

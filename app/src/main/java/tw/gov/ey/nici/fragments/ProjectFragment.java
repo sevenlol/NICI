@@ -9,8 +9,10 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +31,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import tw.gov.ey.nici.NICIMainActivity;
 import tw.gov.ey.nici.R;
 import tw.gov.ey.nici.events.ProjectDataErrorEvent;
 import tw.gov.ey.nici.events.ProjectDataReadyEvent;
@@ -37,14 +40,20 @@ import tw.gov.ey.nici.models.NiciImage;
 import tw.gov.ey.nici.models.NiciProject;
 import tw.gov.ey.nici.utils.RandomStringGenerator;
 
-public class ProjectFragment extends Fragment implements View.OnClickListener {
+public class ProjectFragment extends Fragment
+        implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     public static final int DEFAULT_EVENT_ID_LENGTH = 20;
+    public static final int DEFAULT_DOWNLOAD_TIMEOUT = 30000;
+    public static final int DEFAULT_REQUEST_TIMEOUT = 5000;
 
     // TODO implement reload mechanism
     // TODO implement timer thread for download
 
     private DownloadManager downloadManager = null;
 
+    private Handler handler = new Handler();
+
+    private SwipeRefreshLayout swipeRefreshLayout = null;
     private ProgressBar loadingProgress = null;
     private LinearLayout projectContainer = null;
     private List<NiciImage> imageList = new ArrayList<>();
@@ -72,11 +81,16 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
 
         IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
         getActivity().registerReceiver(downloadEventReceiver, filter);
+        // make sure the download button is enabled
+        // does not start a new downloadTimer at the moment
+        resetDownloadFlags();
     }
 
     @Override
     public void onPause() {
         getActivity().unregisterReceiver(downloadEventReceiver);
+        // stop download timer when exiting
+        stopDownloadTimer();
 
         super.onPause();
     }
@@ -103,9 +117,15 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
 
         // setup views
         View view = inflater.inflate(R.layout.project_fragment, container, false);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_project);
         projectContainer = (LinearLayout) view.findViewById(R.id.project_container);
         loadingProgress = (ProgressBar) view.findViewById(R.id.project_loading_progress);
         downloadBtn = (FloatingActionButton) view.findViewById(R.id.download_project_file_btn);
+
+        // set swipe refresh layout
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setOnRefreshListener(this);
+        }
 
         // set download btn listener
         if (downloadBtn != null) {
@@ -125,6 +145,9 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
                 downloadBtn != null) {
                 downloadBtn.setEnabled(true);
             }
+        } else {
+            // start request timer
+            startRequestTimer();
         }
 
         return view;
@@ -157,6 +180,8 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
         updateContainer();
 
         // TODO add id verification for data ready event
+        // stop request timer and clear flags
+        stopRequestTimer();
         clearRequestFlags();
     }
 
@@ -176,6 +201,8 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
             // TODO show error text to let user know how to reload
         }
 
+        // stop request timer and clear flags
+        stopRequestTimer();
         clearRequestFlags();
     }
 
@@ -221,6 +248,28 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onRefresh() {
+        reload();
+    }
+
+    private void reload() {
+        Log.d("Project", "Reloading");
+        isSendingRequest = true;
+        currentRequestId = ProjectModelFragment.FIRST_REQUEST_ID;
+        model = null;
+        if (projectContainer != null) {
+            projectContainer.removeAllViews();
+        }
+        // will be using the pull down refresh icon when reloading
+        setLoadingProgressBar(false);
+        startRequestTimer();
+        if (getActivity() != null &&
+            getActivity() instanceof NICIMainActivity) {
+            ((NICIMainActivity) getActivity()).reloadCurrentModel();
+        }
+    }
+
     // TODO  add a timer thread for request timeout
     private void setRequestFlags() {
         isSendingRequest = true;
@@ -233,9 +282,15 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
         isSendingRequest = false;
         currentRequestId = null;
         setLoadingProgressBar(false);
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     private void setLoadingProgressBar(final boolean isVisible) {
+        if (getActivity() == null) {
+            return;
+        }
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -253,27 +308,18 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         if (model == null || model.getProjectFileUrl() == null ||
             model.getProjectFileUrl().equals("")) {
-            Toast.makeText(
-                    getContext(),
-                    getString(R.string.no_project_file),
-                    Toast.LENGTH_SHORT).show();
+            makeShortToast(R.string.no_project_file);
             return;
         }
 
         if (downloadManager == null) {
-            Toast.makeText(
-                    getContext(),
-                    getString(R.string.download_failed),
-                    Toast.LENGTH_SHORT).show();
+            makeShortToast(R.string.download_failed);
             return;
         }
 
         // is already downloading, return
         if (currentDownloadId != null) {
-            Toast.makeText(
-                    getContext(),
-                    getString(R.string.already_downloading),
-                    Toast.LENGTH_SHORT).show();
+            makeShortToast(R.string.already_downloading);
             return;
         }
 
@@ -282,10 +328,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
         try {
             uri = Uri.parse(model.getProjectFileUrl());
         } catch (Exception e) {
-            Toast.makeText(
-                    getContext(),
-                    getString(R.string.no_project_file),
-                    Toast.LENGTH_SHORT).show();
+            makeShortToast(R.string.no_project_file);
             return;
         }
 
@@ -303,6 +346,8 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
 
         downloadBtn.setEnabled(false);
         currentDownloadId = downloadManager.enqueue(req);
+        // start download timer
+        startDownloadTimer();
     }
 
     // TODO handle download notification clicked event
@@ -317,16 +362,68 @@ public class ProjectFragment extends Fragment implements View.OnClickListener {
                 Long id = extras.getLong(DownloadManager.EXTRA_DOWNLOAD_ID);
                 if (currentDownloadId.equals(id)) {
                     // download complete
-                    currentDownloadId = null;
-                    downloadBtn.setEnabled(true);
-                    Toast.makeText(
-                            getContext(),
-                            getString(R.string.download_complete),
-                            Toast.LENGTH_SHORT).show();
+                    Log.d("Project", "Download Complete");
+                    stopDownloadTimer();
+                    resetDownloadFlags();
+                    makeShortToast(R.string.download_complete);
                 }
             }
         }
     };
+
+    private Runnable requestTimer = new Runnable() {
+        @Override
+        public void run() {
+            Log.d("Project", "Request Timeout");
+            clearRequestFlags();
+        }
+    };
+
+    private Runnable downloadTimer = new Runnable() {
+        @Override
+        public void run() {
+            Log.d("Project", "Download Timeout");
+            resetDownloadFlags();
+        }
+    };
+
+    private void resetDownloadFlags() {
+        currentDownloadId = null;
+        if (downloadBtn != null) {
+            downloadBtn.setEnabled(true);
+        }
+    }
+
+    private void startRequestTimer() {
+        if (handler != null) {
+            handler.postDelayed(requestTimer, DEFAULT_REQUEST_TIMEOUT);
+        }
+    }
+
+    private void stopRequestTimer() {
+        if (handler != null) {
+            handler.removeCallbacks(requestTimer);
+        }
+    }
+
+    private void startDownloadTimer() {
+        if (handler != null) {
+            handler.postDelayed(downloadTimer, DEFAULT_DOWNLOAD_TIMEOUT);
+        }
+    }
+
+    private void stopDownloadTimer() {
+        if (handler != null) {
+            handler.removeCallbacks(downloadTimer);
+        }
+    }
+
+    private void makeShortToast(int resourceId) {
+        Toast.makeText(
+                getContext(),
+                getString(resourceId),
+                Toast.LENGTH_SHORT).show();
+    }
 
     private String getName(Uri uri) {
         File file = new File(uri.toString());

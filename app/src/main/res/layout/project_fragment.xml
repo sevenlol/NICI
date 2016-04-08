@@ -4,29 +4,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ScrollView
-        android:id="@+id/project_anchor"
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_project"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <LinearLayout
-            android:id="@+id/project_container"
+        <ScrollView
+            android:id="@+id/project_anchor"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/fab_anchor_bottom_padding"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <ProgressBar
-                android:id="@+id/project_loading_progress"
-                android:indeterminate="true"
-                style="@style/Base.Widget.AppCompat.ProgressBar"
+            <LinearLayout
+                android:id="@+id/project_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible"/>
+                android:paddingBottom="@dimen/fab_anchor_bottom_padding"
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <ProgressBar
+                    android:id="@+id/project_loading_progress"
+                    android:indeterminate="true"
+                    style="@style/Base.Widget.AppCompat.ProgressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"/>
 
-    </ScrollView>
+            </LinearLayout>
+
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/download_project_file_btn"
