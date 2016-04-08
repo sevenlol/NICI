@@ -17,4 +17,5 @@
 
     <dimen name="list_item_primary">24sp</dimen>
     <dimen name="list_item_secondary">14sp</dimen>
+    <dimen name="list_text_label">20sp</dimen>
 </resources>

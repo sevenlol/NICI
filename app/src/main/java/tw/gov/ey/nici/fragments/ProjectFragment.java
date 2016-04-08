@@ -46,9 +46,6 @@ public class ProjectFragment extends Fragment
     public static final int DEFAULT_DOWNLOAD_TIMEOUT = 30000;
     public static final int DEFAULT_REQUEST_TIMEOUT = 5000;
 
-    // TODO implement reload mechanism
-    // TODO implement timer thread for download
-
     private DownloadManager downloadManager = null;
 
     private Handler handler = new Handler();

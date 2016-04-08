@@ -3,6 +3,7 @@ package tw.gov.ey.nici.network;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import tw.gov.ey.nici.models.NiciContent;
 import tw.gov.ey.nici.models.NiciHeading;
@@ -81,7 +82,7 @@ public class NiciClientFactory {
             NiciParagraph paragraph4 = new NiciParagraph("「數位匯流發展方案」自民國99年核定實施以來" +
                     "，在各界引起普遍的共鳴與迴響，惟伴隨資通訊科技的日行千里，各界對匯流發展的期待已遠高於" +
                     "方案設定當時。為精進我國數位化進程，帶給民眾速度更快、品質更好的數位生活，民國101年5" +
-                    "月行政院核定通過「數位匯流發展方案(2010-2015年)」（第二版）修正，規劃七大推動主軸（" +
+                    "月行政院核定通過「<b>數位匯流發展方案(2010-2015年)</b>」（第二版）修正，規劃七大推動主軸（" +
                     "增訂豐富電視節目內容主軸）、26項推動策略、 107個辦理措施，並重新設定數位匯流推動主要" +
                     "指標。");
             NiciParagraph paragraph5 = new NiciParagraph("為提昇效率、推動政府與產業合作發展數位匯流" +
@@ -96,10 +97,13 @@ public class NiciClientFactory {
                     "images/ideataiwan-M.jpg", "DESCRIPTION");
             contentList.add(image1);
 
+            Random random = new Random();
+            final int randomMax = 100;
+
             // test list
             List<String> items = new ArrayList<String>();
             for (int i = 0; i < 5; i++) {
-                items.add("Item " + i);
+                items.add("Item " + random.nextInt(randomMax));
             }
             NiciList list1 = new NiciList(items);
             contentList.add(list1);

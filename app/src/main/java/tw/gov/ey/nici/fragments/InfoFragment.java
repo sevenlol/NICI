@@ -4,17 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -23,6 +27,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import tw.gov.ey.nici.NICIMainActivity;
 import tw.gov.ey.nici.R;
 import tw.gov.ey.nici.events.InfoDataErrorEvent;
 import tw.gov.ey.nici.events.InfoDataReadyEvent;
@@ -31,11 +36,16 @@ import tw.gov.ey.nici.models.NiciInfo;
 import tw.gov.ey.nici.utils.RandomStringGenerator;
 import tw.gov.ey.nici.views.NiciInfoAdapter;
 
-public class InfoFragment extends Fragment implements View.OnClickListener, ListView.OnItemClickListener {
+public class InfoFragment extends Fragment implements ListView.OnItemClickListener,
+        SwipeRefreshLayout.OnRefreshListener, ListView.OnScrollListener {
     public static final int DEFAULT_SHOW_MORE_DATA_COUNT = 3;
     public static final int DEFAULT_EVENT_ID_LENGTH = 20;
+    public static final int DEFAULT_REQUEST_TIMEOUT = 5000;
 
-    private Button showMoreInfoBtn = null;
+    private Handler handler = new Handler();
+
+    private SwipeRefreshLayout swipeRefreshLayout = null;
+    private TextView showMoreInfoLabel = null;
     private ProgressBar showMoreInfoProgress = null;
     private ListView listView = null;
 
@@ -74,36 +84,39 @@ public class InfoFragment extends Fragment implements View.OnClickListener, List
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.info_fragment, container, false);
 
+        // set the swipe refresh layout
+        swipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_info);
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setOnRefreshListener(this);
+        }
+
         // inflate footer layout
         FrameLayout footerLayout = (FrameLayout) LayoutInflater.from(getContext())
                 .inflate(R.layout.list_footer, null);
-        showMoreInfoBtn = (Button) footerLayout.findViewById(R.id.show_more_btn);
-        if (showMoreInfoBtn != null) {
-            showMoreInfoBtn.setText(getString(R.string.show_more_info));
-            showMoreInfoBtn.setOnClickListener(this);
-        }
+        showMoreInfoLabel = (TextView) footerLayout.findViewById(R.id.show_more_label);
         showMoreInfoProgress = (ProgressBar) footerLayout.findViewById(R.id.show_more_progress);
         if (model != null && model.size() > 0) {
             // some data is already loaded
             setShowMoreInfoBtnProgressBar(true, false);
 
             if (model.size() >= total) {
-                setShowMoreBtnEnabled(false);
+                setShowMoreLabelText(getString(R.string.no_more_info));
             }
 
             // if some data is already loaded, not sending request
             clearRequestFlags();
         }
 
-        // TODO add a thread in case the first request timeout
+        // start request timer in case the first request timeout
         if (model != null && model.size() == 0) {
-
+            startRequestTimer();
         }
 
         // set listview and adapter
         adapter = new NiciInfoAdapter(getActivity(), model);
         listView = (ListView) root.findViewById(R.id.info_list);
         listView.setOnItemClickListener(this);
+        listView.setOnScrollListener(this);
         listView.setAdapter(adapter);
         listView.addFooterView(footerLayout);
 
@@ -127,12 +140,14 @@ public class InfoFragment extends Fragment implements View.OnClickListener, List
 
                 // set show more btn availablity
                 if (model.size() >= total) {
-                    setShowMoreBtnEnabled(false);
+                    setShowMoreLabelText(getString(R.string.no_more_info));
                 }
             }
         }
 
         // TODO add id verification for data ready event
+        // stop request timer and clear flags
+        stopRequestTimer();
         clearRequestFlags();
     }
 
@@ -154,13 +169,9 @@ public class InfoFragment extends Fragment implements View.OnClickListener, List
             // TODO show error text
         }
 
+        // stop request timer and clear flags
+        stopRequestTimer();
         clearRequestFlags();
-    }
-
-    @Override
-    // show more info data btn clicked
-    public void onClick(View v) {
-        showMoreInfoData(v);
     }
 
     @Override
@@ -185,6 +196,35 @@ public class InfoFragment extends Fragment implements View.OnClickListener, List
         }
     }
 
+    @Override
+    public void onRefresh() {
+        if (isSendingRequest) {
+            // instantly cancel
+            if (swipeRefreshLayout != null) {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+            return;
+        }
+        reload();
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+        // do nothing
+    }
+
+    @Override
+    public void onScroll(
+            AbsListView absListView,
+            int firstVisibleIndex,
+            int visibleItemCount,
+            int total) {
+        int totalItems = firstVisibleIndex + visibleItemCount;
+        if (totalItems == total && !isSendingRequest) {
+            showMoreInfoData();
+        }
+    }
+
     public InfoFragment setModel(ArrayList<NiciInfo> model) {
         Log.d("Info Event", "Set Model: " + (model == null ? 0 : model.size()));
         this.model = model; return this;
@@ -195,7 +235,7 @@ public class InfoFragment extends Fragment implements View.OnClickListener, List
         return this;
     }
 
-    private void showMoreInfoData(View view) {
+    private void showMoreInfoData() {
         Log.d("Info Event", "Total: " + total);
         Log.d("Info Event", "IsSendingReq: " + isSendingRequest);
         Log.d("Info Event", "Show More Info Data: " + (model == null ? 0 : model.size()));
@@ -209,34 +249,52 @@ public class InfoFragment extends Fragment implements View.OnClickListener, List
             return;
         }
 
-        // set safety flags
+        // set safety flags and start timer
         // id is only checked when receiving error events at the moment
+        startRequestTimer();
         setRequestFlags();
         EventBus.getDefault().post(new InfoDataRequestEvent(
                 currentRequestId, DEFAULT_SHOW_MORE_DATA_COUNT));
     }
 
-    // TODO  add a timer thread for request timeout
+    private void reload() {
+        isSendingRequest = true;
+        currentRequestId = InfoModelFragment.FIRST_REQUEST_ID;
+        adapter.clear();
+        total = 0;
+        // will be using the pull down refresh icon when reloading
+        setShowMoreInfoBtnProgressBar(false, false);
+        if (getActivity() != null &&
+                getActivity() instanceof NICIMainActivity) {
+            ((NICIMainActivity) getActivity()).reloadCurrentModel();
+        }
+    }
+
     private void setRequestFlags() {
         isSendingRequest = true;
         currentRequestId = RandomStringGenerator.getString(DEFAULT_EVENT_ID_LENGTH);
         setShowMoreInfoBtnProgressBar(false, true);
     }
 
-    // TODO cancel the timer thread
     private void clearRequestFlags() {
         isSendingRequest = false;
         currentRequestId = null;
         setShowMoreInfoBtnProgressBar(true, false);
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     private void setShowMoreInfoBtnProgressBar(
-            final boolean btnVisible, final boolean progressBarVisible) {
+            final boolean labelVisible, final boolean progressBarVisible) {
+        if (getActivity() == null) {
+            return;
+        }
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (showMoreInfoBtn != null) {
-                    showMoreInfoBtn.setVisibility(btnVisible ? View.VISIBLE : View.GONE);
+                if (showMoreInfoLabel != null) {
+                    showMoreInfoLabel.setVisibility(labelVisible ? View.VISIBLE : View.GONE);
                 }
                 if (showMoreInfoProgress != null) {
                     showMoreInfoProgress.setVisibility(
@@ -246,19 +304,37 @@ public class InfoFragment extends Fragment implements View.OnClickListener, List
         });
     }
 
-    private void setShowMoreBtnEnabled(final boolean btnEnabled) {
+    private void setShowMoreLabelText(final String text) {
+        if (getActivity() == null) {
+            return;
+        }
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (showMoreInfoBtn != null) {
-                    showMoreInfoBtn.setEnabled(btnEnabled);
-                    if (!btnEnabled) {
-                        showMoreInfoBtn.setText(getString(R.string.no_more_info));
-                    } else {
-                        showMoreInfoBtn.setText(getString(R.string.show_more_info));
-                    }
+                if (showMoreInfoLabel != null) {
+                    showMoreInfoLabel.setText(text);
                 }
             }
         });
+    }
+
+    private Runnable requestTimer = new Runnable() {
+        @Override
+        public void run() {
+            Log.d("Info", "Request Timeout");
+            clearRequestFlags();
+        }
+    };
+
+    private void startRequestTimer() {
+        if (handler != null) {
+            handler.postDelayed(requestTimer, DEFAULT_REQUEST_TIMEOUT);
+        }
+    }
+
+    private void stopRequestTimer() {
+        if (handler != null) {
+            handler.removeCallbacks(requestTimer);
+        }
     }
 }
