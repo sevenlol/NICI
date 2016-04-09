@@ -221,7 +221,7 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
             if (currentFirstVisibleItem >= lastFirstVisibleItem) {
                 Log.d("Info", "Scroll Down");
                 // prevent the glitch at the top of the list
-                if (lastFirstVisibleItem != 0) {
+                if (lastFirstVisibleItem != 0 || currentFirstVisibleItem != 1) {
                     showHideBars(false);
                 }
             } else {
