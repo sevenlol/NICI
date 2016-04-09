@@ -2,9 +2,11 @@ package tw.gov.ey.nici.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -41,6 +43,7 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
     public static final int DEFAULT_SHOW_MORE_DATA_COUNT = 3;
     public static final int DEFAULT_EVENT_ID_LENGTH = 20;
     public static final int DEFAULT_REQUEST_TIMEOUT = 5000;
+    public static final boolean DEFAULT_SCROLL_DETECTION_ENABLED = false;
 
     private Handler handler = new Handler();
 
@@ -56,6 +59,7 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
     private boolean isSendingRequest = true;
     private String currentRequestId = InfoModelFragment.FIRST_REQUEST_ID;
 
+    private boolean scrollDetectionEnabled = false;
     private int lastFirstVisibleItem = 0;
 
     public static InfoFragment newInstance() {
@@ -77,6 +81,18 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
     public void onDetach() {
         EventBus.getDefault().unregister(this);
         super.onDetach();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // get preference
+        if (getActivity() != null) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            scrollDetectionEnabled = prefs.getBoolean(
+                    getString(R.string.pref_scroll_detection_key), scrollDetectionEnabled);
+        }
     }
 
     @Override
@@ -213,6 +229,9 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
     @Override
     public void onScrollStateChanged(AbsListView absListView, int scrollState) {
         if (listView == null) {
+            return;
+        }
+        if (!scrollDetectionEnabled) {
             return;
         }
 

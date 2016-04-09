@@ -29,8 +29,10 @@
     <string name="bottom_bar_info_title">Info</string>
 
     <string name="setting_title">Setting</string>
+    <string name="pref_scroll_detection_key">niciScrollDetectionEnabled</string>
     <string name="pref_scroll_detection_title">Scroll Detection</string>
     <string name="pref_scroll_detection_summary">Hide/Show Toolbars When Scrolling</string>
+    <string name="pref_display_choice_key">niciDisplayChoice</string>
     <string name="pref_display_choice_title">Display Choice</string>
     <string name="pref_display_choice_summary">Modify the Size of Contents</string>
 

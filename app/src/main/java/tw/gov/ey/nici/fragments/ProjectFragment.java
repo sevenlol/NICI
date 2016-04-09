@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -53,6 +54,7 @@ public class ProjectFragment extends Fragment
     public static final int DEFAULT_REQUEST_TIMEOUT = 5000;
     public static final int DEFAULT_SCROLL_WINDOW_SIZE = 15;
     public static final int DEFAULT_SCROLL_TIMEOUT = 5000;
+    public static final boolean DEFAULT_SCROLL_DETECTION_ENABLED = false;
 
     private DownloadManager downloadManager = null;
 
@@ -72,6 +74,7 @@ public class ProjectFragment extends Fragment
 
     private Long currentDownloadId = null;
 
+    private boolean scrollDetectionEnabled = DEFAULT_SCROLL_DETECTION_ENABLED;
     private Queue<Integer> scrollYQueue = new LinkedList<>();
     private long lastScrollUpdateTime = SystemClock.currentThreadTimeMillis();
 
@@ -93,6 +96,13 @@ public class ProjectFragment extends Fragment
         // make sure the download button is enabled
         // does not start a new downloadTimer at the moment
         resetDownloadFlags();
+
+        // get preference
+        if (getActivity() != null) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            scrollDetectionEnabled = prefs.getBoolean(
+                    getString(R.string.pref_scroll_detection_key), scrollDetectionEnabled);
+        }
     }
 
     @Override
@@ -368,6 +378,9 @@ public class ProjectFragment extends Fragment
     @Override
     public void onScrollChanged() {
         if (scrollView == null) {
+            return;
+        }
+        if (!scrollDetectionEnabled) {
             return;
         }
         if (SystemClock.currentThreadTimeMillis() - lastScrollUpdateTime > DEFAULT_SCROLL_TIMEOUT) {
