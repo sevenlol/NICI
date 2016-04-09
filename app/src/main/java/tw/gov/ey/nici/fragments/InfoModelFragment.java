@@ -17,7 +17,7 @@ import tw.gov.ey.nici.models.NiciInfo;
 import tw.gov.ey.nici.network.NiciClient;
 
 public class InfoModelFragment extends Fragment {
-    public static final int DEFAULT_INIT_LOAD_COUNT = 5;
+    public static final int DEFAULT_INIT_LOAD_COUNT = 8;
     public static final String FIRST_REQUEST_ID = "first_info_request";
 
     private int initLoadCount = DEFAULT_INIT_LOAD_COUNT;

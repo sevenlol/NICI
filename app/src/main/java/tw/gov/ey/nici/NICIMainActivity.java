@@ -57,6 +57,7 @@ public class NICIMainActivity extends AppCompatActivity
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
+            getSupportActionBar().setShowHideAnimationEnabled(true);
         }
 
         // set close icon on click listener
@@ -130,6 +131,24 @@ public class NICIMainActivity extends AppCompatActivity
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void hideBars() {
+        if (mBottomBar != null && mBottomBar.isShown()) {
+            mBottomBar.hide();
+        }
+        if (getSupportActionBar() != null && getSupportActionBar().isShowing()) {
+            getSupportActionBar().hide();
+        }
+    }
+
+    public void showBars() {
+        if (mBottomBar != null) {
+            mBottomBar.show();
+        }
+        if (getSupportActionBar() != null && !getSupportActionBar().isShowing()) {
+            getSupportActionBar().show();
         }
     }
 

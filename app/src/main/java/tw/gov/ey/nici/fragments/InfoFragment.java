@@ -56,6 +56,8 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
     private boolean isSendingRequest = true;
     private String currentRequestId = InfoModelFragment.FIRST_REQUEST_ID;
 
+    private int lastFirstVisibleItem = 0;
+
     public static InfoFragment newInstance() {
         return new InfoFragment();
     }
@@ -210,7 +212,24 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
 
     @Override
     public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-        // do nothing
+        if (listView == null) {
+            return;
+        }
+
+        if (scrollState == SCROLL_STATE_IDLE && absListView.getId() == listView.getId()) {
+            final int currentFirstVisibleItem = listView.getFirstVisiblePosition();
+            if (currentFirstVisibleItem >= lastFirstVisibleItem) {
+                Log.d("Info", "Scroll Down");
+                // prevent the glitch at the top of the list
+                if (lastFirstVisibleItem != 0) {
+                    showHideBars(false);
+                }
+            } else {
+                Log.d("Info", "Scroll Up");
+                showHideBars(true);
+            }
+            lastFirstVisibleItem = currentFirstVisibleItem;
+        }
     }
 
     @Override
@@ -255,6 +274,18 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
         setRequestFlags();
         EventBus.getDefault().post(new InfoDataRequestEvent(
                 currentRequestId, DEFAULT_SHOW_MORE_DATA_COUNT));
+    }
+
+    private void showHideBars(boolean showBars) {
+        if (getActivity() == null || !(getActivity() instanceof NICIMainActivity)) {
+            return;
+        }
+
+        if (showBars) {
+            ((NICIMainActivity) getActivity()).showBars();
+        } else {
+            ((NICIMainActivity) getActivity()).hideBars();
+        }
     }
 
     private void reload() {
