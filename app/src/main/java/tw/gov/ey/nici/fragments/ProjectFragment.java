@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,8 +18,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -29,7 +32,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import tw.gov.ey.nici.NICIMainActivity;
 import tw.gov.ey.nici.R;
@@ -41,15 +46,19 @@ import tw.gov.ey.nici.models.NiciProject;
 import tw.gov.ey.nici.utils.RandomStringGenerator;
 
 public class ProjectFragment extends Fragment
-        implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+        implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener,
+        ViewTreeObserver.OnScrollChangedListener {
     public static final int DEFAULT_EVENT_ID_LENGTH = 20;
     public static final int DEFAULT_DOWNLOAD_TIMEOUT = 30000;
     public static final int DEFAULT_REQUEST_TIMEOUT = 5000;
+    public static final int DEFAULT_SCROLL_WINDOW_SIZE = 15;
+    public static final int DEFAULT_SCROLL_TIMEOUT = 5000;
 
     private DownloadManager downloadManager = null;
 
     private Handler handler = new Handler();
 
+    private ScrollView scrollView = null;
     private SwipeRefreshLayout swipeRefreshLayout = null;
     private ProgressBar loadingProgress = null;
     private LinearLayout projectContainer = null;
@@ -62,6 +71,9 @@ public class ProjectFragment extends Fragment
     private String currentRequestId = ProjectModelFragment.FIRST_REQUEST_ID;
 
     private Long currentDownloadId = null;
+
+    private Queue<Integer> scrollYQueue = new LinkedList<>();
+    private long lastScrollUpdateTime = SystemClock.currentThreadTimeMillis();
 
     public static ProjectFragment newInstance() {
         return new ProjectFragment();
@@ -114,10 +126,16 @@ public class ProjectFragment extends Fragment
 
         // setup views
         View view = inflater.inflate(R.layout.project_fragment, container, false);
+        scrollView = (ScrollView) view.findViewById(R.id.project_anchor);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_project);
         projectContainer = (LinearLayout) view.findViewById(R.id.project_container);
         loadingProgress = (ProgressBar) view.findViewById(R.id.project_loading_progress);
         downloadBtn = (FloatingActionButton) view.findViewById(R.id.download_project_file_btn);
+
+        // set the scroll listener
+        if (scrollView != null) {
+            scrollView.getViewTreeObserver().addOnScrollChangedListener(this);
+        }
 
         // set swipe refresh layout
         if (swipeRefreshLayout != null) {
@@ -347,6 +365,51 @@ public class ProjectFragment extends Fragment
         startDownloadTimer();
     }
 
+    @Override
+    public void onScrollChanged() {
+        if (scrollView == null) {
+            return;
+        }
+        if (SystemClock.currentThreadTimeMillis() - lastScrollUpdateTime > DEFAULT_SCROLL_TIMEOUT) {
+            scrollYQueue.clear();
+        }
+        if (scrollYQueue.size() >= DEFAULT_SCROLL_WINDOW_SIZE) {
+            scrollYQueue.poll();
+        }
+        scrollYQueue.add(scrollView.getScrollY());
+        lastScrollUpdateTime = SystemClock.currentThreadTimeMillis();
+
+        // check scroll up or down
+        if (scrollYQueue.size() == DEFAULT_SCROLL_WINDOW_SIZE) {
+            boolean isScrollingUp = true;
+            boolean isScrollingDown = true;
+            Integer lastY = null;
+            for (Integer y : scrollYQueue) {
+                if (y == null) {
+                    isScrollingUp = false;
+                    isScrollingDown = false;
+                    break;
+                }
+
+                if (lastY != null) {
+                    isScrollingDown &= (y - lastY >= 0);
+                    isScrollingUp &= (y - lastY < 0);
+                }
+                lastY = y;
+            }
+
+            if (isScrollingUp) {
+                Log.d("Project", "Scrolling Up");
+                showHideBars(true);
+            } else if (isScrollingDown) {
+                Log.d("Project", "Scrolling Down");
+                showHideBars(false);
+            }
+
+            scrollYQueue.clear();
+        }
+    }
+
     // TODO handle download notification clicked event
     private BroadcastReceiver downloadEventReceiver = new BroadcastReceiver() {
         @Override
@@ -383,6 +446,18 @@ public class ProjectFragment extends Fragment
             resetDownloadFlags();
         }
     };
+
+    private void showHideBars(boolean showBars) {
+        if (getActivity() == null || !(getActivity() instanceof NICIMainActivity)) {
+            return;
+        }
+
+        if (showBars) {
+            ((NICIMainActivity) getActivity()).showBars();
+        } else {
+            ((NICIMainActivity) getActivity()).hideBars();
+        }
+    }
 
     private void resetDownloadFlags() {
         currentDownloadId = null;
