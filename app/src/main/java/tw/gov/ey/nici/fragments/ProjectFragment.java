@@ -44,6 +44,7 @@ import tw.gov.ey.nici.events.ProjectDataReadyEvent;
 import tw.gov.ey.nici.models.NiciContent;
 import tw.gov.ey.nici.models.NiciImage;
 import tw.gov.ey.nici.models.NiciProject;
+import tw.gov.ey.nici.utils.NiciContentUtils;
 import tw.gov.ey.nici.utils.RandomStringGenerator;
 
 public class ProjectFragment extends Fragment
@@ -55,6 +56,8 @@ public class ProjectFragment extends Fragment
     public static final int DEFAULT_SCROLL_WINDOW_SIZE = 15;
     public static final int DEFAULT_SCROLL_TIMEOUT = 5000;
     public static final boolean DEFAULT_SCROLL_DETECTION_ENABLED = false;
+    public static final NiciContent.Setting DEFAULT_DISPLAY_CHOICE =
+            NiciContent.Setting.MEDIUM;
 
     private DownloadManager downloadManager = null;
 
@@ -75,6 +78,7 @@ public class ProjectFragment extends Fragment
     private Long currentDownloadId = null;
 
     private boolean scrollDetectionEnabled = DEFAULT_SCROLL_DETECTION_ENABLED;
+    private NiciContent.Setting displayChoice = DEFAULT_DISPLAY_CHOICE;
     private Queue<Integer> scrollYQueue = new LinkedList<>();
     private long lastScrollUpdateTime = SystemClock.currentThreadTimeMillis();
 
@@ -102,6 +106,14 @@ public class ProjectFragment extends Fragment
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             scrollDetectionEnabled = prefs.getBoolean(
                     getString(R.string.pref_scroll_detection_key), scrollDetectionEnabled);
+            NiciContent.Setting oldDisplayChoice = displayChoice;
+            displayChoice = NiciContentUtils.getSetting(
+                    prefs.getString(
+                            getString(R.string.pref_display_choice_key),
+                            displayChoice.name()));
+            if (oldDisplayChoice != displayChoice) {
+                updateContainer();
+            }
         }
     }
 
@@ -249,7 +261,7 @@ public class ProjectFragment extends Fragment
             if (content == null) {
                 continue;
             }
-            View view = content.getView(getContext());
+            View view = content.getView(getContext(), displayChoice);
             if (view == null) {
                 continue;
             }
