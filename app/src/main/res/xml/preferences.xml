@@ -1,0 +1,15 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:key="niciScrollDetectionEnabled"
+        android:title="@string/pref_scroll_detection_title"
+        android:summary="@string/pref_scroll_detection_summary" />
+
+    <ListPreference
+        android:key="niciDisplayChoice"
+        android:title="@string/pref_display_choice_title"
+        android:summary="@string/pref_display_choice_summary"
+        android:dialogTitle="@string/pref_display_choice_title"
+        android:entries="@array/display_choices_text"
+        android:entryValues="@array/display_choices_value"/>
+</PreferenceScreen>
