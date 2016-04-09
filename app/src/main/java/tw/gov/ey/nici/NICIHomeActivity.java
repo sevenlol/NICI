@@ -10,7 +10,7 @@ import android.view.View;
 
 public class NICIHomeActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String FACEBOOK_PAGE_URL = "https://www.facebook.com";
+    private static final String FACEBOOK_PAGE_URL = "https://www.facebook.com/dcoffice";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
