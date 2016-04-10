@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import tw.gov.ey.nici.models.NiciContent;
+import tw.gov.ey.nici.models.NiciEvent;
 import tw.gov.ey.nici.models.NiciHeading;
 import tw.gov.ey.nici.models.NiciImage;
 import tw.gov.ey.nici.models.NiciInfo;
@@ -118,6 +119,16 @@ public class NiciClientFactory {
             return new NiciProject().setProjectFileUrl("http://dev.iifun.com.tw/nici/WebTools/File" +
                     "sDownload.ashx?Siteid=1&MmmID=31&fd=Messagess_Files&Pname=1.docx")
                     .setContentList(contentList);
+        }
+
+        @Override
+        public int getNiciEventCount() {
+            return 0;
+        }
+
+        @Override
+        public List<NiciEvent> getNiciEvent(int skip, int limit) {
+            return null;
         }
 
         @Override
