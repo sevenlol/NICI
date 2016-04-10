@@ -59,7 +59,7 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
     private boolean isSendingRequest = true;
     private String currentRequestId = InfoModelFragment.FIRST_REQUEST_ID;
 
-    private boolean scrollDetectionEnabled = false;
+    private boolean scrollDetectionEnabled = DEFAULT_SCROLL_DETECTION_ENABLED;
     private int lastFirstVisibleItem = 0;
 
     public static InfoFragment newInstance() {

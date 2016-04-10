@@ -19,6 +19,7 @@ import tw.gov.ey.nici.fragments.InfoFragment;
 import tw.gov.ey.nici.fragments.InfoModelFragment;
 import tw.gov.ey.nici.fragments.IntroFragment;
 import tw.gov.ey.nici.fragments.MeetingFragment;
+import tw.gov.ey.nici.fragments.MeetingModelFragment;
 import tw.gov.ey.nici.fragments.ProjectFragment;
 import tw.gov.ey.nici.fragments.ProjectModelFragment;
 import tw.gov.ey.nici.network.NiciClient;
@@ -28,6 +29,7 @@ public class NICIMainActivity extends AppCompatActivity
         implements OnMenuTabClickListener, View.OnClickListener {
     public static final String PAGE_TYPE_KEY = "niciPageTypeKey";
     public static final String PROJECT_MODEL_FRAGMENT_TAG = "niciProjectModelFragment";
+    public static final String MEETING_MODEL_FRAGMENT_TAG = "niciMeetingModelFragment";
     public static final String INFO_MODEL_FRAGMENT_TAG = "niciInfoModelFragment";
     public enum PageType {
         INTRO(0), PROJECT(1), MEETING(2), INFO(3);
@@ -173,7 +175,18 @@ public class NICIMainActivity extends AppCompatActivity
                         .setModel(projectModelFragment.getModel()));
                 break;
             case R.id.bottomBarMeeting:
-                replaceCurrentFragment(MeetingFragment.newInstance());
+                MeetingModelFragment meetingModelFragment = (MeetingModelFragment)
+                        getFragmentFromTag(MEETING_MODEL_FRAGMENT_TAG);
+                if (meetingModelFragment == null) {
+                    meetingModelFragment = MeetingModelFragment.newInstance(niciClient);
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .add(meetingModelFragment, MEETING_MODEL_FRAGMENT_TAG)
+                            .commit();
+                }
+                replaceCurrentFragment(MeetingFragment.newInstance()
+                        .setModel(meetingModelFragment.getModel())
+                        .setTotal(meetingModelFragment.getTotal()));
                 break;
             case R.id.bottomBarInfo:
                 // set model
@@ -220,6 +233,19 @@ public class NICIMainActivity extends AppCompatActivity
                         .commit();
                 break;
             case 2:
+                MeetingModelFragment meetingModelFragment = (MeetingModelFragment)
+                        getFragmentFromTag(MEETING_MODEL_FRAGMENT_TAG);
+                if (meetingModelFragment != null) {
+                    getSupportFragmentManager()
+                        .beginTransaction()
+                        .remove(meetingModelFragment)
+                        .commit();
+                }
+                meetingModelFragment = MeetingModelFragment.newInstance(niciClient);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(meetingModelFragment, MEETING_MODEL_FRAGMENT_TAG)
+                        .commit();
                 break;
             case 3:
                 InfoModelFragment infoModelFragment = (InfoModelFragment)
@@ -266,6 +292,13 @@ public class NICIMainActivity extends AppCompatActivity
                 }
                 break;
             case 2:
+                MeetingModelFragment meetingModelFragment = (MeetingModelFragment) getSupportFragmentManager()
+                        .findFragmentByTag(MEETING_MODEL_FRAGMENT_TAG);
+                MeetingFragment meetingFragment = (MeetingFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.main_fragment);
+                if (meetingFragment != null && meetingModelFragment != null) {
+                    meetingFragment.setModel(meetingModelFragment.getModel());
+                }
                 break;
             case 3:
                 InfoModelFragment infoModelFragment = (InfoModelFragment) getSupportFragmentManager()

@@ -20,8 +20,14 @@
     <string name="info_date_format">yyyy-MM-dd</string>
     <string name="info_date_str_format">時間：%s</string>
     <string name="info_location_str_format">地點：%s</string>
-    <string name="show_more_info">Show More Info</string>
     <string name="no_more_info">No More Info to Show</string>
+
+    <string name="meeting_date_format">yyyy-MM-dd</string>
+    <string name="meeting_date_str_format">時間：%s</string>
+    <string name="meeting_location_str_format">地點：%s</string>
+    <string name="no_more_meeting">No More Meeting to Show</string>
+
+    <string name="meeting_detail_title">Meeting Detail</string>
 
     <string name="bottom_bar_intro_title">Intro</string>
     <string name="bottom_bar_project_title">Project</string>

@@ -18,6 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".NICIMainActivity" />
+        <activity android:name=".MeetingDetailActivity" />
         <activity android:name=".SettingActivity" />
         <activity android:name=".AboutActivity" />
     </application>
