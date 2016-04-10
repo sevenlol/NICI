@@ -48,29 +48,34 @@ public class NiciClientFactory {
                     .setLinkUrl("https://www.google.com?testId=" + i));
 
                 eventList.add(new NiciEvent()
-                    .setTitle("Title " + i)
-                    .setLocation("Location " + i)
-                    .setDate(new Date())
-                    .setDescription("Description " + i));
+                        .setId("Id: " + i)
+                        .setTitle("Title " + i)
+                        .setLocation("Location " + i)
+                        .setDate(new Date())
+                        .setDescription("Description " + i));
             }
 
             // data that miss some fields
             eventList.add(new NiciEvent()
-                .setLocation("Location ")
-                .setDate(new Date())
-                .setDescription("Description "));
+                    .setId("Id")
+                    .setLocation("Location ")
+                    .setDate(new Date())
+                    .setDescription("Description "));
 
             eventList.add(new NiciEvent()
+                    .setId("Id")
                     .setTitle("Title ")
                     .setDate(new Date())
                     .setDescription("Description "));
 
             eventList.add(new NiciEvent()
+                    .setId("Id")
                     .setTitle("Title ")
                     .setLocation("Location ")
                     .setDescription("Description "));
 
             eventList.add(new NiciEvent()
+                    .setId("Id")
                     .setTitle("Title ")
                     .setLocation("Location ")
                     .setDate(new Date()));

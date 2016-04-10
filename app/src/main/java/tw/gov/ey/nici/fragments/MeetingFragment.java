@@ -27,6 +27,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
+import tw.gov.ey.nici.MeetingDetailActivity;
 import tw.gov.ey.nici.NICIMainActivity;
 import tw.gov.ey.nici.R;
 import tw.gov.ey.nici.events.MeetingDataErrorEvent;
@@ -205,9 +206,13 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
             return;
         }
         try {
-            // TODO goes to meeting detail page
+            // TODO add meeting detail id
+            Log.d("Meeting", "Start Activity");
+            Intent meetingDetailIntent = new Intent(getActivity(), MeetingDetailActivity.class);
+            startActivity(meetingDetailIntent);
         } catch (Exception e) {
             // TODO handle parse error
+            Log.d("Meeting", "Exception: " + e.getMessage());
         }
     }
 
