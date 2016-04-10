@@ -40,7 +40,6 @@ public class NICIMainActivity extends AppCompatActivity
 
     private BottomBar mBottomBar;
     private NiciClient niciClient;
-    private String YOUTUBE_VIDEO_ID = "Gx1emgAKkh0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,7 +156,7 @@ public class NICIMainActivity extends AppCompatActivity
     public void onMenuTabSelected(@IdRes int menuItemId) {
         switch(menuItemId) {
             case R.id.bottomBarIntro:
-                replaceCurrentFragment(IntroFragment.newInstance(YOUTUBE_VIDEO_ID));
+                replaceCurrentFragment(IntroFragment.newInstance());
                 break;
             case R.id.bottomBarProject:
                 // set model
