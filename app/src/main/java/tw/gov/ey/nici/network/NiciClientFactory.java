@@ -35,6 +35,7 @@ public class NiciClientFactory {
     private static class FakeNiciClient implements NiciClient {
         private static final int FAKE_DATA_COUNT = 15;
 
+        private List<NiciEvent> eventList = new ArrayList<>();
         private List<NiciInfo> model = new ArrayList<NiciInfo>();
 
         {
@@ -45,7 +46,34 @@ public class NiciClientFactory {
                     .setDate(new Date())
                     .setDescription("Description " + i)
                     .setLinkUrl("https://www.google.com?testId=" + i));
+
+                eventList.add(new NiciEvent()
+                    .setTitle("Title " + i)
+                    .setLocation("Location " + i)
+                    .setDate(new Date())
+                    .setDescription("Description " + i));
             }
+
+            // data that miss some fields
+            eventList.add(new NiciEvent()
+                .setLocation("Location ")
+                .setDate(new Date())
+                .setDescription("Description "));
+
+            eventList.add(new NiciEvent()
+                    .setTitle("Title ")
+                    .setDate(new Date())
+                    .setDescription("Description "));
+
+            eventList.add(new NiciEvent()
+                    .setTitle("Title ")
+                    .setLocation("Location ")
+                    .setDescription("Description "));
+
+            eventList.add(new NiciEvent()
+                    .setTitle("Title ")
+                    .setLocation("Location ")
+                    .setDate(new Date()));
         }
 
         @Override
@@ -123,12 +151,26 @@ public class NiciClientFactory {
 
         @Override
         public int getNiciEventCount() {
-            return 0;
+            return model.size() + 4;
         }
 
         @Override
         public List<NiciEvent> getNiciEvent(int skip, int limit) {
-            return null;
+            List<NiciEvent> result = new ArrayList<NiciEvent>();
+            for (int i = 0; i < eventList.size(); i++) {
+                if (i < skip) {
+                    continue;
+                }
+                if (result.size() == limit) {
+                    break;
+                }
+                result.add(eventList.get(i));
+            }
+            // add delay for testing
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {}
+            return result;
         }
 
         @Override
