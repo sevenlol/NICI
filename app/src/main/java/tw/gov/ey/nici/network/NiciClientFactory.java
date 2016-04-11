@@ -42,7 +42,7 @@ public class NiciClientFactory {
             for (int i = 0; i < FAKE_DATA_COUNT; i++) {
                 model.add(new NiciInfo()
                     .setTitle("Title " + i)
-                    .setLocation("Location " + i)
+                    .setPublishedBy("PublishedBy " + i)
                     .setDate(new Date())
                     .setDescription("Description " + i)
                     .setLinkUrl("https://www.google.com?testId=" + i));

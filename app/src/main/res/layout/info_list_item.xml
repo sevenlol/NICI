@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
-            android:id="@+id/info_location"
+            android:id="@+id/info_published_by"
             android:textSize="@dimen/list_item_secondary"
             android:layout_below="@id/info_date"
             android:layout_alignParentLeft="true"

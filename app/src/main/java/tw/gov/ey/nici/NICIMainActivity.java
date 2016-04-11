@@ -32,6 +32,9 @@ public class NICIMainActivity extends AppCompatActivity
     public static final String PROJECT_MODEL_FRAGMENT_TAG = "niciProjectModelFragment";
     public static final String MEETING_MODEL_FRAGMENT_TAG = "niciMeetingModelFragment";
     public static final String INFO_MODEL_FRAGMENT_TAG = "niciInfoModelFragment";
+
+    private static final String FACEBOOK_PAGE_URL = "https://www.facebook.com/dcoffice";
+
     public enum PageType {
         INTRO(0), PROJECT(1), MEETING(2), MEETING_INFO(3),
         INFO(4), FACEBOOK(5);
@@ -217,7 +220,7 @@ public class NICIMainActivity extends AppCompatActivity
                 setActionBarTitle(R.string.info_page_title);
                 break;
             case R.id.bottomBarFacebook:
-                replaceCurrentFragment(FacebookFragment.newInstance("https://www.facebook.com/dcoffice"));
+                replaceCurrentFragment(FacebookFragment.newInstance(FACEBOOK_PAGE_URL));
                 setActionBarTitle(R.string.facebook_page_title);
                 break;
             default:

@@ -5,7 +5,7 @@ import java.util.Date;
 public class NiciInfo {
     private String title;
     private Date date;
-    private String location;
+    private String publishedBy;
     private String description;
     private String linkUrl;
 
@@ -15,7 +15,7 @@ public class NiciInfo {
 
     public String getTitle() { return title; }
     public Date getDate() { return date; }
-    public String getLocation() { return location; }
+    public String getPublishedBy() { return publishedBy; }
     public String getDescription() { return description; }
     public String getLinkUrl() { return linkUrl; }
 
@@ -29,8 +29,8 @@ public class NiciInfo {
         this.date = date; return this;
     }
 
-    public NiciInfo setLocation(String location) {
-        this.location = location; return this;
+    public NiciInfo setPublishedBy(String publishedBy) {
+        this.publishedBy = publishedBy; return this;
     }
 
     public NiciInfo setDescription(String description) {

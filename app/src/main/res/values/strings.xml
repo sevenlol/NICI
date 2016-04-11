@@ -20,7 +20,7 @@
 
     <string name="info_date_format">yyyy-MM-dd</string>
     <string name="info_date_str_format">時間：%s</string>
-    <string name="info_location_str_format">地點：%s</string>
+    <string name="info_published_by_str_format">發表：%s</string>
     <string name="no_more_info">No More Info to Show</string>
 
     <string name="meeting_date_format">yyyy-MM-dd</string>

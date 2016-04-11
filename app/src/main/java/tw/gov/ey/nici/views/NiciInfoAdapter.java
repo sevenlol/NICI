@@ -18,7 +18,7 @@ public class NiciInfoAdapter extends ArrayAdapter<NiciInfo> {
     private static class ViewHolder {
         TextView title;
         TextView date;
-        TextView location;
+        TextView publishedBy;
     }
 
     public NiciInfoAdapter(Context context, ArrayList<NiciInfo> infoList) {
@@ -38,7 +38,7 @@ public class NiciInfoAdapter extends ArrayAdapter<NiciInfo> {
 
             viewHolder.title = (TextView) convertView.findViewById(R.id.info_title);
             viewHolder.date = (TextView) convertView.findViewById(R.id.info_date);
-            viewHolder.location = (TextView) convertView.findViewById(R.id.info_location);
+            viewHolder.publishedBy = (TextView) convertView.findViewById(R.id.info_published_by);
 
             // set view holder
             convertView.setTag(viewHolder);
@@ -48,9 +48,9 @@ public class NiciInfoAdapter extends ArrayAdapter<NiciInfo> {
 
         // set required view
         viewHolder.title.setText(info.getTitle() == null ? "" : info.getTitle());
-        viewHolder.location.setText(String.format(
-                getContext().getString(R.string.info_location_str_format),
-                info.getLocation() == null ? "" : info.getLocation()));
+        viewHolder.publishedBy.setText(String.format(
+                getContext().getString(R.string.info_published_by_str_format),
+                info.getPublishedBy() == null ? "" : info.getPublishedBy()));
         String dateStr = "";
         if (info.getDate() != null) {
             try {
