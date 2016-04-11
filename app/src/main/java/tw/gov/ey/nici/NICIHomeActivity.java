@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 public class NICIHomeActivity extends AppCompatActivity implements View.OnClickListener {
@@ -29,7 +30,9 @@ public class NICIHomeActivity extends AppCompatActivity implements View.OnClickL
         FloatingActionButton showIntroBtn = (FloatingActionButton) findViewById(R.id.show_intro_btn);
         FloatingActionButton showProjectBtn = (FloatingActionButton) findViewById(R.id.show_project_btn);
         FloatingActionButton showMeetingBtn = (FloatingActionButton) findViewById(R.id.show_meeting_btn);
+        FloatingActionButton showMeetingInfoBtn = (FloatingActionButton) findViewById(R.id.show_meeting_info_btn);
         FloatingActionButton showInfoBtn = (FloatingActionButton) findViewById(R.id.show_info_btn);
+        FloatingActionButton showFacebookBtn = (FloatingActionButton) findViewById(R.id.show_facebook_btn);
         if (showIntroBtn != null) {
             showIntroBtn.setOnClickListener(this);
         }
@@ -39,8 +42,14 @@ public class NICIHomeActivity extends AppCompatActivity implements View.OnClickL
         if (showMeetingBtn != null) {
             showMeetingBtn.setOnClickListener(this);
         }
+        if (showMeetingInfoBtn != null) {
+            showMeetingInfoBtn.setOnClickListener(this);
+        }
         if (showInfoBtn != null) {
             showInfoBtn.setOnClickListener(this);
+        }
+        if (showFacebookBtn != null) {
+            showFacebookBtn.setOnClickListener(this);
         }
     }
 
@@ -58,8 +67,14 @@ public class NICIHomeActivity extends AppCompatActivity implements View.OnClickL
             case R.id.show_meeting_btn:
                 pageType = NICIMainActivity.PageType.MEETING.name();
                 break;
+            case R.id.show_meeting_info_btn:
+                pageType = NICIMainActivity.PageType.MEETING_INFO.name();
+                break;
             case R.id.show_info_btn:
                 pageType = NICIMainActivity.PageType.INFO.name();
+                break;
+            case R.id.show_facebook_btn:
+                pageType = NICIMainActivity.PageType.FACEBOOK.name();
                 break;
             default:
                 pageType = NICIMainActivity.PageType.INTRO.name();

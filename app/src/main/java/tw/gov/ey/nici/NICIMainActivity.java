@@ -15,6 +15,7 @@ import android.view.View;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
+import tw.gov.ey.nici.fragments.FacebookFragment;
 import tw.gov.ey.nici.fragments.InfoFragment;
 import tw.gov.ey.nici.fragments.InfoModelFragment;
 import tw.gov.ey.nici.fragments.IntroFragment;
@@ -32,7 +33,8 @@ public class NICIMainActivity extends AppCompatActivity
     public static final String MEETING_MODEL_FRAGMENT_TAG = "niciMeetingModelFragment";
     public static final String INFO_MODEL_FRAGMENT_TAG = "niciInfoModelFragment";
     public enum PageType {
-        INTRO(0), PROJECT(1), MEETING(2), INFO(3);
+        INTRO(0), PROJECT(1), MEETING(2), MEETING_INFO(3),
+        INFO(4), FACEBOOK(5);
 
         public final int position;
         private PageType(int position) {
@@ -88,7 +90,9 @@ public class NICIMainActivity extends AppCompatActivity
                     case INTRO:
                     case PROJECT:
                     case MEETING:
+                    case MEETING_INFO:
                     case INFO:
+                    case FACEBOOK:
                         position = type.position;
                         break;
                     default:
@@ -102,7 +106,9 @@ public class NICIMainActivity extends AppCompatActivity
         mBottomBar.mapColorForTab(PageType.INTRO.position, ContextCompat.getColor(this, R.color.bottomBarIntro));
         mBottomBar.mapColorForTab(PageType.PROJECT.position, ContextCompat.getColor(this, R.color.bottomBarProject));
         mBottomBar.mapColorForTab(PageType.MEETING.position, ContextCompat.getColor(this, R.color.bottomBarMeeting));
-        mBottomBar.mapColorForTab(PageType.INFO.position, ContextCompat.getColor(this, R.color.bottomBarInfo));
+        mBottomBar.mapColorForTab(PageType.MEETING_INFO.position, ContextCompat.getColor(this, R.color.bottomBarInfo));
+        mBottomBar.mapColorForTab(PageType.INFO.position, ContextCompat.getColor(this, R.color.bottomBarMeeting));
+        mBottomBar.mapColorForTab(PageType.FACEBOOK.position, ContextCompat.getColor(this, R.color.bottomBarInfo));
 
         // update model for orientation change
         updateModelForCurrentFragment();
@@ -159,6 +165,7 @@ public class NICIMainActivity extends AppCompatActivity
         switch(menuItemId) {
             case R.id.bottomBarIntro:
                 replaceCurrentFragment(IntroFragment.newInstance());
+                setActionBarTitle(R.string.intro_page_title);
                 break;
             case R.id.bottomBarProject:
                 // set model
@@ -173,6 +180,7 @@ public class NICIMainActivity extends AppCompatActivity
                 }
                 replaceCurrentFragment(ProjectFragment.newInstance()
                         .setModel(projectModelFragment.getModel()));
+                setActionBarTitle(R.string.project_page_title);
                 break;
             case R.id.bottomBarMeeting:
                 MeetingModelFragment meetingModelFragment = (MeetingModelFragment)
@@ -187,6 +195,10 @@ public class NICIMainActivity extends AppCompatActivity
                 replaceCurrentFragment(MeetingFragment.newInstance()
                         .setModel(meetingModelFragment.getModel())
                         .setTotal(meetingModelFragment.getTotal()));
+                setActionBarTitle(R.string.meeting_page_title);
+                break;
+            case R.id.bottomBarMeetingInfo:
+                setActionBarTitle(R.string.meeting_info_page_title);
                 break;
             case R.id.bottomBarInfo:
                 // set model
@@ -202,6 +214,11 @@ public class NICIMainActivity extends AppCompatActivity
                 replaceCurrentFragment(InfoFragment.newInstance()
                         .setModel(infoModelFragment.getModel())
                         .setTotal(infoModelFragment.getTotal()));
+                setActionBarTitle(R.string.info_page_title);
+                break;
+            case R.id.bottomBarFacebook:
+                replaceCurrentFragment(FacebookFragment.newInstance("https://www.facebook.com/dcoffice"));
+                setActionBarTitle(R.string.facebook_page_title);
                 break;
             default:
         }
@@ -248,6 +265,8 @@ public class NICIMainActivity extends AppCompatActivity
                         .commit();
                 break;
             case 3:
+                break;
+            case 4:
                 InfoModelFragment infoModelFragment = (InfoModelFragment)
                         getFragmentFromTag(INFO_MODEL_FRAGMENT_TAG);
                 if (infoModelFragment != null) {
@@ -262,6 +281,8 @@ public class NICIMainActivity extends AppCompatActivity
                         .add(infoModelFragment, INFO_MODEL_FRAGMENT_TAG)
                         .commit();
                 break;
+            case 5:
+                break;
             default:
         }
     }
@@ -271,6 +292,12 @@ public class NICIMainActivity extends AppCompatActivity
                 .beginTransaction()
                 .replace(R.id.main_fragment, fragment)
                 .commit();
+    }
+
+    private void setActionBarTitle(int stringId) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(stringId);
+        }
     }
 
     private Fragment getFragmentFromTag(String tag) {
@@ -301,6 +328,8 @@ public class NICIMainActivity extends AppCompatActivity
                 }
                 break;
             case 3:
+                break;
+            case 4:
                 InfoModelFragment infoModelFragment = (InfoModelFragment) getSupportFragmentManager()
                         .findFragmentByTag(INFO_MODEL_FRAGMENT_TAG);
                 InfoFragment infoFragment = (InfoFragment) getSupportFragmentManager()
@@ -308,6 +337,8 @@ public class NICIMainActivity extends AppCompatActivity
                 if (infoModelFragment != null && infoFragment != null) {
                     infoFragment.setModel(infoModelFragment.getModel());
                 }
+                break;
+            case 5:
                 break;
             default:
         }

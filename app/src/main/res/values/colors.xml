@@ -6,13 +6,17 @@
 
     <color name="bottomBarIntro">@color/colorPrimaryDark</color>
     <color name="bottomBarProject">@color/colorAccent</color>
-    <color name="bottomBarInfo">@color/colorPrimary</color>
     <color name="bottomBarMeeting">@color/colorAccent</color>
+    <color name="bottomBarMeetingInfo">@color/colorPrimary</color>
+    <color name="bottomBarInfo">@color/colorPrimary</color>
+    <color name="bottomBarFacebook">@color/colorPrimaryDark</color>
 
     <color name="showIntroIcon">@color/colorPrimary</color>
     <color name="showProjectIcon">@color/colorAccent</color>
     <color name="showMeetingIcon">@color/colorAccent</color>
+    <color name="showMeetingInfoIcon">@color/colorPrimaryDark</color>
     <color name="showInfoIcon">@color/colorPrimary</color>
+    <color name="showFacebookIcon">@color/colorAccent</color>
 
     <color name="showFacebookPageBtn">#3B5998</color>
     <color name="showFacebookPageText">#FFFFFF</color>

@@ -13,7 +13,15 @@
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/bottom_bar_meeting_title" />
     <item
+        android:id="@+id/bottomBarMeetingInfo"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/bottom_bar_meeting_info_title" />
+    <item
         android:id="@+id/bottomBarInfo"
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/bottom_bar_info_title" />
+    <item
+        android:id="@+id/bottomBarFacebook"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/bottom_bar_facebook_title" />
 </menu>

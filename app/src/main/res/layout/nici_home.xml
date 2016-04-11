@@ -98,6 +98,28 @@
                     android:gravity="center_horizontal"
                     android:layout_width="0dp">
                     <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/show_meeting_info_btn"
+                        android:src="@drawable/ic_home_white_24dp"
+                        app:backgroundTint="@color/showInfoIcon"
+                        app:elevation="@dimen/show_icon_elevation"
+                        android:elevation="@dimen/show_icon_elevation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:text="@string/show_meeting_info_page"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/show_icon_text_margin"/>
+                </LinearLayout>
+            </TableRow>
+            <TableRow
+                android:layout_marginBottom="@dimen/show_icon_row_bottom_margin">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal"
+                    android:layout_width="0dp">
+                    <android.support.design.widget.FloatingActionButton
                         android:id="@+id/show_info_btn"
                         android:src="@drawable/ic_home_white_24dp"
                         app:backgroundTint="@color/showInfoIcon"
@@ -107,6 +129,25 @@
                         android:layout_height="wrap_content"/>
                     <TextView
                         android:text="@string/show_info_page"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/show_icon_text_margin"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal"
+                    android:layout_width="0dp">
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/show_facebook_btn"
+                        android:src="@drawable/ic_home_white_24dp"
+                        app:backgroundTint="@color/showFacebookIcon"
+                        app:elevation="@dimen/show_icon_elevation"
+                        android:elevation="@dimen/show_icon_elevation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:text="@string/show_facebook_page"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/show_icon_text_margin"/>
@@ -122,6 +163,7 @@
             android:layout_below="@id/show_icon_table"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:onClick="showFacebookPage"/>
     </RelativeLayout>
 </LinearLayout>
