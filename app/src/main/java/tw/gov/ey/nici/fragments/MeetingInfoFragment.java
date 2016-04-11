@@ -54,7 +54,7 @@ public class MeetingInfoFragment extends Fragment implements ListView.OnItemClic
     private ArrayList<NiciEventInfo> model = null;
 
     private boolean isSendingRequest = true;
-    private String currentRequestId = MeetingModelFragment.FIRST_REQUEST_ID;
+    private String currentRequestId = MeetingInfoModelFragment.FIRST_REQUEST_ID;
 
     private boolean scrollDetectionEnabled = DEFAULT_SCROLL_DETECTION_ENABLED;
     private int lastFirstVisibleItem = 0;
@@ -302,7 +302,7 @@ public class MeetingInfoFragment extends Fragment implements ListView.OnItemClic
 
     private void reload() {
         isSendingRequest = true;
-        currentRequestId = MeetingModelFragment.FIRST_REQUEST_ID;
+        currentRequestId = MeetingInfoModelFragment.FIRST_REQUEST_ID;
         adapter.clear();
         total = 0;
         // will be using the pull down refresh icon when reloading
