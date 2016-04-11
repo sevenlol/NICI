@@ -30,6 +30,8 @@
 
     <string name="meeting_detail_title">Meeting Detail</string>
 
+    <string name="no_more_meeting_info">No More Meeting Info to Show</string>
+
     <string name="intro_page_title">Intro</string>
     <string name="project_page_title">Project</string>
     <string name="meeting_page_title">Meeting</string>

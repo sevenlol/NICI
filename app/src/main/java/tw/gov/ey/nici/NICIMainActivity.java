@@ -20,6 +20,8 @@ import tw.gov.ey.nici.fragments.InfoFragment;
 import tw.gov.ey.nici.fragments.InfoModelFragment;
 import tw.gov.ey.nici.fragments.IntroFragment;
 import tw.gov.ey.nici.fragments.MeetingFragment;
+import tw.gov.ey.nici.fragments.MeetingInfoFragment;
+import tw.gov.ey.nici.fragments.MeetingInfoModelFragment;
 import tw.gov.ey.nici.fragments.MeetingModelFragment;
 import tw.gov.ey.nici.fragments.ProjectFragment;
 import tw.gov.ey.nici.fragments.ProjectModelFragment;
@@ -31,6 +33,7 @@ public class NICIMainActivity extends AppCompatActivity
     public static final String PAGE_TYPE_KEY = "niciPageTypeKey";
     public static final String PROJECT_MODEL_FRAGMENT_TAG = "niciProjectModelFragment";
     public static final String MEETING_MODEL_FRAGMENT_TAG = "niciMeetingModelFragment";
+    public static final String MEETING_INFO_MODEL_FRAGMENT_TAG = "niciMeetingInfoModelFragment";
     public static final String INFO_MODEL_FRAGMENT_TAG = "niciInfoModelFragment";
 
     private static final String FACEBOOK_PAGE_URL = "https://www.facebook.com/dcoffice";
@@ -201,6 +204,18 @@ public class NICIMainActivity extends AppCompatActivity
                 setActionBarTitle(R.string.meeting_page_title);
                 break;
             case R.id.bottomBarMeetingInfo:
+                MeetingInfoModelFragment meetingInfoModelFragment = (MeetingInfoModelFragment)
+                        getFragmentFromTag(MEETING_INFO_MODEL_FRAGMENT_TAG);
+                if (meetingInfoModelFragment == null) {
+                    meetingInfoModelFragment = MeetingInfoModelFragment.newInstance(niciClient);
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .add(meetingInfoModelFragment, MEETING_INFO_MODEL_FRAGMENT_TAG)
+                            .commit();
+                }
+                replaceCurrentFragment(MeetingInfoFragment.newInstance()
+                    .setModel(meetingInfoModelFragment.getModel())
+                    .setTotal(meetingInfoModelFragment.getTotal()));
                 setActionBarTitle(R.string.meeting_info_page_title);
                 break;
             case R.id.bottomBarInfo:
@@ -268,6 +283,19 @@ public class NICIMainActivity extends AppCompatActivity
                         .commit();
                 break;
             case 3:
+                MeetingInfoModelFragment meetingInfoModelFragment = (MeetingInfoModelFragment)
+                        getFragmentFromTag(MEETING_INFO_MODEL_FRAGMENT_TAG);
+                if (meetingInfoModelFragment != null) {
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .remove(meetingInfoModelFragment)
+                            .commit();
+                }
+                meetingInfoModelFragment = MeetingInfoModelFragment.newInstance(niciClient);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(meetingInfoModelFragment, MEETING_MODEL_FRAGMENT_TAG)
+                        .commit();
                 break;
             case 4:
                 InfoModelFragment infoModelFragment = (InfoModelFragment)
@@ -331,6 +359,13 @@ public class NICIMainActivity extends AppCompatActivity
                 }
                 break;
             case 3:
+                MeetingInfoModelFragment meetingInfoModelFragment = (MeetingInfoModelFragment) getSupportFragmentManager()
+                        .findFragmentByTag(MEETING_INFO_MODEL_FRAGMENT_TAG);
+                MeetingInfoFragment meetingInfoFragment = (MeetingInfoFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.main_fragment);
+                if (meetingInfoFragment != null && meetingInfoModelFragment != null) {
+                    meetingInfoFragment.setModel(meetingInfoModelFragment.getModel());
+                }
                 break;
             case 4:
                 InfoModelFragment infoModelFragment = (InfoModelFragment) getSupportFragmentManager()

@@ -3,7 +3,6 @@ package tw.gov.ey.nici.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -27,17 +26,16 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
-import tw.gov.ey.nici.MeetingDetailActivity;
 import tw.gov.ey.nici.NICIMainActivity;
 import tw.gov.ey.nici.R;
-import tw.gov.ey.nici.events.MeetingDataErrorEvent;
-import tw.gov.ey.nici.events.MeetingDataReadyEvent;
-import tw.gov.ey.nici.events.MeetingDataRequestEvent;
-import tw.gov.ey.nici.models.NiciEvent;
+import tw.gov.ey.nici.events.MeetingInfoDataErrorEvent;
+import tw.gov.ey.nici.events.MeetingInfoDataReadyEvent;
+import tw.gov.ey.nici.events.MeetingInfoDataRequestEvent;
+import tw.gov.ey.nici.models.NiciEventInfo;
 import tw.gov.ey.nici.utils.RandomStringGenerator;
-import tw.gov.ey.nici.views.NiciEventAdapter;
+import tw.gov.ey.nici.views.NiciEventInfoAdapter;
 
-public class MeetingFragment extends Fragment  implements ListView.OnItemClickListener,
+public class MeetingInfoFragment extends Fragment implements ListView.OnItemClickListener,
         SwipeRefreshLayout.OnRefreshListener, ListView.OnScrollListener {
     public static final int DEFAULT_SHOW_MORE_DATA_COUNT = 3;
     public static final int DEFAULT_EVENT_ID_LENGTH = 20;
@@ -47,13 +45,13 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
     private Handler handler = new Handler();
 
     private SwipeRefreshLayout swipeRefreshLayout = null;
-    private TextView showMoreMeetingLabel = null;
-    private ProgressBar showMoreMeetingProgress = null;
+    private TextView showMoreMeetingInfoLabel = null;
+    private ProgressBar showMoreMeetingInfoProgress = null;
     private ListView listView = null;
 
     private int total = 0;
-    private ArrayAdapter<NiciEvent> adapter = null;
-    private ArrayList<NiciEvent> model = null;
+    private ArrayAdapter<NiciEventInfo> adapter = null;
+    private ArrayList<NiciEventInfo> model = null;
 
     private boolean isSendingRequest = true;
     private String currentRequestId = MeetingModelFragment.FIRST_REQUEST_ID;
@@ -61,8 +59,8 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
     private boolean scrollDetectionEnabled = DEFAULT_SCROLL_DETECTION_ENABLED;
     private int lastFirstVisibleItem = 0;
 
-    public static MeetingFragment newInstance() {
-        return new MeetingFragment();
+    public static MeetingInfoFragment newInstance() {
+        return new MeetingInfoFragment();
     }
 
     @Override
@@ -100,10 +98,10 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
             LayoutInflater inflater,
             ViewGroup container,
             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.meeting_fragment, container, false);
+        View root = inflater.inflate(R.layout.meeting_info_fragment, container, false);
 
         // set the swipe refresh layout
-        swipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_meeting);
+        swipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_meeting_info);
         if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setOnRefreshListener(this);
         }
@@ -111,14 +109,14 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
         // inflate footer layout
         FrameLayout footerLayout = (FrameLayout) LayoutInflater.from(getContext())
                 .inflate(R.layout.list_footer, null);
-        showMoreMeetingLabel = (TextView) footerLayout.findViewById(R.id.show_more_label);
-        showMoreMeetingProgress = (ProgressBar) footerLayout.findViewById(R.id.show_more_progress);
+        showMoreMeetingInfoLabel = (TextView) footerLayout.findViewById(R.id.show_more_label);
+        showMoreMeetingInfoProgress = (ProgressBar) footerLayout.findViewById(R.id.show_more_progress);
         if (model != null && model.size() > 0) {
             // some data is already loaded
             setShowMoreMeetingBtnProgressBar(true, false);
 
             if (model.size() >= total) {
-                setShowMoreLabelText(getString(R.string.no_more_meeting));
+                setShowMoreLabelText(getString(R.string.no_more_meeting_info));
             }
 
             // if some data is already loaded, not sending request
@@ -131,88 +129,14 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
         }
 
         // set listview and adapter
-        adapter = new NiciEventAdapter(getActivity(), model);
-        listView = (ListView) root.findViewById(R.id.meeting_list);
+        adapter = new NiciEventInfoAdapter(getActivity(), model);
+        listView = (ListView) root.findViewById(R.id.meeting_info_list);
         listView.setOnItemClickListener(this);
         listView.setOnScrollListener(this);
         listView.setAdapter(adapter);
         listView.addFooterView(footerLayout);
 
         return root;
-    }
-
-    // receive new meeting data
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(MeetingDataReadyEvent event) {
-        // update total and model
-        // and set show more btn status
-        if (event != null) {
-            if (event.getTotal() >= 0) {
-                total = event.getTotal();
-            }
-
-            if (adapter != null && event.getEventList() != null) {
-                for (int i = 0; i < event.getEventList().size(); i++) {
-                    adapter.add(event.getEventList().get(i));
-                }
-
-                // set show more btn availablity
-                if (model.size() >= total) {
-                    setShowMoreLabelText(getString(R.string.no_more_meeting));
-                }
-            }
-        }
-
-        // TODO add id verification for data ready event
-        // stop request timer and clear flags
-        stopRequestTimer();
-        clearRequestFlags();
-    }
-
-    // meeting data request failed
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(MeetingDataErrorEvent event) {
-        if (event == null) {
-            return;
-        }
-
-        // the id is not matched, exit
-        if (currentRequestId != null && !currentRequestId.equals(event.getId())) {
-            return;
-        }
-
-        if (MeetingModelFragment.FIRST_REQUEST_ID.equals(currentRequestId)) {
-            // TODO handle the first request failing
-            // TODO disable show more meeting action and only allow reload
-            // TODO show error text
-        }
-
-        // stop request timer and clear flags
-        stopRequestTimer();
-        clearRequestFlags();
-    }
-
-    @Override
-    // meeting item clicked
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.d("Meeting Event", "Item Position: " + position);
-        if (model == null || model.size() <= position) {
-            return;
-        }
-
-        NiciEvent event = model.get(position);
-        if (event == null || event.getId() == null) {
-            return;
-        }
-        try {
-            // TODO add meeting detail id
-            Log.d("Meeting", "Start Activity");
-            Intent meetingDetailIntent = new Intent(getActivity(), MeetingDetailActivity.class);
-            startActivity(meetingDetailIntent);
-        } catch (Exception e) {
-            // TODO handle parse error
-            Log.d("Meeting", "Exception: " + e.getMessage());
-        }
     }
 
     @Override
@@ -239,16 +163,88 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
         if (scrollState == SCROLL_STATE_IDLE && absListView.getId() == listView.getId()) {
             final int currentFirstVisibleItem = listView.getFirstVisiblePosition();
             if (currentFirstVisibleItem >= lastFirstVisibleItem) {
-                Log.d("Meeting", "Scroll Down");
+                Log.d("MeetingInfo", "Scroll Down");
                 // prevent the glitch at the top of the list
                 if (lastFirstVisibleItem != 0 || currentFirstVisibleItem != 1) {
                     showHideBars(false);
                 }
             } else {
-                Log.d("Meeting", "Scroll Up");
+                Log.d("MeetingInfo", "Scroll Up");
                 showHideBars(true);
             }
             lastFirstVisibleItem = currentFirstVisibleItem;
+        }
+    }
+
+    // receive new meeting data
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(MeetingInfoDataReadyEvent event) {
+        // update total and model
+        // and set show more btn status
+        if (event != null) {
+            if (event.getTotal() >= 0) {
+                total = event.getTotal();
+            }
+
+            if (adapter != null && event.getEventInfoList() != null) {
+                for (int i = 0; i < event.getEventInfoList().size(); i++) {
+                    adapter.add(event.getEventInfoList().get(i));
+                }
+
+                // set show more btn availablity
+                if (model.size() >= total) {
+                    setShowMoreLabelText(getString(R.string.no_more_meeting_info));
+                }
+            }
+        }
+
+        // TODO add id verification for data ready event
+        // stop request timer and clear flags
+        stopRequestTimer();
+        clearRequestFlags();
+    }
+
+    // meeting data request failed
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(MeetingInfoDataErrorEvent event) {
+        if (event == null) {
+            return;
+        }
+
+        // the id is not matched, exit
+        if (currentRequestId != null && !currentRequestId.equals(event.getId())) {
+            return;
+        }
+
+        if (MeetingInfoModelFragment.FIRST_REQUEST_ID.equals(currentRequestId)) {
+            // TODO handle the first request failing
+            // TODO disable show more meeting action and only allow reload
+            // TODO show error text
+        }
+
+        // stop request timer and clear flags
+        stopRequestTimer();
+        clearRequestFlags();
+    }
+
+    @Override
+    // meeting item clicked
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Log.d("Meeting Event", "Item Position: " + position);
+        if (model == null || model.size() <= position) {
+            return;
+        }
+
+        NiciEventInfo eventInfo = model.get(position);
+        if (eventInfo == null || eventInfo.getId() == null) {
+            return;
+        }
+        try {
+            // TODO start meeting info detail activity
+            Log.d("MeetingInfo", "Start Activity");
+        } catch (Exception e) {
+            // TODO handle parse error
+            Log.d("MeetingInfo", "Exception: " + e.getMessage());
         }
     }
 
@@ -260,20 +256,20 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
             int total) {
         int totalItems = firstVisibleIndex + visibleItemCount;
         if (totalItems == total && !isSendingRequest) {
-            showMoreMeetingData();
+            showMoreMeetingInfoData();
         }
     }
 
-    public MeetingFragment setModel(ArrayList<NiciEvent> model) {
+    public MeetingInfoFragment setModel(ArrayList<NiciEventInfo> model) {
         this.model = model; return this;
     }
 
-    public MeetingFragment setTotal(Integer total) {
+    public MeetingInfoFragment setTotal(Integer total) {
         this.total = (total == null ? 0 : total);
         return this;
     }
 
-    private void showMoreMeetingData() {
+    private void showMoreMeetingInfoData() {
         if (total <= 0) {
             return;
         }
@@ -288,7 +284,7 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
         // id is only checked when receiving error events at the moment
         startRequestTimer();
         setRequestFlags();
-        EventBus.getDefault().post(new MeetingDataRequestEvent(
+        EventBus.getDefault().post(new MeetingInfoDataRequestEvent(
                 currentRequestId, DEFAULT_SHOW_MORE_DATA_COUNT));
     }
 
@@ -340,11 +336,11 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (showMoreMeetingLabel != null) {
-                    showMoreMeetingLabel.setVisibility(labelVisible ? View.VISIBLE : View.GONE);
+                if (showMoreMeetingInfoLabel != null) {
+                    showMoreMeetingInfoLabel.setVisibility(labelVisible ? View.VISIBLE : View.GONE);
                 }
-                if (showMoreMeetingProgress != null) {
-                    showMoreMeetingProgress.setVisibility(
+                if (showMoreMeetingInfoProgress != null) {
+                    showMoreMeetingInfoProgress.setVisibility(
                             progressBarVisible ? View.VISIBLE : View.GONE);
                 }
             }
@@ -358,8 +354,8 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (showMoreMeetingLabel != null) {
-                    showMoreMeetingLabel.setText(text);
+                if (showMoreMeetingInfoLabel != null) {
+                    showMoreMeetingInfoLabel.setText(text);
                 }
             }
         });
@@ -368,7 +364,7 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
     private Runnable requestTimer = new Runnable() {
         @Override
         public void run() {
-            Log.d("Meeting", "Request Timeout");
+            Log.d("MeetingInfo", "Request Timeout");
             clearRequestFlags();
         }
     };

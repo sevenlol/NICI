@@ -7,6 +7,7 @@ import java.util.Random;
 
 import tw.gov.ey.nici.models.NiciContent;
 import tw.gov.ey.nici.models.NiciEvent;
+import tw.gov.ey.nici.models.NiciEventInfo;
 import tw.gov.ey.nici.models.NiciHeading;
 import tw.gov.ey.nici.models.NiciImage;
 import tw.gov.ey.nici.models.NiciInfo;
@@ -36,6 +37,7 @@ public class NiciClientFactory {
         private static final int FAKE_DATA_COUNT = 15;
 
         private List<NiciEvent> eventList = new ArrayList<>();
+        private List<NiciEventInfo> eventInfoList = new ArrayList<>();
         private List<NiciInfo> model = new ArrayList<NiciInfo>();
 
         {
@@ -48,6 +50,13 @@ public class NiciClientFactory {
                     .setLinkUrl("https://www.google.com?testId=" + i));
 
                 eventList.add(new NiciEvent()
+                        .setId("Id: " + i)
+                        .setTitle("Title " + i)
+                        .setLocation("Location " + i)
+                        .setDate(new Date())
+                        .setDescription("Description " + i));
+
+                eventInfoList.add(new NiciEventInfo()
                         .setId("Id: " + i)
                         .setTitle("Title " + i)
                         .setLocation("Location " + i)
@@ -170,6 +179,30 @@ public class NiciClientFactory {
                     break;
                 }
                 result.add(eventList.get(i));
+            }
+            // add delay for testing
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {}
+            return result;
+        }
+
+        @Override
+        public int getNiciEventInfoCount() {
+            return eventInfoList.size();
+        }
+
+        @Override
+        public List<NiciEventInfo> getNiciEventInfo(int skip, int limit) {
+            List<NiciEventInfo> result = new ArrayList<>();
+            for (int i = 0; i < eventInfoList.size(); i++) {
+                if (i < skip) {
+                    continue;
+                }
+                if (result.size() == limit) {
+                    break;
+                }
+                result.add(eventInfoList.get(i));
             }
             // add delay for testing
             try {

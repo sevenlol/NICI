@@ -3,6 +3,7 @@ package tw.gov.ey.nici.network;
 import java.util.List;
 
 import tw.gov.ey.nici.models.NiciEvent;
+import tw.gov.ey.nici.models.NiciEventInfo;
 import tw.gov.ey.nici.models.NiciInfo;
 import tw.gov.ey.nici.models.NiciProject;
 
@@ -16,6 +17,10 @@ public interface NiciClient {
     /* NiciMeeting */
     int getNiciEventCount();
     List<NiciEvent> getNiciEvent(int skip, int limit);
+
+    /* NiciMeetingInfo */
+    int getNiciEventInfoCount();
+    List<NiciEventInfo> getNiciEventInfo(int skip, int limit);
 
     /* NiciInfo */
     int getNiciInfoCount();
