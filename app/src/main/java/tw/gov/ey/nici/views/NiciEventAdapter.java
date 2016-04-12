@@ -19,6 +19,7 @@ public class NiciEventAdapter extends ArrayAdapter<NiciEvent> {
         TextView title;
         TextView date;
         TextView location;
+        TextView minutesTaker;
     }
 
     public NiciEventAdapter(Context context, ArrayList<NiciEvent> eventList) {
@@ -39,6 +40,7 @@ public class NiciEventAdapter extends ArrayAdapter<NiciEvent> {
             viewHolder.title = (TextView) convertView.findViewById(R.id.meeting_title);
             viewHolder.date = (TextView) convertView.findViewById(R.id.meeting_date);
             viewHolder.location = (TextView) convertView.findViewById(R.id.meeting_location);
+            viewHolder.minutesTaker = (TextView) convertView.findViewById(R.id.meeting_minutes_taker);
 
             // set view holder
             convertView.setTag(viewHolder);
@@ -51,6 +53,9 @@ public class NiciEventAdapter extends ArrayAdapter<NiciEvent> {
         viewHolder.location.setText(String.format(
                 getContext().getString(R.string.meeting_location_str_format),
                 event.getLocation() == null ? "" : event.getLocation()));
+        viewHolder.minutesTaker.setText(String.format(
+                getContext().getString(R.string.meeting_minutes_taker_str_format),
+                event.getMinutesTaker() == null ? "" : event.getMinutesTaker()));
         String dateStr = "";
         if (event.getDate() != null) {
             try {

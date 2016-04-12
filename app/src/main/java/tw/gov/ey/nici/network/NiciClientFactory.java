@@ -54,7 +54,8 @@ public class NiciClientFactory {
                         .setTitle("Title " + i)
                         .setLocation("Location " + i)
                         .setDate(new Date())
-                        .setDescription("Description " + i));
+                        .setDescription("Description " + i)
+                        .setMinutesTaker("Person " + i));
 
                 eventInfoList.add(new NiciEventInfo()
                         .setId("Id: " + i)
@@ -85,7 +86,8 @@ public class NiciClientFactory {
 
             eventList.add(new NiciEvent()
                     .setId("Id")
-                    .setTitle("Title ")
+                    .setTitle("VERY LONG TITLE AHHAAHAHAHAAHAHAHAHAHAHAHAHAHAHAHAHAHAHA" +
+                            "AAHAHAHAHAHAHHAAHAHHAHAAHHAHAHAAHAHAHHAHAAHAHAHAHAHAHAHAH ")
                     .setLocation("Location ")
                     .setDate(new Date()));
         }
@@ -208,6 +210,9 @@ public class NiciClientFactory {
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {}
+//            if (skip >= 9) {
+//                throw new RuntimeException();
+//            }
             return result;
         }
 
