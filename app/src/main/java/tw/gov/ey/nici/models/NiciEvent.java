@@ -1,6 +1,7 @@
 package tw.gov.ey.nici.models;
 
 import java.util.Date;
+import java.util.List;
 
 public class NiciEvent {
     private String id;
@@ -8,6 +9,11 @@ public class NiciEvent {
     private Date date;
     private String location;
     private String description;
+    private String minutesTaker;
+    private String coverImageUrl;
+    private String eventMinutesUrl;
+    private List<NiciContent> eventContentList;
+
 
     public NiciEvent() {}
 
@@ -16,6 +22,10 @@ public class NiciEvent {
     public Date getDate() { return date; }
     public String getLocation() { return location; }
     public String getDescription() { return description; }
+    public String getMinutesTaker() { return minutesTaker; }
+    public String getCoverImageUrl() { return coverImageUrl; }
+    public String getEventMinutesUrl() { return eventMinutesUrl; }
+    public List<NiciContent> getEventContentList() { return eventContentList; }
 
     public NiciEvent setId(String id) {
         this.id = id; return this;
@@ -35,5 +45,21 @@ public class NiciEvent {
 
     public NiciEvent setDescription(String description) {
         this.description = description; return this;
+    }
+
+    public NiciEvent setMinutesTaker(String minutesTaker) {
+        this.minutesTaker = minutesTaker; return this;
+    }
+
+    public NiciEvent setCoverImageUrl(String coverImageUrl) {
+        this.coverImageUrl = coverImageUrl; return this;
+    }
+
+    public NiciEvent setEventMinutesUrl(String eventMinutesUrl) {
+        this.eventMinutesUrl = eventMinutesUrl; return this;
+    }
+
+    public NiciEvent setEventContentList(List<NiciContent> eventContentList) {
+        this.eventContentList = eventContentList; return this;
     }
 }
