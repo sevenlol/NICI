@@ -205,9 +205,10 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
             return;
         }
         try {
-            // TODO add meeting detail id
+            // TODO add other event field for preview
             Log.d("Meeting", "Start Activity");
             Intent meetingDetailIntent = new Intent(getActivity(), MeetingDetailActivity.class);
+            meetingDetailIntent.putExtra(MeetingDetailActivity.NICI_EVENT_ID_KEY, event.getId());
             startActivity(meetingDetailIntent);
         } catch (Exception e) {
             // TODO handle parse error
