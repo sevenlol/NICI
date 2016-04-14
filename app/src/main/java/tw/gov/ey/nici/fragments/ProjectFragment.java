@@ -307,14 +307,12 @@ public class ProjectFragment extends Fragment
         }
     }
 
-    // TODO  add a timer thread for request timeout
     private void setRequestFlags() {
         isSendingRequest = true;
         currentRequestId = RandomStringGenerator.getString(DEFAULT_EVENT_ID_LENGTH);
         setLoadingProgressBar(true);
     }
 
-    // TODO cancel the timer thread
     private void clearRequestFlags() {
         isSendingRequest = false;
         currentRequestId = null;

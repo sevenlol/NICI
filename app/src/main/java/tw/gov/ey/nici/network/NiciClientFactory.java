@@ -190,6 +190,31 @@ public class NiciClientFactory {
         }
 
         @Override
+        public NiciEvent getNiciEventById(String eventId) {
+            List<NiciContent> contentList = new ArrayList<NiciContent>();
+
+            // heading 1
+            NiciHeading heading1 = new NiciHeading("數位匯流發展方案推廣歷史");
+            contentList.add(heading1);
+
+            // paragraphs for heading 1
+            NiciParagraph paragraph1 = new NiciParagraph("為創造優質數位匯流生活，" +
+                    "打造數位匯流產業，進而提升國家次世代競爭力，我國於民國99年12月核定通過「數位匯" +
+                    "流發展方案(2010-2015年)」，民國101年5月核定通過「數位匯流發展方案(2010-2015年)" +
+                    "」（第二版）改版修訂，行政院同時成立「數位匯流專案小組」，負責督導、協調與推動我國的" +
+                    "數位匯流工作。");
+            NiciParagraph paragraph2 = new NiciParagraph("103年7月行政院核定「數位匯流專案小組」併入" +
+                    "NICI小組，於NICI小組下設置「數位匯流組」，由國家通訊傳播委員會擔任召集機關。");
+            contentList.add(paragraph1);
+            contentList.add(paragraph2);
+            // add delay for testing
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {}
+            return new NiciEvent().setId(eventId).setEventContentList(contentList);
+        }
+
+        @Override
         public int getNiciEventInfoCount() {
             return eventInfoList.size();
         }

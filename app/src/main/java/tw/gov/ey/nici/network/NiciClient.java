@@ -17,6 +17,7 @@ public interface NiciClient {
     /* NiciMeeting */
     int getNiciEventCount();
     List<NiciEvent> getNiciEvent(int skip, int limit);
+    NiciEvent getNiciEventById(String eventId);
 
     /* NiciMeetingInfo */
     int getNiciEventInfoCount();

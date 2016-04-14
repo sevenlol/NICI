@@ -15,12 +15,21 @@ import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
+import tw.gov.ey.nici.MeetingDetailActivity;
 import tw.gov.ey.nici.R;
 import tw.gov.ey.nici.models.NiciContent;
+import tw.gov.ey.nici.models.NiciEvent;
+import tw.gov.ey.nici.models.NiciImage;
+import tw.gov.ey.nici.network.NiciClient;
 import tw.gov.ey.nici.utils.NiciContentUtils;
 
 public class MeetingDetailFragment extends Fragment
@@ -33,7 +42,9 @@ public class MeetingDetailFragment extends Fragment
             NiciContent.Setting.MEDIUM;
 
     private String eventId;
+    private NiciEvent model;
 
+    private NiciClient client = null;
     private Handler handler = new Handler();
 
     private ScrollView scrollView = null;
@@ -41,16 +52,18 @@ public class MeetingDetailFragment extends Fragment
     private ProgressBar loadingProgress = null;
     private LinearLayout meetingDetailContainer = null;
 
+    private boolean isSendingRequest = false;
+
     private boolean scrollDetectionEnabled = DEFAULT_SCROLL_DETECTION_ENABLED;
     private NiciContent.Setting displayChoice = DEFAULT_DISPLAY_CHOICE;
     private Queue<Integer> scrollYQueue = new LinkedList<>();
     private long lastScrollUpdateTime = SystemClock.currentThreadTimeMillis();
 
-    public static MeetingDetailFragment newInstance(String eventId) {
-        if (eventId == null || eventId.equals("")) {
+    public static MeetingDetailFragment newInstance(NiciClient client, String eventId) {
+        if (eventId == null || eventId.equals("") || client == null) {
             throw new IllegalArgumentException();
         }
-        return new MeetingDetailFragment().setEventId(eventId);
+        return new MeetingDetailFragment().setEventId(eventId).setClient(client);
     }
 
     @Override
@@ -102,14 +115,12 @@ public class MeetingDetailFragment extends Fragment
             swipeRefreshLayout.setOnRefreshListener(this);
         }
 
-        // FIXME remove this
-        if (loadingProgress != null) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    loadingProgress.setVisibility(View.GONE);
-                }
-            });
+        if (model == null) {
+            // load data
+            new LoadMeetingDetailDataThread().start();
+        } else {
+            clearRequestFlags();
+            updateContainer();
         }
 
         return root;
@@ -117,10 +128,7 @@ public class MeetingDetailFragment extends Fragment
 
     @Override
     public void onRefresh() {
-        // FIXME remove this
-        if (swipeRefreshLayout != null) {
-            swipeRefreshLayout.setRefreshing(false);
-        }
+        reload();
     }
 
     @Override
@@ -160,16 +168,192 @@ public class MeetingDetailFragment extends Fragment
             }
 
             if (isScrollingUp) {
-                // TODO show toolbar
+                // show toolbar
+                showHideBar(true);
             } else if (isScrollingDown) {
-                // TODO hide toolbar
+                // hide toolbar
+                showHideBar(false);
             }
 
             scrollYQueue.clear();
         }
     }
 
+    private void reload() {
+        if (isSendingRequest) {
+            if (swipeRefreshLayout != null) {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+            return;
+        }
+
+        if (meetingDetailContainer != null) {
+            meetingDetailContainer.removeAllViews();
+        }
+        new LoadMeetingDetailDataThread().start();
+    }
+
+    private void updateContainer() {
+        if (model == null || meetingDetailContainer == null) {
+            return;
+        }
+        if (model.getEventContentList() == null ||
+                model.getEventContentList().size() == 0) {
+            return;
+        }
+
+        // clear all child views
+        meetingDetailContainer.removeAllViews();
+
+        List<NiciImage> imageList = new ArrayList<>();
+        for (NiciContent content : model.getEventContentList()) {
+            if (content == null) {
+                continue;
+            }
+            View view = content.getView(getContext(), displayChoice);
+            if (view == null) {
+                continue;
+            }
+            meetingDetailContainer.addView(view);
+
+            // save NiciImage to a list
+            if (content instanceof NiciImage) {
+                NiciImage image = (NiciImage) content;
+                if (image.getImageUrl() != null &&
+                        image.getImageView(getContext()) != null) {
+                    imageList.add(image);
+                }
+            }
+        }
+
+        // TODO change image setting and check url
+        for (NiciImage image : imageList) {
+            Picasso.with(getActivity())
+                    .load(image.getImageUrl())
+                    .into(image.getImageView(getActivity()));
+        }
+    }
+
+    private Runnable requestTimer = new Runnable() {
+        @Override
+        public void run() {
+            Log.d("MeetingDetail", "Request Timeout");
+            clearRequestFlags();
+        }
+    };
+
+    private void showHideBar(boolean isShow) {
+        if (getActivity() != null && getActivity() instanceof MeetingDetailActivity) {
+            if (isShow) {
+                ((MeetingDetailActivity) getActivity()).showBar();
+            } else {
+                ((MeetingDetailActivity) getActivity()).hideBar();
+            }
+        }
+    }
+
+    private void clearRequestFlags() {
+        isSendingRequest = false;
+        setLoadingProgressBar(false);
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    private void setLoadingProgressBar(final boolean isVisible) {
+        if (getActivity() == null) {
+            return;
+        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (loadingProgress == null) {
+                    return;
+                }
+
+                loadingProgress.setVisibility(isVisible ?
+                        View.VISIBLE : View.GONE);
+            }
+        });
+    }
+
+    class LoadMeetingDetailDataThread extends Thread {
+        @Override
+        public void run() {
+            if (isSendingRequest || eventId == null || eventId.equals("")) {
+                return;
+            }
+
+            isSendingRequest = true;
+            startRequestTimer();
+
+            boolean requestSucceeded = true;
+            try {
+                NiciEvent result = client.getNiciEventById(eventId);
+                if (validateData(result)) {
+                    // valid response
+                    model = result;
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateContainer();
+                            }
+                        });
+                    }
+                } else {
+                    requestSucceeded = false;
+                }
+            } catch (Exception e) {
+                Log.d("MeetingDetail", "Exception: " + e.getMessage());
+                requestSucceeded = false;
+            } finally {
+                if (!requestSucceeded) {
+                    // TODO load data error, display error message
+                }
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            clearRequestFlags();
+                        }
+                    });
+                }
+                // stop timer
+                stopRequestTimer();
+            }
+        }
+    }
+
+    // TODO change the implementation
+    private boolean validateData(NiciEvent event) {
+        return event != null && event.getEventContentList() != null;
+    }
+
+    private void startRequestTimer() {
+        if (handler != null) {
+            handler.postDelayed(requestTimer, DEFAULT_REQUEST_TIMEOUT);
+        }
+    }
+
+    private void stopRequestTimer() {
+        if (handler != null) {
+            handler.removeCallbacks(requestTimer);
+        }
+    }
+
+    private void makeShortToast(int resourceId) {
+        Toast.makeText(
+                getContext(),
+                getString(resourceId),
+                Toast.LENGTH_SHORT).show();
+    }
+
     private MeetingDetailFragment setEventId(String eventId) {
         this.eventId = eventId; return this;
+    }
+
+    private MeetingDetailFragment setClient(NiciClient client) {
+        this.client = client; return this;
     }
 }
