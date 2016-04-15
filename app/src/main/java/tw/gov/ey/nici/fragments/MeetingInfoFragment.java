@@ -33,6 +33,7 @@ import tw.gov.ey.nici.events.MeetingInfoDataReadyEvent;
 import tw.gov.ey.nici.events.MeetingInfoDataRequestEvent;
 import tw.gov.ey.nici.models.NiciEventInfo;
 import tw.gov.ey.nici.utils.RandomStringGenerator;
+import tw.gov.ey.nici.MeetingInfoDetailActivity;
 import tw.gov.ey.nici.views.NiciEventInfoAdapter;
 
 public class MeetingInfoFragment extends Fragment implements ListView.OnItemClickListener,
@@ -240,8 +241,11 @@ public class MeetingInfoFragment extends Fragment implements ListView.OnItemClic
             return;
         }
         try {
-            // TODO start meeting info detail activity
+            // TODO add other event info field for preview
             Log.d("MeetingInfo", "Start Activity");
+            Intent meetingDetailIntent = new Intent(getActivity(), MeetingInfoDetailActivity.class);
+            meetingDetailIntent.putExtra(MeetingInfoDetailActivity.NICI_EVENT_INFO_ID_KEY, eventInfo.getId());
+            startActivity(meetingDetailIntent);
         } catch (Exception e) {
             // TODO handle parse error
             Log.d("MeetingInfo", "Exception: " + e.getMessage());
