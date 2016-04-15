@@ -5,7 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,15 +18,22 @@ import tw.gov.ey.nici.R;
 import tw.gov.ey.nici.models.NiciEvent;
 
 public class NiciEventAdapter extends ArrayAdapter<NiciEvent> {
+    public static final int DEFAULT_PREFIEW_IMAGE_SIZE = 72;
     private static class ViewHolder {
         TextView title;
         TextView date;
         TextView location;
         TextView minutesTaker;
+        ImageView coverImagePreview;
     }
 
-    public NiciEventAdapter(Context context, ArrayList<NiciEvent> eventList) {
+    private int previewImageSize = DEFAULT_PREFIEW_IMAGE_SIZE;
+
+    public NiciEventAdapter(Context context, ArrayList<NiciEvent> eventList, int previewImageSize) {
         super(context, 0, eventList);
+        if (previewImageSize > 0) {
+            this.previewImageSize = previewImageSize;
+        }
     }
 
     @Override
@@ -41,6 +51,8 @@ public class NiciEventAdapter extends ArrayAdapter<NiciEvent> {
             viewHolder.date = (TextView) convertView.findViewById(R.id.meeting_date);
             viewHolder.location = (TextView) convertView.findViewById(R.id.meeting_location);
             viewHolder.minutesTaker = (TextView) convertView.findViewById(R.id.meeting_minutes_taker);
+            viewHolder.coverImagePreview = (ImageView) convertView
+                    .findViewById(R.id.meeting_cover_image_preview);
 
             // set view holder
             convertView.setTag(viewHolder);
@@ -66,6 +78,20 @@ public class NiciEventAdapter extends ArrayAdapter<NiciEvent> {
         }
         viewHolder.date.setText(String.format(
                 getContext().getString(R.string.meeting_date_str_format), dateStr));
+
+        // load image
+        if (event.getCoverImageUrl() != null && !event.getCoverImageUrl().equals("")) {
+            Picasso.with(getContext())
+                .load(event.getCoverImageUrl())
+                .resize(previewImageSize, previewImageSize)
+                .centerCrop()
+                .placeholder(R.drawable.image_placeholder)
+                .into(viewHolder.coverImagePreview);
+            viewHolder.coverImagePreview.setVisibility(View.VISIBLE);
+        } else {
+            // hide the image
+            viewHolder.coverImagePreview.setVisibility(View.GONE);
+        }
 
         return convertView;
     }

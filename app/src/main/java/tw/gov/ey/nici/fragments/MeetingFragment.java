@@ -3,6 +3,7 @@ package tw.gov.ey.nici.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -131,7 +132,9 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
         }
 
         // set listview and adapter
-        adapter = new NiciEventAdapter(getActivity(), model);
+        // Note the retrieved dimension is already transformed into pixel
+        adapter = new NiciEventAdapter(getActivity(), model,
+                (int) getActivity().getResources().getDimension(R.dimen.list_item_preview_image));
         listView = (ListView) root.findViewById(R.id.meeting_list);
         listView.setOnItemClickListener(this);
         listView.setOnScrollListener(this);

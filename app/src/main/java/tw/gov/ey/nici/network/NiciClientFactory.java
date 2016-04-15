@@ -55,7 +55,9 @@ public class NiciClientFactory {
                         .setLocation("Location " + i)
                         .setDate(new Date())
                         .setDescription("Description " + i)
-                        .setMinutesTaker("Person " + i));
+                        .setMinutesTaker("Person " + i)
+                        .setCoverImageUrl("http://dev.iifun.com.tw/nici/WebTools/Thumbnail.ashx?" +
+                                "SiteID=1&MmmID=40&fd=MessagessPic_Pics&Fixed=&Pname=06.jpg"));
 
                 eventInfoList.add(new NiciEventInfo()
                         .setId("Id: " + i)
