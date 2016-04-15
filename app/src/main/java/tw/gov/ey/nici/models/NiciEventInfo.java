@@ -1,6 +1,7 @@
 package tw.gov.ey.nici.models;
 
 import java.util.Date;
+import java.util.List;
 
 public class NiciEventInfo {
     private String id;
@@ -8,6 +9,7 @@ public class NiciEventInfo {
     private Date date;
     private String location;
     private String description;
+    private List<NiciContent> eventInfoContentList;
 
     public NiciEventInfo() {}
 
@@ -16,6 +18,7 @@ public class NiciEventInfo {
     public Date getDate() { return date; }
     public String getLocation() { return location; }
     public String getDescription() { return description; }
+    public List<NiciContent> getEventInfoContentList() { return eventInfoContentList; }
 
     public NiciEventInfo setId(String id) {
         this.id = id; return this;
@@ -35,5 +38,9 @@ public class NiciEventInfo {
 
     public NiciEventInfo setDescription(String description) {
         this.description = description; return this;
+    }
+
+    public NiciEventInfo setEventInfoContentList(List<NiciContent> eventInfoContentList) {
+        this.eventInfoContentList = eventInfoContentList; return this;
     }
 }

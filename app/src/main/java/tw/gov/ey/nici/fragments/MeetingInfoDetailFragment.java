@@ -24,15 +24,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import tw.gov.ey.nici.MeetingDetailActivity;
+import tw.gov.ey.nici.MeetingInfoDetailActivity;
 import tw.gov.ey.nici.R;
 import tw.gov.ey.nici.models.NiciContent;
-import tw.gov.ey.nici.models.NiciEvent;
+import tw.gov.ey.nici.models.NiciEventInfo;
 import tw.gov.ey.nici.models.NiciImage;
 import tw.gov.ey.nici.network.NiciClient;
 import tw.gov.ey.nici.utils.NiciContentUtils;
 
-public class MeetingDetailFragment extends Fragment
+public class MeetingInfoDetailFragment extends Fragment
         implements SwipeRefreshLayout.OnRefreshListener, ViewTreeObserver.OnScrollChangedListener {
     public static final int DEFAULT_REQUEST_TIMEOUT = 5000;
     public static final int DEFAULT_SCROLL_WINDOW_SIZE = 15;
@@ -41,8 +41,8 @@ public class MeetingDetailFragment extends Fragment
     public static final NiciContent.Setting DEFAULT_DISPLAY_CHOICE =
             NiciContent.Setting.MEDIUM;
 
-    private String eventId;
-    private NiciEvent model;
+    private String eventInfoId;
+    private NiciEventInfo model;
 
     private NiciClient client = null;
     private Handler handler = new Handler();
@@ -50,7 +50,7 @@ public class MeetingDetailFragment extends Fragment
     private ScrollView scrollView = null;
     private SwipeRefreshLayout swipeRefreshLayout = null;
     private ProgressBar loadingProgress = null;
-    private LinearLayout meetingDetailContainer = null;
+    private LinearLayout meetingInfoDetailContainer = null;
 
     private boolean isSendingRequest = false;
 
@@ -59,11 +59,11 @@ public class MeetingDetailFragment extends Fragment
     private Queue<Integer> scrollYQueue = new LinkedList<>();
     private long lastScrollUpdateTime = SystemClock.currentThreadTimeMillis();
 
-    public static MeetingDetailFragment newInstance(NiciClient client, String eventId) {
-        if (eventId == null || eventId.equals("") || client == null) {
+    public static MeetingInfoDetailFragment newInstance(NiciClient client, String eventInfoId) {
+        if (eventInfoId == null || eventInfoId.equals("") || client == null) {
             throw new IllegalArgumentException();
         }
-        return new MeetingDetailFragment().setEventId(eventId).setClient(client);
+        return new MeetingInfoDetailFragment().setClient(client).setEventInfoId(eventInfoId);
     }
 
     @Override
@@ -98,12 +98,12 @@ public class MeetingDetailFragment extends Fragment
             LayoutInflater inflater,
             ViewGroup container,
             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.meeting_detail_fragment, container, false);
+        View root = inflater.inflate(R.layout.meeting_info_detail_fragment, container, false);
 
-        scrollView = (ScrollView) root.findViewById(R.id.meeting_detail_anchor);
-        swipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_meeting_detail);
-        meetingDetailContainer = (LinearLayout) root.findViewById(R.id.meeting_detail_container);
-        loadingProgress = (ProgressBar) root.findViewById(R.id.meeting_detail_loading_progress);
+        scrollView = (ScrollView) root.findViewById(R.id.meeting_info_detail_anchor);
+        swipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_meeting_info_detail);
+        meetingInfoDetailContainer = (LinearLayout) root.findViewById(R.id.meeting_info_detail_container);
+        loadingProgress = (ProgressBar) root.findViewById(R.id.meeting_info_detail_loading_progress);
 
         // set the scroll listener
         if (scrollView != null) {
@@ -117,7 +117,7 @@ public class MeetingDetailFragment extends Fragment
 
         if (model == null) {
             // load data
-            new LoadMeetingDetailDataThread().start();
+            new LoadMeetingInfoDetailDataThread().start();
         } else {
             clearRequestFlags();
             updateContainer();
@@ -187,26 +187,26 @@ public class MeetingDetailFragment extends Fragment
             return;
         }
 
-        if (meetingDetailContainer != null) {
-            meetingDetailContainer.removeAllViews();
+        if (meetingInfoDetailContainer != null) {
+            meetingInfoDetailContainer.removeAllViews();
         }
-        new LoadMeetingDetailDataThread().start();
+        new LoadMeetingInfoDetailDataThread().start();
     }
 
     private void updateContainer() {
-        if (model == null || meetingDetailContainer == null) {
+        if (model == null || meetingInfoDetailContainer == null) {
             return;
         }
         // allowed to be empty
-        if (model.getEventContentList() == null) {
+        if (model.getEventInfoContentList() == null) {
             return;
         }
 
         // clear all child views
-        meetingDetailContainer.removeAllViews();
+        meetingInfoDetailContainer.removeAllViews();
 
         List<NiciImage> imageList = new ArrayList<>();
-        for (NiciContent content : model.getEventContentList()) {
+        for (NiciContent content : model.getEventInfoContentList()) {
             if (content == null) {
                 continue;
             }
@@ -214,7 +214,7 @@ public class MeetingDetailFragment extends Fragment
             if (view == null) {
                 continue;
             }
-            meetingDetailContainer.addView(view);
+            meetingInfoDetailContainer.addView(view);
 
             // save NiciImage to a list
             if (content instanceof NiciImage) {
@@ -237,17 +237,17 @@ public class MeetingDetailFragment extends Fragment
     private Runnable requestTimer = new Runnable() {
         @Override
         public void run() {
-            Log.d("MeetingDetail", "Request Timeout");
+            Log.d("MeetingInfoDetail", "Request Timeout");
             clearRequestFlags();
         }
     };
 
     private void showHideBar(boolean isShow) {
-        if (getActivity() != null && getActivity() instanceof MeetingDetailActivity) {
+        if (getActivity() != null && getActivity() instanceof MeetingInfoDetailActivity) {
             if (isShow) {
-                ((MeetingDetailActivity) getActivity()).showBar();
+                ((MeetingInfoDetailActivity) getActivity()).showBar();
             } else {
-                ((MeetingDetailActivity) getActivity()).hideBar();
+                ((MeetingInfoDetailActivity) getActivity()).hideBar();
             }
         }
     }
@@ -277,10 +277,10 @@ public class MeetingDetailFragment extends Fragment
         });
     }
 
-    class LoadMeetingDetailDataThread extends Thread {
+    class LoadMeetingInfoDetailDataThread extends Thread {
         @Override
         public void run() {
-            if (isSendingRequest || eventId == null || eventId.equals("")) {
+            if (isSendingRequest || eventInfoId == null || eventInfoId.equals("")) {
                 return;
             }
 
@@ -289,7 +289,7 @@ public class MeetingDetailFragment extends Fragment
 
             boolean requestSucceeded = true;
             try {
-                NiciEvent result = client.getNiciEventById(eventId);
+                NiciEventInfo result = client.getNiciEventInfoById(eventInfoId);
                 if (validateData(result)) {
                     // valid response
                     model = result;
@@ -305,7 +305,7 @@ public class MeetingDetailFragment extends Fragment
                     requestSucceeded = false;
                 }
             } catch (Exception e) {
-                Log.d("MeetingDetail", "Exception: " + e.getMessage());
+                Log.d("MeetingInfoDetail", "Exception: " + e.getMessage());
                 requestSucceeded = false;
             } finally {
                 if (!requestSucceeded) {
@@ -326,8 +326,8 @@ public class MeetingDetailFragment extends Fragment
     }
 
     // TODO change the implementation
-    private boolean validateData(NiciEvent event) {
-        return event != null && event.getEventContentList() != null;
+    private boolean validateData(NiciEventInfo eventInfo) {
+        return eventInfo != null && eventInfo.getEventInfoContentList() != null;
     }
 
     private void startRequestTimer() {
@@ -349,11 +349,11 @@ public class MeetingDetailFragment extends Fragment
                 Toast.LENGTH_SHORT).show();
     }
 
-    private MeetingDetailFragment setEventId(String eventId) {
-        this.eventId = eventId; return this;
+    private MeetingInfoDetailFragment setClient(NiciClient client) {
+        this.client = client; return this;
     }
 
-    private MeetingDetailFragment setClient(NiciClient client) {
-        this.client = client; return this;
+    private MeetingInfoDetailFragment setEventInfoId(String eventInfoId) {
+        this.eventInfoId = eventInfoId; return this;
     }
 }

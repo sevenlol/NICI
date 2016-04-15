@@ -3,8 +3,10 @@ package tw.gov.ey.nici;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
+import tw.gov.ey.nici.fragments.MeetingInfoDetailFragment;
 import tw.gov.ey.nici.network.NiciClient;
 import tw.gov.ey.nici.network.NiciClientFactory;
 
@@ -37,9 +39,17 @@ public class MeetingInfoDetailActivity extends AppCompatActivity implements View
             actionBar.setNavigationOnClickListener(this);
         }
 
-        String eventId = getIntent() == null ?
+        String eventInfoId = getIntent() == null ?
                 null : getIntent().getExtras() == null ?
                 null : getIntent().getExtras().getString(NICI_EVENT_INFO_ID_KEY);
+        if (getSupportFragmentManager().findFragmentById(R.id.meeting_info_detail_fragment) == null &&
+                eventInfoId != null && niciClient != null) {
+            Log.d("MeetingInfoDetail", "Event Info ID: " + eventInfoId);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.meeting_info_detail_fragment, MeetingInfoDetailFragment.newInstance(niciClient, eventInfoId))
+                    .commit();
+        }
     }
 
     @Override
