@@ -1,10 +1,14 @@
 package tw.gov.ey.nici.fragments;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -51,6 +55,20 @@ public class FacebookFragment extends Fragment {
         public boolean shouldOverrideUrlLoading(WebView webView, String url) {
             webView.loadUrl(url);
             return true;
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                flushCookies();
+            } else {
+                CookieSyncManager.getInstance().sync();
+            }
+        }
+
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        private void flushCookies() {
+            CookieManager.getInstance().flush();
         }
     };
 
