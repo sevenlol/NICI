@@ -1,6 +1,7 @@
 package tw.gov.ey.nici.views;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,8 @@ public class NiciEventAdapter extends ArrayAdapter<NiciEvent> {
         ImageView coverImagePreview;
     }
 
-    private int previewImageSize = DEFAULT_PREFIEW_IMAGE_SIZE;
+    private int previewImageSize = DEFAULT_PREFIEW_IMAGE_SIZE *
+            (int) Resources.getSystem().getDisplayMetrics().density;
 
     public NiciEventAdapter(Context context, ArrayList<NiciEvent> eventList, int previewImageSize) {
         super(context, 0, eventList);
