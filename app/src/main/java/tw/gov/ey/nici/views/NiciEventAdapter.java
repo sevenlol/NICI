@@ -19,7 +19,8 @@ import tw.gov.ey.nici.R;
 import tw.gov.ey.nici.models.NiciEvent;
 
 public class NiciEventAdapter extends ArrayAdapter<NiciEvent> {
-    public static final int DEFAULT_PREFIEW_IMAGE_SIZE = 72;
+    // image width and height in dp
+    public static final int DEFAULT_PREVIEW_IMAGE_SIZE = 72;
     private static class ViewHolder {
         TextView title;
         TextView date;
@@ -28,7 +29,7 @@ public class NiciEventAdapter extends ArrayAdapter<NiciEvent> {
         ImageView coverImagePreview;
     }
 
-    private int previewImageSize = DEFAULT_PREFIEW_IMAGE_SIZE *
+    private int previewImageSize = DEFAULT_PREVIEW_IMAGE_SIZE *
             (int) Resources.getSystem().getDisplayMetrics().density;
 
     public NiciEventAdapter(Context context, ArrayList<NiciEvent> eventList, int previewImageSize) {
