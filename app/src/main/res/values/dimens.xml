@@ -3,6 +3,12 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <dimen name="nici_logo_full_width">120dp</dimen>
+    <dimen name="nici_logo_full_height">96dp</dimen>
+
+    <dimen name="project_title_fig_width">186dp</dimen>
+    <dimen name="project_title_fig_height">56dp</dimen>
+
     <dimen name="show_icon_table_vertical_margin">48dp</dimen>
     <dimen name="show_icon_row_bottom_margin">24dp</dimen>
     <dimen name="show_icon_elevation">0dp</dimen>

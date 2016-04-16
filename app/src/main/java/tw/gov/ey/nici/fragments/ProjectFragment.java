@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
@@ -66,6 +67,7 @@ public class ProjectFragment extends Fragment
     private ScrollView scrollView = null;
     private SwipeRefreshLayout swipeRefreshLayout = null;
     private ProgressBar loadingProgress = null;
+    private RelativeLayout projectTitleLogoContainer = null;
     private LinearLayout projectContainer = null;
     private List<NiciImage> imageList = new ArrayList<>();
     private FloatingActionButton downloadBtn = null;
@@ -150,6 +152,7 @@ public class ProjectFragment extends Fragment
         View view = inflater.inflate(R.layout.project_fragment, container, false);
         scrollView = (ScrollView) view.findViewById(R.id.project_anchor);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_project);
+        projectTitleLogoContainer = (RelativeLayout) view.findViewById(R.id.project_title_logo_container);
         projectContainer = (LinearLayout) view.findViewById(R.id.project_container);
         loadingProgress = (ProgressBar) view.findViewById(R.id.project_loading_progress);
         downloadBtn = (FloatingActionButton) view.findViewById(R.id.download_project_file_btn);
@@ -169,6 +172,9 @@ public class ProjectFragment extends Fragment
             downloadBtn.setOnClickListener(this);
             downloadBtn.setEnabled(false);
         }
+
+        // hide title logo container
+        setProjectTitleLogoContainer(false);
 
         // already has model, stop loading
         if (model != null) {
@@ -257,6 +263,9 @@ public class ProjectFragment extends Fragment
         // clear image list
         imageList.clear();
 
+        // show title logo container
+        setProjectTitleLogoContainer(true);
+
         for (NiciContent content : model.getContentList()) {
             if (content == null) {
                 continue;
@@ -298,6 +307,8 @@ public class ProjectFragment extends Fragment
         if (projectContainer != null) {
             projectContainer.removeAllViews();
         }
+        // hide title logo container
+        setProjectTitleLogoContainer(false);
         // will be using the pull down refresh icon when reloading
         setLoadingProgressBar(false);
         startRequestTimer();
@@ -320,6 +331,22 @@ public class ProjectFragment extends Fragment
         if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setRefreshing(false);
         }
+    }
+
+    private void setProjectTitleLogoContainer(final boolean isVisible) {
+        if (getActivity() == null) {
+            return;
+        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (projectTitleLogoContainer == null) {
+                    return;
+                }
+                projectTitleLogoContainer.setVisibility(isVisible ?
+                    View.VISIBLE : View.GONE);
+            }
+        });
     }
 
     private void setLoadingProgressBar(final boolean isVisible) {

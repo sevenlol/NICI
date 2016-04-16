@@ -17,24 +17,53 @@
             android:id="@+id/project_anchor"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <LinearLayout
-                android:id="@+id/project_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/fab_anchor_bottom_padding"
                 android:orientation="vertical">
 
-                <ProgressBar
-                    android:id="@+id/project_loading_progress"
-                    android:indeterminate="true"
-                    style="@style/Base.Widget.AppCompat.ProgressBar"
+                <RelativeLayout
+                    android:id="@+id/project_title_logo_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/project_title"
+                        android:src="@drawable/project_title"
+                        android:layout_width="@dimen/project_title_fig_width"
+                        android:layout_height="@dimen/project_title_fig_height"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"/>
+                    <ImageView
+                        android:id="@+id/project_logo"
+                        android:src="@drawable/nici_logo_full"
+                        android:layout_width="@dimen/nici_logo_full_width"
+                        android:layout_toRightOf="@id/project_title"
+                        android:layout_toEndOf="@id/project_title"
+                        android:layout_height="@dimen/nici_logo_full_height"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/project_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"/>
+                    android:paddingBottom="@dimen/fab_anchor_bottom_padding"
+                    android:orientation="vertical">
+
+                    <ProgressBar
+                        android:id="@+id/project_loading_progress"
+                        android:indeterminate="true"
+                        style="@style/Base.Widget.AppCompat.ProgressBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible"/>
+
+                </LinearLayout>
 
             </LinearLayout>
-
         </ScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
