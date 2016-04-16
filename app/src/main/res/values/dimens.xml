@@ -3,12 +3,14 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <dimen name="show_icon_table_vertical_margin">48dp</dimen>
     <dimen name="show_icon_row_bottom_margin">24dp</dimen>
     <dimen name="show_icon_elevation">0dp</dimen>
     <dimen name="show_icon_text_margin">8dp</dimen>
 
     <dimen name="fab_elevation">4dp</dimen>
     <dimen name="fab_margin">8dp</dimen>
+    <dimen name="fab_margin_large">24dp</dimen>
     <dimen name="fab_anchor_bottom_padding">48dp</dimen>
 
     <dimen name="list_item_min_height">96dp</dimen>

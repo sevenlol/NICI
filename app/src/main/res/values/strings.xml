@@ -3,13 +3,13 @@
     <string name="action_settings">Setting</string>
     <string name="action_about">About</string>
 
-    <string name="show_intro_page">Show Intro</string>
-    <string name="show_project_page">Show Project</string>
-    <string name="show_meeting_page">Show Meeting</string>
-    <string name="show_meeting_info_page">Show Meeting Info</string>
-    <string name="show_info_page">Show Info</string>
+    <string name="show_intro_page">小組簡介</string>
+    <string name="show_project_page">方案計畫</string>
+    <string name="show_meeting_page">活動/會議情形</string>
+    <string name="show_meeting_info_page">活動/會議訊息</string>
+    <string name="show_info_page">資訊分享</string>
 
-    <string name="show_facebook_page">Show Facebook Page</string>
+    <string name="show_facebook_page">FACEBOOK</string>
 
     <string name="project_title">數位匯流計畫</string>
     <string name="project_desc">數位匯流計畫簡介</string>
@@ -34,12 +34,12 @@
 
     <string name="no_more_meeting_info">No More Meeting Info to Show</string>
 
-    <string name="intro_page_title">Intro</string>
-    <string name="project_page_title">Project</string>
-    <string name="meeting_page_title">Meeting</string>
-    <string name="meeting_info_page_title">Meeting Info</string>
-    <string name="info_page_title">Info</string>
-    <string name="facebook_page_title">Facebook</string>
+    <string name="intro_page_title">小組簡介</string>
+    <string name="project_page_title">方案計畫</string>
+    <string name="meeting_page_title">活動/會議情形</string>
+    <string name="meeting_info_page_title">活動/會議訊息</string>
+    <string name="info_page_title">資訊分享</string>
+    <string name="facebook_page_title">FACEBOOK</string>
 
     <string name="bottom_bar_intro_title">Intro</string>
     <string name="bottom_bar_project_title">Project</string>

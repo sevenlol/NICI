@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -39,7 +40,7 @@ import tw.gov.ey.nici.utils.RandomStringGenerator;
 import tw.gov.ey.nici.views.NiciInfoAdapter;
 
 public class InfoFragment extends Fragment implements ListView.OnItemClickListener,
-        SwipeRefreshLayout.OnRefreshListener, ListView.OnScrollListener {
+        SwipeRefreshLayout.OnRefreshListener, ListView.OnScrollListener, View.OnClickListener {
     public static final int DEFAULT_SHOW_MORE_DATA_COUNT = 3;
     public static final int DEFAULT_EVENT_ID_LENGTH = 20;
     public static final int DEFAULT_REQUEST_TIMEOUT = 5000;
@@ -51,6 +52,7 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
     private TextView showMoreInfoLabel = null;
     private ProgressBar showMoreInfoProgress = null;
     private ListView listView = null;
+    private FloatingActionButton scrollToTopBtn = null;
 
     private int total = 0;
     private ArrayAdapter<NiciInfo> adapter = null;
@@ -106,6 +108,12 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
         swipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_info);
         if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setOnRefreshListener(this);
+        }
+
+        // set the scroll to top button
+        scrollToTopBtn = (FloatingActionButton) root.findViewById(R.id.scroll_to_top_btn);
+        if (scrollToTopBtn != null) {
+            scrollToTopBtn.setOnClickListener(this);
         }
 
         // inflate footer layout
@@ -260,6 +268,16 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
         int totalItems = firstVisibleIndex + visibleItemCount;
         if (totalItems == total && !isSendingRequest) {
             showMoreInfoData();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (listView != null) {
+            // instant top
+            listView.setSelectionAfterHeaderView();
+            // smooth scroll
+//            listView.smoothScrollToPosition(0);
         }
     }
 
