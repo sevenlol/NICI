@@ -14,6 +14,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <RelativeLayout
+        android:id="@+id/youtube_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <ImageButton
         android:scaleType="fitCenter"
         android:layout_width="wrap_content"
