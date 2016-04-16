@@ -3,6 +3,7 @@ package tw.gov.ey.nici.fragments;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,9 @@ import android.webkit.WebViewClient;
 
 import tw.gov.ey.nici.R;
 
-public class FacebookFragment extends Fragment {
+public class FacebookFragment extends Fragment implements View.OnClickListener {
+    private WebView webView = null;
+    private FloatingActionButton scrollToTopBtn = null;
 
     private String facebookPageUrl = null;
 
@@ -41,10 +44,15 @@ public class FacebookFragment extends Fragment {
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.facebook_fragment, container, false);
 
-        WebView webView = (WebView) root.findViewById(R.id.facebook_container);
+        webView = (WebView) root.findViewById(R.id.facebook_container);
         if (webView != null && facebookPageUrl != null) {
             webView.setWebViewClient(webViewClient);
             webView.loadUrl(facebookPageUrl);
+        }
+
+        scrollToTopBtn = (FloatingActionButton) root.findViewById(R.id.scroll_to_top_btn);
+        if (scrollToTopBtn != null) {
+            scrollToTopBtn.setOnClickListener(this);
         }
 
         return root;
@@ -74,5 +82,12 @@ public class FacebookFragment extends Fragment {
 
     private FacebookFragment setFacebookPageUrl(String facebookPageUrl) {
         this.facebookPageUrl = facebookPageUrl; return this;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (webView != null) {
+            webView.scrollTo(0, 0);
+        }
     }
 }
