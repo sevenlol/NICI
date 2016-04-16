@@ -41,7 +41,7 @@ public class IntroFragment extends Fragment {
             ViewGroup container,
             Bundle savedInstanceState) {
         View mView = inflater.inflate(R.layout.intro_fragment, container, false);
-        
+
         if (getChildFragmentManager().findFragmentById(R.id.youtube_fragment) == null) {
             YouTubePlayerSupportFragment fragment = YouTubePlayerSupportFragment.newInstance();
             getChildFragmentManager()

@@ -21,18 +21,18 @@
     <string name="info_date_format">yyyy-MM-dd</string>
     <string name="info_date_str_format">時間：%s</string>
     <string name="info_published_by_str_format">發表：%s</string>
-    <string name="no_more_info">No More Info to Show</string>
+    <string name="no_more_info">沒有更多資訊</string>
 
     <string name="meeting_date_format">yyyy-MM-dd</string>
     <string name="meeting_date_str_format">時間：%s</string>
     <string name="meeting_location_str_format">地點：%s</string>
     <string name="meeting_minutes_taker_str_format">會議記錄：%s</string>
-    <string name="no_more_meeting">No More Meeting to Show</string>
+    <string name="no_more_meeting">沒有更多活動/會議情形</string>
 
     <string name="meeting_detail_title">Meeting Detail</string>
     <string name="meeting_info_detail_title">Meeting Info Detail</string>
 
-    <string name="no_more_meeting_info">No More Meeting Info to Show</string>
+    <string name="no_more_meeting_info">沒有更多活動/會議訊息</string>
 
     <string name="intro_page_title">小組簡介</string>
     <string name="project_page_title">方案計畫</string>
@@ -41,14 +41,14 @@
     <string name="info_page_title">資訊分享</string>
     <string name="facebook_page_title">FACEBOOK</string>
 
-    <string name="bottom_bar_intro_title">Intro</string>
-    <string name="bottom_bar_project_title">Project</string>
-    <string name="bottom_bar_meeting_title">Meeting</string>
-    <string name="bottom_bar_meeting_info_title">Meeting Info</string>
-    <string name="bottom_bar_info_title">Info</string>
-    <string name="bottom_bar_facebook_title">Facebook</string>
+    <string name="bottom_bar_intro_title">小組簡介</string>
+    <string name="bottom_bar_project_title">方案計畫</string>
+    <string name="bottom_bar_meeting_title">會議情形</string>
+    <string name="bottom_bar_meeting_info_title">會議訊息</string>
+    <string name="bottom_bar_info_title">資訊分享</string>
+    <string name="bottom_bar_facebook_title">社團</string>
 
-    <string name="setting_title">Setting</string>
+    <string name="setting_title">設定</string>
     <string name="pref_scroll_detection_key">niciScrollDetectionEnabled</string>
     <string name="pref_scroll_detection_title">Scroll Detection</string>
     <string name="pref_scroll_detection_summary">Hide/Show Toolbars When Scrolling</string>
@@ -56,5 +56,5 @@
     <string name="pref_display_choice_title">Display Choice</string>
     <string name="pref_display_choice_summary">Modify the Size of Contents</string>
 
-    <string name="about_title">About</string>
+    <string name="about_title">關於</string>
 </resources>

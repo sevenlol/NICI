@@ -68,9 +68,10 @@ public class NiciEventAdapter extends ArrayAdapter<NiciEvent> {
         viewHolder.location.setText(String.format(
                 getContext().getString(R.string.meeting_location_str_format),
                 event.getLocation() == null ? "" : event.getLocation()));
-        viewHolder.minutesTaker.setText(String.format(
+        // disable minutesTaker field
+        /*viewHolder.minutesTaker.setText(String.format(
                 getContext().getString(R.string.meeting_minutes_taker_str_format),
-                event.getMinutesTaker() == null ? "" : event.getMinutesTaker()));
+                event.getMinutesTaker() == null ? "" : event.getMinutesTaker()));*/
         String dateStr = "";
         if (event.getDate() != null) {
             try {
