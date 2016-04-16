@@ -166,4 +166,10 @@
             android:visibility="gone"
             android:onClick="showFacebookPage"/>
     </RelativeLayout>
+
+    <com.redbooth.WelcomeCoordinatorLayout
+        android:id="@+id/welcome_page_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"/>
 </LinearLayout>

@@ -8,15 +8,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
+
+import com.redbooth.WelcomeCoordinatorLayout;
+import com.redbooth.WelcomePageLayout;
 
 public class NICIHomeActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String FACEBOOK_PAGE_URL = "https://www.facebook.com/dcoffice";
 
+    private RelativeLayout homeContainer = null;
+    private WelcomeCoordinatorLayout welcomePageContainer = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nici_home);
+
+        // get containers
+        homeContainer = (RelativeLayout) findViewById(R.id.home_content);
+        welcomePageContainer = (WelcomeCoordinatorLayout) findViewById(R.id.welcome_page_container);
 
         // initiate action bar
         Toolbar actionBar = (Toolbar) findViewById(R.id.home_action_bar);
@@ -51,6 +62,9 @@ public class NICIHomeActivity extends AppCompatActivity implements View.OnClickL
         if (showFacebookBtn != null) {
             showFacebookBtn.setOnClickListener(this);
         }
+
+        // init welcome page
+        initWelcomePage();
     }
 
     @Override
@@ -58,6 +72,11 @@ public class NICIHomeActivity extends AppCompatActivity implements View.OnClickL
         Intent showMainIntent = new Intent(this, NICIMainActivity.class);
         String pageType;
         switch(v.getId()) {
+            case R.id.welcome_page:
+                // welcome page clicked, show home icons and action bar
+                Log.d("Home", "Welcome Page Clicked");
+                showHomeContent();
+                return;
             case R.id.show_intro_btn:
                 pageType = NICIMainActivity.PageType.INTRO.name();
                 break;
@@ -88,5 +107,38 @@ public class NICIHomeActivity extends AppCompatActivity implements View.OnClickL
         Intent facebookPageIntent = new Intent(Intent.ACTION_VIEW)
                 .setData(Uri.parse(FACEBOOK_PAGE_URL));
         startActivity(facebookPageIntent);
+    }
+
+    private void initWelcomePage() {
+        // hide action bar and home page
+        if (homeContainer != null) {
+            homeContainer.setVisibility(View.GONE);
+        }
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
+        // init welcome page
+        if (welcomePageContainer != null) {
+            welcomePageContainer.addPage(R.layout.welcome_page);
+            welcomePageContainer.setScrollingEnabled(false);
+            welcomePageContainer.showIndicators(false);
+        }
+        WelcomePageLayout welcomePage = (WelcomePageLayout) findViewById(R.id.welcome_page);
+        if (welcomePage != null) {
+            welcomePage.setOnClickListener(this);
+        }
+    }
+
+    private void showHomeContent() {
+        if (homeContainer != null) {
+            homeContainer.setVisibility(View.VISIBLE);
+        }
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().show();
+        }
+        if (welcomePageContainer != null) {
+            welcomePageContainer.setVisibility(View.GONE);
+        }
     }
 }
