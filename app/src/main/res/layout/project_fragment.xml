@@ -25,7 +25,10 @@
                 <RelativeLayout
                     android:id="@+id/project_title_logo_container"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/logo_title_bar_vertical_margin"
+                    android:layout_marginRight="@dimen/logo_title_bar_right_margin"
+                    android:layout_marginEnd="@dimen/logo_title_bar_right_margin">
                     <ImageView
                         android:id="@+id/project_title"
                         android:src="@drawable/project_title"
