@@ -20,6 +20,7 @@
         <activity android:name=".NICIMainActivity" />
         <activity android:name=".MeetingDetailActivity" />
         <activity android:name=".MeetingInfoDetailActivity" />
+        <activity android:name=".DocViewerActivity" />
         <activity android:name=".SettingActivity" />
         <activity android:name=".AboutActivity" />
     </application>

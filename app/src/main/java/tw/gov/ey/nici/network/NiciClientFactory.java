@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Random;
 
 import tw.gov.ey.nici.models.NiciContent;
+import tw.gov.ey.nici.models.NiciDocViewerLink;
 import tw.gov.ey.nici.models.NiciEvent;
 import tw.gov.ey.nici.models.NiciEventInfo;
+import tw.gov.ey.nici.models.NiciFileUtilBar;
 import tw.gov.ey.nici.models.NiciHeading;
 import tw.gov.ey.nici.models.NiciImage;
 import tw.gov.ey.nici.models.NiciInfo;
@@ -121,6 +123,16 @@ public class NiciClientFactory {
             // heading 2
             NiciHeading heading2 = new NiciHeading("數位匯流發展方案第二版");
             contentList.add(heading2);
+
+            // file util bar
+            NiciFileUtilBar fileUtilBar = new NiciFileUtilBar(true, true,
+                    "http://dev.iifun.com.tw/nici/WebTools/File" +
+                    "sDownload.ashx?Siteid=1&MmmID=31&fd=Messagess_Files&Pname=1.docx");
+            contentList.add(fileUtilBar);
+
+            // doc viewer link test
+            NiciDocViewerLink viewerLink = new NiciDocViewerLink("testurl", "FILE LINK TITLE");
+            contentList.add(viewerLink);
 
             // paragraphs for heading 2
             NiciParagraph paragraph3 = new NiciParagraph("為創造優質數位匯流生活，打造數位匯流產業，" +
