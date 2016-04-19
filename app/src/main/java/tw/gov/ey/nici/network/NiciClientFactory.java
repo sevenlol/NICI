@@ -126,12 +126,14 @@ public class NiciClientFactory {
 
             // file util bar
             NiciFileUtilBar fileUtilBar = new NiciFileUtilBar(true, true,
-                    "http://dev.iifun.com.tw/nici/WebTools/File" +
-                    "sDownload.ashx?Siteid=1&MmmID=31&fd=Messagess_Files&Pname=1.docx");
+                    "http://www.nici.ey.gov.tw/Upload/RelFile/2829/733138/73f7af44-4c6a-4a2f-8204-3c4e7c82bb62.pdf",
+                    "數位匯流發展方案第二版");
             contentList.add(fileUtilBar);
 
             // doc viewer link test
-            NiciDocViewerLink viewerLink = new NiciDocViewerLink("testurl", "FILE LINK TITLE");
+            NiciDocViewerLink viewerLink = new NiciDocViewerLink("http://www.nici.ey.gov.tw/Upload/" +
+                    "RelFile/2829/733138/73f7af44-4c6a-4a2f-8204-3c4e7c82bb62.pdf",
+                    "FILE LINK TITLE", "FILE LINK LABEL");
             contentList.add(viewerLink);
 
             // paragraphs for heading 2

@@ -71,8 +71,8 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/download_project_file_btn"
-        android:src="@drawable/ic_file_download_white_24dp"
+        android:id="@+id/scroll_to_top_btn"
+        android:src="@drawable/ic_keyboard_arrow_up_white_24dp"
         app:layout_anchor="@id/project_anchor"
         app:layout_anchorGravity="bottom|right|end"
         android:layout_margin="@dimen/fab_margin"

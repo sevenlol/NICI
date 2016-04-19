@@ -38,11 +38,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import tw.gov.ey.nici.DocViewerActivity;
 import tw.gov.ey.nici.NICIMainActivity;
 import tw.gov.ey.nici.R;
 import tw.gov.ey.nici.events.ProjectDataErrorEvent;
 import tw.gov.ey.nici.events.ProjectDataReadyEvent;
 import tw.gov.ey.nici.models.NiciContent;
+import tw.gov.ey.nici.models.NiciDocViewerLink;
+import tw.gov.ey.nici.models.NiciFileUtilBar;
 import tw.gov.ey.nici.models.NiciImage;
 import tw.gov.ey.nici.models.NiciProject;
 import tw.gov.ey.nici.utils.NiciContentUtils;
@@ -70,9 +73,12 @@ public class ProjectFragment extends Fragment
     private RelativeLayout projectTitleLogoContainer = null;
     private LinearLayout projectContainer = null;
     private List<NiciImage> imageList = new ArrayList<>();
-    private FloatingActionButton downloadBtn = null;
+    private FloatingActionButton scrollToTopBtn = null;
 
     private NiciProject model = null;
+
+    private List<NiciFileUtilBar> fileUtilBars = new ArrayList<>();
+    private List<NiciDocViewerLink> docViewerLinks = new ArrayList<>();
 
     private boolean isSendingRequest = true;
     private String currentRequestId = ProjectModelFragment.FIRST_REQUEST_ID;
@@ -155,7 +161,7 @@ public class ProjectFragment extends Fragment
         projectTitleLogoContainer = (RelativeLayout) view.findViewById(R.id.project_title_logo_container);
         projectContainer = (LinearLayout) view.findViewById(R.id.project_container);
         loadingProgress = (ProgressBar) view.findViewById(R.id.project_loading_progress);
-        downloadBtn = (FloatingActionButton) view.findViewById(R.id.download_project_file_btn);
+        scrollToTopBtn = (FloatingActionButton) view.findViewById(R.id.scroll_to_top_btn);
 
         // set the scroll listener
         if (scrollView != null) {
@@ -168,9 +174,8 @@ public class ProjectFragment extends Fragment
         }
 
         // set download btn listener
-        if (downloadBtn != null) {
-            downloadBtn.setOnClickListener(this);
-            downloadBtn.setEnabled(false);
+        if (scrollToTopBtn != null) {
+            scrollToTopBtn.setOnClickListener(this);
         }
 
         // hide title logo container
@@ -181,13 +186,6 @@ public class ProjectFragment extends Fragment
             clearRequestFlags();
             // update view with model
             updateContainer();
-
-            // enable download
-            if (model.getProjectFileUrl() != null &&
-                !model.getProjectFileUrl().equals("") &&
-                downloadBtn != null) {
-                downloadBtn.setEnabled(true);
-            }
         } else {
             // start request timer
             startRequestTimer();
@@ -215,8 +213,8 @@ public class ProjectFragment extends Fragment
         // enable download
         if (model.getProjectFileUrl() != null &&
             !model.getProjectFileUrl().equals("") &&
-            downloadBtn != null) {
-            downloadBtn.setEnabled(true);
+            scrollToTopBtn != null) {
+            scrollToTopBtn.setEnabled(true);
         }
 
         // update view
@@ -274,6 +272,9 @@ public class ProjectFragment extends Fragment
             if (view == null) {
                 continue;
             }
+            if (view.getParent() != null) {
+                ((ViewGroup) view.getParent()).removeView(view);
+            }
             projectContainer.addView(view);
 
             // save NiciImage to a list
@@ -282,6 +283,27 @@ public class ProjectFragment extends Fragment
                 if (image.getImageUrl() != null &&
                     image.getImageView(getContext()) != null) {
                     imageList.add(image);
+                }
+            }
+
+            // file util bars
+            if (content instanceof NiciFileUtilBar) {
+                NiciFileUtilBar bar = (NiciFileUtilBar) content;
+                fileUtilBars.add(bar);
+                if (bar.getDownloadButton(getContext()) != null) {
+                    bar.getDownloadButton(getContext()).setOnClickListener(this);
+                }
+                if (bar.getViewButton(getContext()) != null) {
+                    bar.getViewButton(getContext()).setOnClickListener(this);
+                }
+            }
+
+            // doc viewer links
+            if (content instanceof NiciDocViewerLink) {
+                NiciDocViewerLink link = (NiciDocViewerLink) content;
+                docViewerLinks.add(link);
+                if (link.getLinkButton(getContext()) != null) {
+                    link.getLinkButton(getContext()).setOnClickListener(this);
                 }
             }
         }
@@ -368,48 +390,39 @@ public class ProjectFragment extends Fragment
 
     @Override
     public void onClick(View v) {
-        if (model == null || model.getProjectFileUrl() == null ||
-            model.getProjectFileUrl().equals("")) {
-            makeShortToast(R.string.no_project_file);
+        // TODO implement download and online view document functions
+        if (v == scrollToTopBtn) {
+            scrollToTop();
             return;
         }
 
-        if (downloadManager == null) {
-            makeShortToast(R.string.download_failed);
-            return;
+        // file util bars
+        for (NiciFileUtilBar bar : fileUtilBars) {
+            if (bar == null || bar.getFileUrl() == null) {
+                continue;
+            }
+
+            if (v == bar.getDownloadButton(getContext())) {
+                downloadProjectFile(bar.getFileUrl());
+                return;
+            }
+            if (v == bar.getViewButton(getContext())) {
+                viewDoc(bar.getFileUrl(), bar.getFileTitle());
+                return;
+            }
         }
 
-        // is already downloading, return
-        if (currentDownloadId != null) {
-            makeShortToast(R.string.already_downloading);
-            return;
+        // doc viewer link
+        for (NiciDocViewerLink link : docViewerLinks) {
+            if (link == null || link.getFileUrl() == null) {
+                continue;
+            }
+
+            if (v == link.getLinkButton(getContext())) {
+                viewDoc(link.getFileUrl(), link.getFileTitle());
+                return;
+            }
         }
-
-        // TODO download project file
-        Uri uri = null;
-        try {
-            uri = Uri.parse(model.getProjectFileUrl());
-        } catch (Exception e) {
-            makeShortToast(R.string.no_project_file);
-            return;
-        }
-
-        DownloadManager.Request req = new DownloadManager.Request(uri);
-
-        // download settings
-        req.setAllowedNetworkTypes(
-                DownloadManager.Request.NETWORK_MOBILE |
-                DownloadManager.Request.NETWORK_WIFI)
-            .setAllowedOverRoaming(false)
-            .setTitle(getString(R.string.project_title))
-            .setDescription(getString(R.string.project_desc))
-            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, getName(uri))
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-
-        downloadBtn.setEnabled(false);
-        currentDownloadId = downloadManager.enqueue(req);
-        // start download timer
-        startDownloadTimer();
     }
 
     @Override
@@ -458,6 +471,70 @@ public class ProjectFragment extends Fragment
 
             scrollYQueue.clear();
         }
+    }
+
+    private void scrollToTop() {
+        if (scrollView != null) {
+            scrollView.scrollTo(0, 0);
+        }
+    }
+
+    private void viewDoc(String fileUrl, String fileTitle) {
+        if (fileUrl == null || fileUrl.equals("")) {
+            return;
+        }
+
+        Intent intent = new Intent(getContext(), DocViewerActivity.class);
+        intent.putExtra(DocViewerActivity.DOC_URL_KEY, fileUrl);
+        if (fileTitle != null && !fileTitle.equals("")) {
+            intent.putExtra(DocViewerActivity.DOC_TITLE_KEY, fileTitle);
+        }
+        if (getActivity() != null) {
+            getActivity().startActivity(intent);
+        }
+    }
+
+    private void downloadProjectFile(String fileUrl) {
+        if (fileUrl == null || fileUrl.equals("")) {
+            makeShortToast(R.string.no_project_file);
+            return;
+        }
+
+        if (downloadManager == null) {
+            makeShortToast(R.string.download_failed);
+            return;
+        }
+
+        // is already downloading, return
+        if (currentDownloadId != null) {
+            makeShortToast(R.string.already_downloading);
+            return;
+        }
+
+        // TODO download project file
+        Uri uri = null;
+        try {
+            uri = Uri.parse(fileUrl);
+        } catch (Exception e) {
+            makeShortToast(R.string.no_project_file);
+            return;
+        }
+
+        DownloadManager.Request req = new DownloadManager.Request(uri);
+
+        // download settings
+        req.setAllowedNetworkTypes(
+                DownloadManager.Request.NETWORK_MOBILE |
+                        DownloadManager.Request.NETWORK_WIFI)
+                .setAllowedOverRoaming(false)
+                .setTitle(getString(R.string.project_title))
+                .setDescription(getString(R.string.project_desc))
+                .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, getName(uri))
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+        currentDownloadId = downloadManager.enqueue(req);
+        // start download timer
+        startDownloadTimer();
     }
 
     // TODO handle download notification clicked event
@@ -511,9 +588,6 @@ public class ProjectFragment extends Fragment
 
     private void resetDownloadFlags() {
         currentDownloadId = null;
-        if (downloadBtn != null) {
-            downloadBtn.setEnabled(true);
-        }
     }
 
     private void startRequestTimer() {

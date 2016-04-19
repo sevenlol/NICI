@@ -8,16 +8,19 @@ import android.widget.LinearLayout;
 
 public class NiciDocViewerLink extends NiciText {
     private String fileUrl = null;
+    private String fileTitle = null;
     private String linkLabel = null;
 
     private Button linkBtn = null;
 
-    public NiciDocViewerLink(String fileUrl, String linkLabel) {
+    public NiciDocViewerLink(String fileUrl, String fileTitle, String linkLabel) {
         if (fileUrl == null || fileUrl.equals("") ||
+            fileTitle == null || fileTitle.equals("") ||
             linkLabel == null || linkLabel.equals("")) {
             throw new IllegalArgumentException();
         }
         this.fileUrl = fileUrl;
+        this.fileTitle = fileTitle;
         this.linkLabel = linkLabel;
     }
     @Override
@@ -47,6 +50,7 @@ public class NiciDocViewerLink extends NiciText {
     }
 
     public String getFileUrl() { return fileUrl; }
+    public String getFileTitle() { return fileTitle; }
 
     private Button getBaseButton(Context context) {
         check(context);

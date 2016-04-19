@@ -14,29 +14,32 @@ public class NiciFileUtilBar extends NiciText {
     public static final String VIEW_LABEL = "線上瀏覽";
     public static final String DOWNLOAD_LABEL = "下載檔案";
 
-    public static final int DEFAULT_VIEW_ICON = R.drawable.ic_home_black_24dp;
-    public static final int DEFAULT_DOWNLOAD_ICON = R.drawable.ic_home_black_24dp;
+    public static final int DEFAULT_VIEW_ICON = R.drawable.ic_pageview_black_24dp;
+    public static final int DEFAULT_DOWNLOAD_ICON = R.drawable.ic_file_download_black_24dp;
 
     public static final int DEFAULT_DRAWABLE_PADDING = 20;
 
     private boolean showViewBtn = false;
     private boolean showDownladBtn = false;
     private String fileUrl = null;
+    private String fileTitle = null;
 
     private Button viewBtn = null;
     private Button downloadBtn = null;
 
-    public NiciFileUtilBar(boolean showViewBtn, boolean showDownladBtn, String fileUrl) {
+    public NiciFileUtilBar(boolean showViewBtn, boolean showDownladBtn, String fileUrl, String fileTitle) {
         // cannot be both false
         if (!showViewBtn && !showDownladBtn) {
             throw new IllegalArgumentException();
         }
-        if (fileUrl == null || fileUrl.equals("")) {
+        if (fileUrl == null || fileUrl.equals("") ||
+            fileTitle == null || fileTitle.equals("")) {
             throw new IllegalArgumentException();
         }
         this.showViewBtn = showViewBtn;
         this.showDownladBtn = showDownladBtn;
         this.fileUrl = fileUrl;
+        this.fileTitle = fileTitle;
     }
 
     @Override
@@ -76,8 +79,13 @@ public class NiciFileUtilBar extends NiciText {
         downloadBtn.setCompoundDrawablesWithIntrinsicBounds(downloadIconId, 0, 0, 0);
         downloadBtn.setCompoundDrawablePadding(getDrawablePadding());
 
-        barLayout.addView(viewBtn);
-        barLayout.addView(downloadBtn);
+        // FIXME probably not create the button if the flag is false
+        if (showViewBtn) {
+            barLayout.addView(viewBtn);
+        }
+        if (showDownladBtn) {
+            barLayout.addView(downloadBtn);
+        }
 
         return barLayout;
     }
@@ -97,6 +105,7 @@ public class NiciFileUtilBar extends NiciText {
     }
 
     public String getFileUrl() { return fileUrl; }
+    public String getFileTitle() { return fileTitle; }
 
     private Button getBaseButton(Context context) {
         return new Button(context, null,
