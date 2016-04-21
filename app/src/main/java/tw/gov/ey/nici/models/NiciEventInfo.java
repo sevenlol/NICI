@@ -10,6 +10,8 @@ public class NiciEventInfo {
     private String location;
     private String description;
     private List<NiciContent> eventInfoContentList;
+    private List<RelatedLink> relatedLinkList;
+    private List<RelatedFile> relatedFileList;
 
     public NiciEventInfo() {}
 
@@ -19,6 +21,8 @@ public class NiciEventInfo {
     public String getLocation() { return location; }
     public String getDescription() { return description; }
     public List<NiciContent> getEventInfoContentList() { return eventInfoContentList; }
+    public List<RelatedLink> getRelatedLinkList() { return relatedLinkList; }
+    public List<RelatedFile> getRelatedFileList() { return relatedFileList; }
 
     public NiciEventInfo setId(String id) {
         this.id = id; return this;
@@ -42,5 +46,24 @@ public class NiciEventInfo {
 
     public NiciEventInfo setEventInfoContentList(List<NiciContent> eventInfoContentList) {
         this.eventInfoContentList = eventInfoContentList; return this;
+    }
+
+    public NiciEventInfo setRelatedLinkList(List<RelatedLink> relatedLinkList) {
+        this.relatedLinkList = relatedLinkList; return this;
+    }
+
+    public NiciEventInfo setRelatedFileList(List<RelatedFile> relatedFileList) {
+        this.relatedFileList = relatedFileList; return this;
+    }
+
+    public static class RelatedFile {
+        String fileTitle;
+        String fileUrl;
+        String fileLabel;
+    }
+
+    public static class RelatedLink {
+        String linkLabel;
+        String linkUrl;
     }
 }

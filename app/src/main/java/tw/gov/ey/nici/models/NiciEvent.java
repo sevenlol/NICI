@@ -13,6 +13,7 @@ public class NiciEvent {
     private String coverImageUrl;
     private String eventMinutesUrl;
     private List<NiciContent> eventContentList;
+    private List<RelatedFile> relatedFileList;
 
 
     public NiciEvent() {}
@@ -26,6 +27,7 @@ public class NiciEvent {
     public String getCoverImageUrl() { return coverImageUrl; }
     public String getEventMinutesUrl() { return eventMinutesUrl; }
     public List<NiciContent> getEventContentList() { return eventContentList; }
+    public List<RelatedFile> getRelatedFileList() { return relatedFileList; }
 
     public NiciEvent setId(String id) {
         this.id = id; return this;
@@ -61,5 +63,15 @@ public class NiciEvent {
 
     public NiciEvent setEventContentList(List<NiciContent> eventContentList) {
         this.eventContentList = eventContentList; return this;
+    }
+
+    public NiciEvent setRelatedFileList(List<RelatedFile> relatedFileList) {
+        this.relatedFileList = relatedFileList; return this;
+    }
+
+    public static class RelatedFile {
+        String fileTitle;
+        String fileUrl;
+        String fileLabel;
     }
 }

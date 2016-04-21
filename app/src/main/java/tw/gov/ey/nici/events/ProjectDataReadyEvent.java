@@ -6,8 +6,7 @@ public class ProjectDataReadyEvent {
     private NiciProject project;
 
     public ProjectDataReadyEvent(NiciProject project) {
-        if (project == null || project.getContentList() == null ||
-            project.getProjectFileUrl() == null) {
+        if (project == null || project.getContentList() == null) {
             throw new IllegalArgumentException();
         }
         this.project = project;
