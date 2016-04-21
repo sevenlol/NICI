@@ -294,7 +294,7 @@ public class NICIMainActivity extends AppCompatActivity
                 meetingInfoModelFragment = MeetingInfoModelFragment.newInstance(niciClient);
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .add(meetingInfoModelFragment, MEETING_MODEL_FRAGMENT_TAG)
+                        .add(meetingInfoModelFragment, MEETING_INFO_MODEL_FRAGMENT_TAG)
                         .commit();
                 break;
             case 4:
