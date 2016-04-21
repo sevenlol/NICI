@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -33,7 +34,8 @@ import tw.gov.ey.nici.network.NiciClient;
 import tw.gov.ey.nici.utils.NiciContentUtils;
 
 public class MeetingInfoDetailFragment extends Fragment
-        implements SwipeRefreshLayout.OnRefreshListener, ViewTreeObserver.OnScrollChangedListener {
+        implements SwipeRefreshLayout.OnRefreshListener, ViewTreeObserver.OnScrollChangedListener,
+            View.OnClickListener {
     public static final int DEFAULT_REQUEST_TIMEOUT = 5000;
     public static final int DEFAULT_SCROLL_WINDOW_SIZE = 15;
     public static final int DEFAULT_SCROLL_TIMEOUT = 5000;
@@ -51,6 +53,7 @@ public class MeetingInfoDetailFragment extends Fragment
     private SwipeRefreshLayout swipeRefreshLayout = null;
     private ProgressBar loadingProgress = null;
     private LinearLayout meetingInfoDetailContainer = null;
+    private FloatingActionButton scrollToTopBtn = null;
 
     private boolean isSendingRequest = false;
 
@@ -104,6 +107,7 @@ public class MeetingInfoDetailFragment extends Fragment
         swipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_meeting_info_detail);
         meetingInfoDetailContainer = (LinearLayout) root.findViewById(R.id.meeting_info_detail_container);
         loadingProgress = (ProgressBar) root.findViewById(R.id.meeting_info_detail_loading_progress);
+        scrollToTopBtn = (FloatingActionButton) root.findViewById(R.id.scroll_to_top_btn);
 
         // set the scroll listener
         if (scrollView != null) {
@@ -113,6 +117,11 @@ public class MeetingInfoDetailFragment extends Fragment
         // set swipe refresh layout
         if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setOnRefreshListener(this);
+        }
+
+        // set download btn listener
+        if (scrollToTopBtn != null) {
+            scrollToTopBtn.setOnClickListener(this);
         }
 
         if (model == null) {
@@ -176,6 +185,13 @@ public class MeetingInfoDetailFragment extends Fragment
             }
 
             scrollYQueue.clear();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (scrollView != null) {
+            scrollView.scrollTo(0, 0);
         }
     }
 
