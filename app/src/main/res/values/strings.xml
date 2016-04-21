@@ -31,6 +31,13 @@
 
     <string name="meeting_detail_title">Meeting Detail</string>
     <string name="meeting_info_detail_title">Meeting Info Detail</string>
+    <string name="related_files_title">相關檔案</string>
+    <string name="default_related_file_label">檔案〈線上觀看〉</string>
+    <string name="default_related_file_title">檔案</string>
+
+    <string name="related_links_title">相關連結</string>
+    <string name="default_related_link_label">連結</string>
+    <string name="view_link_failed">開啟連結失敗</string>
 
     <string name="no_more_meeting_info">沒有更多活動/會議訊息</string>
 

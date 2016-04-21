@@ -1,6 +1,8 @@
 package tw.gov.ey.nici.fragments;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -25,10 +27,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import tw.gov.ey.nici.DocViewerActivity;
 import tw.gov.ey.nici.MeetingInfoDetailActivity;
 import tw.gov.ey.nici.R;
 import tw.gov.ey.nici.models.NiciContent;
+import tw.gov.ey.nici.models.NiciDocViewerLink;
+import tw.gov.ey.nici.models.NiciEvent;
 import tw.gov.ey.nici.models.NiciEventInfo;
+import tw.gov.ey.nici.models.NiciHeading;
 import tw.gov.ey.nici.models.NiciImage;
 import tw.gov.ey.nici.network.NiciClient;
 import tw.gov.ey.nici.utils.NiciContentUtils;
@@ -242,11 +248,95 @@ public class MeetingInfoDetailFragment extends Fragment
             }
         }
 
+        // set related links
+        NiciHeading relatedLinksTitle = new NiciHeading(getString(R.string.related_links_title));
+        meetingInfoDetailContainer.addView(relatedLinksTitle.getView(getContext()));
+        if (model.getRelatedLinkList() != null) {
+            for (NiciEventInfo.RelatedLink link : model.getRelatedLinkList()) {
+                if (link == null || link.linkUrl == null || link.linkUrl.equals("")) {
+                    continue;
+                }
+
+                final String linkUrl = link.linkUrl;
+                final String linkLabel = link.linkLabel == null ?
+                        getString(R.string.default_related_link_label) : link.linkLabel;
+                NiciDocViewerLink relatedLink = new NiciDocViewerLink(linkUrl, linkLabel, linkLabel);
+                meetingInfoDetailContainer.addView(relatedLink.getView(getContext()));
+                if (relatedLink.getLinkButton(getContext()) != null) {
+                    relatedLink.getLinkButton(getContext()).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            viewLink(linkUrl);
+                        }
+                    });
+                }
+            }
+        }
+
+        // set related files
+        NiciHeading relatedFilesTitle = new NiciHeading(getString(R.string.related_files_title));
+        meetingInfoDetailContainer.addView(relatedFilesTitle.getView(getContext()));
+        if (model.getRelatedFileList() != null) {
+            for(NiciEventInfo.RelatedFile file : model.getRelatedFileList()) {
+                if (file == null || file.fileUrl == null || file.fileUrl.equals("")) {
+                    continue;
+                }
+
+                final String fileUrl = file.fileUrl;
+                final String fileLabel = file.fileLabel == null ?
+                        getString(R.string.default_related_file_label) : file.fileLabel;
+                final String fileTitle = file.fileTitle == null ?
+                        getString(R.string.default_related_file_title) : file.fileTitle;
+                NiciDocViewerLink link = new NiciDocViewerLink(fileUrl, fileTitle, fileLabel);
+
+                meetingInfoDetailContainer.addView(link.getView(getContext()));
+                if (link.getLinkButton(getContext()) != null) {
+                    link.getLinkButton(getContext()).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            viewDoc(fileUrl, fileTitle);
+                        }
+                    });
+                }
+            }
+        }
+
         // TODO change image setting and check url
         for (NiciImage image : imageList) {
             Picasso.with(getActivity())
                     .load(image.getImageUrl())
                     .into(image.getImageView(getActivity()));
+        }
+    }
+
+    private void viewDoc(String fileUrl, String fileTitle) {
+        if (fileUrl == null || fileUrl.equals("")) {
+            return;
+        }
+
+        Intent intent = new Intent(getContext(), DocViewerActivity.class);
+        intent.putExtra(DocViewerActivity.DOC_URL_KEY, fileUrl);
+        if (fileTitle != null && !fileTitle.equals("")) {
+            intent.putExtra(DocViewerActivity.DOC_TITLE_KEY, fileTitle);
+        }
+        if (getActivity() != null) {
+            getActivity().startActivity(intent);
+        }
+    }
+
+    private void viewLink(String linkUrl) {
+        try {
+            if (!linkUrl.startsWith("http") && !linkUrl.startsWith("https")) {
+                linkUrl = "http://" + linkUrl;
+            }
+            Intent viewLinkIntent = new Intent(Intent.ACTION_VIEW);
+            viewLinkIntent.setData(Uri.parse(linkUrl));
+            startActivity(viewLinkIntent);
+        } catch (Exception e) {
+            Toast.makeText(
+                    getContext(),
+                    getString(R.string.view_link_failed),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -57,13 +57,13 @@ public class NiciEventInfo {
     }
 
     public static class RelatedFile {
-        String fileTitle;
-        String fileUrl;
-        String fileLabel;
+        public String fileTitle;
+        public String fileUrl;
+        public String fileLabel;
     }
 
     public static class RelatedLink {
-        String linkLabel;
-        String linkUrl;
+        public String linkLabel;
+        public String linkUrl;
     }
 }

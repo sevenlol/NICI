@@ -1,5 +1,6 @@
 package tw.gov.ey.nici.fragments;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,10 +26,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import tw.gov.ey.nici.DocViewerActivity;
 import tw.gov.ey.nici.MeetingDetailActivity;
 import tw.gov.ey.nici.R;
 import tw.gov.ey.nici.models.NiciContent;
+import tw.gov.ey.nici.models.NiciDocViewerLink;
 import tw.gov.ey.nici.models.NiciEvent;
+import tw.gov.ey.nici.models.NiciHeading;
 import tw.gov.ey.nici.models.NiciImage;
 import tw.gov.ey.nici.network.NiciClient;
 import tw.gov.ey.nici.utils.NiciContentUtils;
@@ -242,11 +246,54 @@ public class MeetingDetailFragment extends Fragment
             }
         }
 
+        // set related files
+        NiciHeading relatedFilesTitle = new NiciHeading(getString(R.string.related_files_title));
+        meetingDetailContainer.addView(relatedFilesTitle.getView(getContext()));
+        if (model.getRelatedFileList() != null) {
+            for(NiciEvent.RelatedFile file : model.getRelatedFileList()) {
+                if (file == null || file.fileUrl == null || file.fileUrl.equals("")) {
+                    continue;
+                }
+
+                final String fileUrl = file.fileUrl;
+                final String fileLabel = file.fileLabel == null ?
+                        getString(R.string.default_related_file_label) : file.fileLabel;
+                final String fileTitle = file.fileTitle == null ?
+                        getString(R.string.default_related_file_title) : file.fileTitle;
+                NiciDocViewerLink link = new NiciDocViewerLink(fileUrl, fileTitle, fileLabel);
+
+                meetingDetailContainer.addView(link.getView(getContext()));
+                if (link.getLinkButton(getContext()) != null) {
+                    link.getLinkButton(getContext()).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            viewDoc(fileUrl, fileTitle);
+                        }
+                    });
+                }
+            }
+        }
+
         // TODO change image setting and check url
         for (NiciImage image : imageList) {
             Picasso.with(getActivity())
                     .load(image.getImageUrl())
                     .into(image.getImageView(getActivity()));
+        }
+    }
+
+    private void viewDoc(String fileUrl, String fileTitle) {
+        if (fileUrl == null || fileUrl.equals("")) {
+            return;
+        }
+
+        Intent intent = new Intent(getContext(), DocViewerActivity.class);
+        intent.putExtra(DocViewerActivity.DOC_URL_KEY, fileUrl);
+        if (fileTitle != null && !fileTitle.equals("")) {
+            intent.putExtra(DocViewerActivity.DOC_TITLE_KEY, fileTitle);
+        }
+        if (getActivity() != null) {
+            getActivity().startActivity(intent);
         }
     }
 

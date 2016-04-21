@@ -223,11 +223,43 @@ public class NiciClientFactory {
                     "NICI小組，於NICI小組下設置「數位匯流組」，由國家通訊傳播委員會擔任召集機關。");
             contentList.add(paragraph1);
             contentList.add(paragraph2);
+
+            // paragraphs for heading 2
+            NiciParagraph paragraph3 = new NiciParagraph("為創造優質數位匯流生活，打造數位匯流產業，" +
+                    "進而提升國家次世代競爭力，行政院於民國99年12月核定通過「數位匯流發展方案(2010-2015" +
+                    "年)」，宣示推動我國的數位匯流產業發展環境。");
+            NiciParagraph paragraph4 = new NiciParagraph("「數位匯流發展方案」自民國99年核定實施以來" +
+                    "，在各界引起普遍的共鳴與迴響，惟伴隨資通訊科技的日行千里，各界對匯流發展的期待已遠高於" +
+                    "方案設定當時。為精進我國數位化進程，帶給民眾速度更快、品質更好的數位生活，民國101年5" +
+                    "月行政院核定通過「<b>數位匯流發展方案(2010-2015年)</b>」（第二版）修正，規劃七大推動主軸（" +
+                    "增訂豐富電視節目內容主軸）、26項推動策略、 107個辦理措施，並重新設定數位匯流推動主要" +
+                    "指標。");
+            NiciParagraph paragraph5 = new NiciParagraph("為提昇效率、推動政府與產業合作發展數位匯流" +
+                    "，數位匯流專案辦公室將參照部會執行「數位匯流發展方案（第二版）」辦理措施執行成效，" +
+                    "隨時檢討推動策略，以期及早達成我國數位匯流相關指標，帶給民眾更好的數位匯流環境。");
+            contentList.add(paragraph3);
+            contentList.add(paragraph4);
+            contentList.add(paragraph5);
+
+            List<NiciEvent.RelatedFile> relatedFileList = new ArrayList<>();
+
+            NiciEvent.RelatedFile file1 = new NiciEvent.RelatedFile();
+            file1.fileUrl = "http://www.nici.ey.gov.tw/Upload/" +
+                    "RelFile/2829/733138/73f7af44-4c6a-4a2f-8204-3c4e7c82bb62.pdf";
+            NiciEvent.RelatedFile file2 = new NiciEvent.RelatedFile();
+            file2.fileUrl = "http://www.nici.ey.gov.tw/Upload/" +
+                    "RelFile/2829/733138/73f7af44-4c6a-4a2f-8204-3c4e7c82bb62.pdf";
+            relatedFileList.add(file1);
+            relatedFileList.add(file2);
+
             // add delay for testing
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {}
-            return new NiciEvent().setId(eventId).setEventContentList(contentList);
+            return new NiciEvent()
+                    .setId(eventId)
+                    .setEventContentList(contentList)
+                    .setRelatedFileList(relatedFileList);
         }
 
         @Override
@@ -275,11 +307,48 @@ public class NiciClientFactory {
                     "NICI小組，於NICI小組下設置「數位匯流組」，由國家通訊傳播委員會擔任召集機關。");
             contentList.add(paragraph1);
             contentList.add(paragraph2);
+
+            // paragraphs for heading 2
+            NiciParagraph paragraph3 = new NiciParagraph("為創造優質數位匯流生活，打造數位匯流產業，" +
+                    "進而提升國家次世代競爭力，行政院於民國99年12月核定通過「數位匯流發展方案(2010-2015" +
+                    "年)」，宣示推動我國的數位匯流產業發展環境。");
+            NiciParagraph paragraph4 = new NiciParagraph("「數位匯流發展方案」自民國99年核定實施以來" +
+                    "，在各界引起普遍的共鳴與迴響，惟伴隨資通訊科技的日行千里，各界對匯流發展的期待已遠高於" +
+                    "方案設定當時。為精進我國數位化進程，帶給民眾速度更快、品質更好的數位生活，民國101年5" +
+                    "月行政院核定通過「<b>數位匯流發展方案(2010-2015年)</b>」（第二版）修正，規劃七大推動主軸（" +
+                    "增訂豐富電視節目內容主軸）、26項推動策略、 107個辦理措施，並重新設定數位匯流推動主要" +
+                    "指標。");
+            NiciParagraph paragraph5 = new NiciParagraph("為提昇效率、推動政府與產業合作發展數位匯流" +
+                    "，數位匯流專案辦公室將參照部會執行「數位匯流發展方案（第二版）」辦理措施執行成效，" +
+                    "隨時檢討推動策略，以期及早達成我國數位匯流相關指標，帶給民眾更好的數位匯流環境。");
+            contentList.add(paragraph3);
+            contentList.add(paragraph4);
+            contentList.add(paragraph5);
+
+            List<NiciEventInfo.RelatedFile> relatedFileList = new ArrayList<>();
+            NiciEventInfo.RelatedFile file1 = new NiciEventInfo.RelatedFile();
+            file1.fileUrl = "http://www.nici.ey.gov.tw/Upload/" +
+                    "RelFile/2829/733138/73f7af44-4c6a-4a2f-8204-3c4e7c82bb62.pdf";
+            NiciEventInfo.RelatedFile file2 = new NiciEventInfo.RelatedFile();
+            file2.fileUrl = "http://www.nici.ey.gov.tw/Upload/" +
+                    "RelFile/2829/733138/73f7af44-4c6a-4a2f-8204-3c4e7c82bb62.pdf";
+            relatedFileList.add(file1);
+            relatedFileList.add(file2);
+
+            List<NiciEventInfo.RelatedLink> relatedLinkList = new ArrayList<>();
+            NiciEventInfo.RelatedLink link1 = new NiciEventInfo.RelatedLink();
+            link1.linkUrl = "www.google.com.tw";
+            relatedLinkList.add(link1);
+
             // add delay for testing
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {}
-            return new NiciEventInfo().setId(eventInfoId).setEventInfoContentList(contentList);
+            return new NiciEventInfo()
+                    .setId(eventInfoId)
+                    .setEventInfoContentList(contentList)
+                    .setRelatedFileList(relatedFileList)
+                    .setRelatedLinkList(relatedLinkList);
         }
 
         @Override

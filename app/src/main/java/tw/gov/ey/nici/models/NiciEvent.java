@@ -70,8 +70,8 @@ public class NiciEvent {
     }
 
     public static class RelatedFile {
-        String fileTitle;
-        String fileUrl;
-        String fileLabel;
+        public String fileTitle;
+        public String fileUrl;
+        public String fileLabel;
     }
 }

@@ -22,6 +22,7 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -213,12 +214,19 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
             return;
         }
         try {
-            Uri uri = Uri.parse(info.getLinkUrl());
+            String linkUrl = info.getLinkUrl();
+            if (!linkUrl.startsWith("http") && !linkUrl.startsWith("https")) {
+                linkUrl = "http://" + linkUrl;
+            }
+            Uri uri = Uri.parse(linkUrl);
             Intent viewIntent = new Intent(Intent.ACTION_VIEW);
             viewIntent.setData(uri);
             startActivity(viewIntent);
         } catch (Exception e) {
-            // TODO handle parse error
+            Toast.makeText(
+                    getContext(),
+                    getString(R.string.view_link_failed),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
