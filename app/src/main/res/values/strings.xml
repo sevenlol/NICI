@@ -11,6 +11,8 @@
 
     <string name="show_facebook_page">FACEBOOK</string>
 
+    <string name="load_video_fail">影片載入失敗</string>
+
     <string name="project_title">數位匯流計畫</string>
     <string name="project_desc">數位匯流計畫簡介</string>
     <string name="no_project_file">計畫檔案不存在</string>

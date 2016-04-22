@@ -27,7 +27,8 @@
     <dimen name="list_divider_height">10dp</dimen>
 
     <dimen name="list_item_preview_image">72dp</dimen>
-    <dimen name="list_item_preview_image_margin">8dp</dimen>
+    <dimen name="list_item_preview_image_margin">12dp</dimen>
+    <dimen name="list_item_preview_image_margin_small">4dp</dimen>
     <dimen name="list_item_primary">24sp</dimen>
     <dimen name="list_item_secondary">14sp</dimen>
     <dimen name="list_text_label">20sp</dimen>

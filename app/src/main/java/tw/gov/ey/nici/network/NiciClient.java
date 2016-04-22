@@ -5,11 +5,15 @@ import java.util.List;
 import tw.gov.ey.nici.models.NiciEvent;
 import tw.gov.ey.nici.models.NiciEventInfo;
 import tw.gov.ey.nici.models.NiciInfo;
+import tw.gov.ey.nici.models.NiciIntro;
 import tw.gov.ey.nici.models.NiciProject;
 
 public interface NiciClient {
     /* other methods */
     void clearCache();
+
+    /* NiciIntro */
+    NiciIntro getNiciIntro();
 
     /* NiciProject */
     NiciProject getNiciProject();
