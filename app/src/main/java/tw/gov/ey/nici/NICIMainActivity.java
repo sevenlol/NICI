@@ -19,6 +19,7 @@ import tw.gov.ey.nici.fragments.FacebookFragment;
 import tw.gov.ey.nici.fragments.InfoFragment;
 import tw.gov.ey.nici.fragments.InfoModelFragment;
 import tw.gov.ey.nici.fragments.IntroFragment;
+import tw.gov.ey.nici.fragments.IntroModelFragment;
 import tw.gov.ey.nici.fragments.MeetingFragment;
 import tw.gov.ey.nici.fragments.MeetingInfoFragment;
 import tw.gov.ey.nici.fragments.MeetingInfoModelFragment;
@@ -31,6 +32,7 @@ import tw.gov.ey.nici.network.NiciClientFactory;
 public class NICIMainActivity extends AppCompatActivity
         implements OnMenuTabClickListener, View.OnClickListener {
     public static final String PAGE_TYPE_KEY = "niciPageTypeKey";
+    public static final String INTRO_MODEL_FRAGMENT_TAG = "niciIntroModelFragment";
     public static final String PROJECT_MODEL_FRAGMENT_TAG = "niciProjectModelFragment";
     public static final String MEETING_MODEL_FRAGMENT_TAG = "niciMeetingModelFragment";
     public static final String MEETING_INFO_MODEL_FRAGMENT_TAG = "niciMeetingInfoModelFragment";
@@ -170,7 +172,18 @@ public class NICIMainActivity extends AppCompatActivity
     public void onMenuTabSelected(@IdRes int menuItemId) {
         switch(menuItemId) {
             case R.id.bottomBarIntro:
-                replaceCurrentFragment(IntroFragment.newInstance());
+                // set model
+                IntroModelFragment introModelFragment = (IntroModelFragment)
+                        getFragmentFromTag(INTRO_MODEL_FRAGMENT_TAG);
+                if (introModelFragment == null) {
+                    introModelFragment = IntroModelFragment.newInstance(niciClient);
+                    getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(introModelFragment, INTRO_MODEL_FRAGMENT_TAG)
+                        .commit();
+                }
+                replaceCurrentFragment(IntroFragment.newInstance()
+                    .setModel(introModelFragment.getModel()));
                 setActionBarTitle(R.string.intro_page_title);
                 break;
             case R.id.bottomBarProject:
@@ -251,6 +264,19 @@ public class NICIMainActivity extends AppCompatActivity
     public void reloadCurrentModel() {
         switch (mBottomBar.getCurrentTabPosition()) {
             case 0:
+                IntroModelFragment introModelFragment = (IntroModelFragment)
+                        getFragmentFromTag(INTRO_MODEL_FRAGMENT_TAG);
+                if (introModelFragment != null) {
+                    getSupportFragmentManager()
+                        .beginTransaction()
+                        .remove(introModelFragment)
+                        .commit();
+                }
+                introModelFragment = IntroModelFragment.newInstance(niciClient);
+                getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(introModelFragment, INTRO_MODEL_FRAGMENT_TAG)
+                    .commit();
                 break;
             case 1:
                 ProjectModelFragment projectModelFragment = (ProjectModelFragment)
@@ -339,6 +365,13 @@ public class NICIMainActivity extends AppCompatActivity
     private void updateModelForCurrentFragment() {
         switch (mBottomBar.getCurrentTabPosition()) {
             case 0:
+                IntroModelFragment introModelFragment = (IntroModelFragment) getSupportFragmentManager()
+                        .findFragmentByTag(INTRO_MODEL_FRAGMENT_TAG);
+                IntroFragment introFragment = (IntroFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.main_fragment);
+                if (introFragment != null && introModelFragment != null) {
+                    introFragment.setModel(introModelFragment.getModel());
+                }
                 break;
             case 1:
                 ProjectModelFragment projectModelFragment = (ProjectModelFragment) getSupportFragmentManager()
