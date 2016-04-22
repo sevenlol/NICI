@@ -173,7 +173,7 @@ public class ProjectFragment extends Fragment
             swipeRefreshLayout.setOnRefreshListener(this);
         }
 
-        // set download btn listener
+        // set scroll to top btn listener
         if (scrollToTopBtn != null) {
             scrollToTopBtn.setOnClickListener(this);
         }
@@ -209,13 +209,6 @@ public class ProjectFragment extends Fragment
             return;
         }
         model = project;
-
-        // enable download
-        if (model.getProjectFileUrl() != null &&
-            !model.getProjectFileUrl().equals("") &&
-            scrollToTopBtn != null) {
-            scrollToTopBtn.setEnabled(true);
-        }
 
         // update view
         updateContainer();
