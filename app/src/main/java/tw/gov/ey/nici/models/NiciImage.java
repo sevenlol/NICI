@@ -10,6 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class NiciImage extends NiciText {
+    private static final int DEFAULT_SMALL_MARGIN = 20;
+    private static final int DEFAULT_MEDIUM_MARGIN = 30;
+    private static final int DEFAULT_LARGE_MARGIN = 40;
 
     private String imageUrl = null;
     private CharSequence imageDescription = null;
@@ -42,6 +45,7 @@ public class NiciImage extends NiciText {
         imageLayout.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0, 0, 0, getMargin());
         imageLayout.setLayoutParams(params);
 
         if (imageView == null) {
@@ -70,6 +74,19 @@ public class NiciImage extends NiciText {
     private ImageView getBaseImageView(Context context) {
         ImageView view = new ImageView(context);
         return view;
+    }
+
+    private int getMargin() {
+        switch (setting) {
+            case SMALL:
+                return DEFAULT_SMALL_MARGIN;
+            case MEDIUM:
+                return DEFAULT_MEDIUM_MARGIN;
+            case LARGE:
+                return DEFAULT_LARGE_MARGIN;
+            default:
+                return DEFAULT_MEDIUM_MARGIN;
+        }
     }
 
     private void checkUrl(String imageUrl) {

@@ -11,6 +11,9 @@ import android.widget.LinearLayout;
 import tw.gov.ey.nici.R;
 
 public class NiciFileUtilBar extends NiciText {
+    private static final int DEFAULT_SMALL_MARGIN = 20;
+    private static final int DEFAULT_MEDIUM_MARGIN = 30;
+    private static final int DEFAULT_LARGE_MARGIN = 40;
     public static final String VIEW_LABEL = "線上瀏覽";
     public static final String DOWNLOAD_LABEL = "下載檔案";
 
@@ -50,7 +53,9 @@ public class NiciFileUtilBar extends NiciText {
         barLayout.setOrientation(LinearLayout.HORIZONTAL);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0, 0, 0, getMargin());
         barLayout.setLayoutParams(params);
+        barLayout.setPadding(0, 0, 0, 0);
 
         if (viewBtn == null) {
             viewBtn = getViewButton(context);
@@ -68,8 +73,16 @@ public class NiciFileUtilBar extends NiciText {
 
         viewBtn.setText(VIEW_LABEL);
         viewBtn.setTextSize(NiciText.DEFAULT_UNIT, getTextSize(setting));
+        viewBtn.setPadding(0, 0, 0, 0);
+        viewBtn.setMinHeight(40);
+        viewBtn.setMinimumHeight(40);
+        viewBtn.setLayoutParams(getViewBtnParams());
         downloadBtn.setText(DOWNLOAD_LABEL);
         downloadBtn.setTextSize(NiciText.DEFAULT_UNIT, getTextSize(setting));
+        downloadBtn.setPadding(0, 0, 0, 0);
+        downloadBtn.setMinHeight(40);
+        downloadBtn.setMinimumHeight(40);
+        downloadBtn.setLayoutParams(getDownloadBtnParams());
 
         int viewIconId = getViewIcon();
         viewBtn.setCompoundDrawablesWithIntrinsicBounds(viewIconId, 0, 0, 0);
@@ -132,6 +145,33 @@ public class NiciFileUtilBar extends NiciText {
             default:
                 return DEFAULT_DOWNLOAD_ICON;
         }
+    }
+
+    private int getMargin() {
+        switch (setting) {
+            case SMALL:
+                return DEFAULT_SMALL_MARGIN;
+            case MEDIUM:
+                return DEFAULT_MEDIUM_MARGIN;
+            case LARGE:
+                return DEFAULT_LARGE_MARGIN;
+            default:
+                return DEFAULT_MEDIUM_MARGIN;
+        }
+    }
+
+    private LinearLayout.LayoutParams getViewBtnParams() {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0, 0, 50, 0);
+        return params;
+    }
+
+    private LinearLayout.LayoutParams getDownloadBtnParams() {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0, 0, 0, 0);
+        return params;
     }
 
     private int getDrawablePadding() {

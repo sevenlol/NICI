@@ -7,6 +7,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 public class NiciDocViewerLink extends NiciText {
+    private static final int DEFAULT_SMALL_MARGIN = 20;
+    private static final int DEFAULT_MEDIUM_MARGIN = 30;
+    private static final int DEFAULT_LARGE_MARGIN = 40;
+
     private String fileUrl = null;
     private String fileTitle = null;
     private String linkLabel = null;
@@ -37,7 +41,13 @@ public class NiciDocViewerLink extends NiciText {
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0, 0, 0, getMargin());
         linkBtn.setLayoutParams(params);
+        linkBtn.setPadding(0, 0, 0, 0);
+        linkBtn.setMinHeight(80);
+        linkBtn.setMinimumHeight(80);
+        linkBtn.setMinWidth(0);
+        linkBtn.setMinimumWidth(0);
 
         return linkBtn;
     }
@@ -51,6 +61,19 @@ public class NiciDocViewerLink extends NiciText {
 
     public String getFileUrl() { return fileUrl; }
     public String getFileTitle() { return fileTitle; }
+
+    private int getMargin() {
+        switch (setting) {
+            case SMALL:
+                return DEFAULT_SMALL_MARGIN;
+            case MEDIUM:
+                return DEFAULT_MEDIUM_MARGIN;
+            case LARGE:
+                return DEFAULT_LARGE_MARGIN;
+            default:
+                return DEFAULT_MEDIUM_MARGIN;
+        }
+    }
 
     private Button getBaseButton(Context context) {
         check(context);

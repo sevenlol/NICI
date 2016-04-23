@@ -3,12 +3,18 @@ package tw.gov.ey.nici.models;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class NiciHeading extends NiciText {
     private static final float DEFAULT_SMALL_TEXT_SIZE = 20;
-    private static final float DEFAULT_MEDIUM_TEXT_SIZE = 24;
-    private static final float DEFAULT_LARGE_TEXT_SIZE = 28;
+    private static final float DEFAULT_MEDIUM_TEXT_SIZE = 26;
+    private static final float DEFAULT_LARGE_TEXT_SIZE = 32;
+
+    private static final int DEFAULT_SMALL_MARGIN = 30;
+    private static final int DEFAULT_MEDIUM_MARGIN = 48;
+    private static final int DEFAULT_LARGE_MARGIN = 60;
 
     private String heading = null;
 
@@ -30,7 +36,26 @@ public class NiciHeading extends NiciText {
         textView.setTextSize(NiciText.DEFAULT_UNIT, getTextSize(setting));
         textView.setTypeface(null, Typeface.BOLD);
 
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0, getMargin(), 0, getMargin());
+
+        textView.setLayoutParams(params);
+
         return textView;
+    }
+
+    private int getMargin() {
+        switch (setting) {
+            case SMALL:
+                return DEFAULT_SMALL_MARGIN;
+            case MEDIUM:
+                return DEFAULT_MEDIUM_MARGIN;
+            case LARGE:
+                return DEFAULT_LARGE_MARGIN;
+            default:
+                return DEFAULT_MEDIUM_MARGIN;
+        }
     }
 
     private void checkHeading(String heading) {

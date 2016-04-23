@@ -9,8 +9,8 @@ public abstract class NiciText implements NiciContent {
     // not allowing overriding unit for now
     protected static final int DEFAULT_UNIT = TypedValue.COMPLEX_UNIT_SP;
     protected static final float DEFAULT_SMALL_TEXT_SIZE = 14;
-    protected static final float DEFAULT_MEDIUM_TEXT_SIZE = 16;
-    protected static final float DEFAULT_LARGE_TEXT_SIZE = 18;
+    protected static final float DEFAULT_MEDIUM_TEXT_SIZE = 18;
+    protected static final float DEFAULT_LARGE_TEXT_SIZE = 22;
 
     protected Setting setting = DEFAULT_SETTING;
     protected float smallTextSize = DEFAULT_SMALL_TEXT_SIZE;
