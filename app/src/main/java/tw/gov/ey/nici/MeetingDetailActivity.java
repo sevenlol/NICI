@@ -12,6 +12,7 @@ import tw.gov.ey.nici.network.NiciClientFactory;
 
 public class MeetingDetailActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String NICI_EVENT_ID_KEY = "meeting_detail_nici_event_id";
+    public static final String MEETING_DETAIL_TITLE_KEY = "meeting_detail_nici_event_title";
 
     private NiciClient niciClient = null;
 
@@ -29,9 +30,13 @@ public class MeetingDetailActivity extends AppCompatActivity implements View.OnC
 
         // set close icon and title
         if (getSupportActionBar() != null) {
+            String title = getIntent() == null ?
+                    null : getIntent().getExtras() == null ?
+                    null : getIntent().getExtras().getString(MEETING_DETAIL_TITLE_KEY);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(getString(R.string.meeting_detail_title));
+            getSupportActionBar().setTitle(
+                    title == null ? getString(R.string.meeting_detail_title) : title);
         }
 
         // set close icon on click listener
