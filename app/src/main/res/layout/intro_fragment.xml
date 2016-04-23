@@ -22,11 +22,37 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <RelativeLayout
+                    android:id="@+id/intro_title_logo_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/logo_title_bar_vertical_margin"
+                    android:layout_marginRight="@dimen/logo_title_bar_right_margin"
+                    android:layout_marginEnd="@dimen/logo_title_bar_right_margin">
+                    <ImageView
+                        android:id="@+id/intro_title"
+                        android:src="@drawable/intro_title"
+                        android:layout_width="@dimen/project_title_fig_width"
+                        android:layout_height="@dimen/project_title_fig_height"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"/>
+                    <ImageView
+                        android:id="@+id/intro_logo"
+                        android:src="@drawable/nici_logo_full"
+                        android:layout_width="@dimen/nici_logo_full_width"
+                        android:layout_toRightOf="@id/intro_title"
+                        android:layout_toEndOf="@id/intro_title"
+                        android:layout_height="@dimen/nici_logo_full_height"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"/>
+                </RelativeLayout>
+
                 <LinearLayout
                     android:id="@+id/upper_intro_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/fab_anchor_bottom_padding"
                     android:orientation="vertical">
 
                     <ProgressBar
@@ -42,7 +68,8 @@
                 <RelativeLayout
                     android:id="@+id/youtube_fragment"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/video_vertical_margin"/>
 
                 <LinearLayout
                     android:id="@+id/lower_intro_container"

@@ -61,6 +61,7 @@ public class IntroFragment extends Fragment
     private ScrollView scrollView = null;
     private SwipeRefreshLayout swipeRefreshLayout = null;
     private ProgressBar loadingProgress = null;
+    private RelativeLayout introLogoTitleContainer = null;
     private LinearLayout upperIntroContainer = null;
     private LinearLayout lowerIntroContainer = null;
     private FloatingActionButton scrollToTopBtn = null;
@@ -127,6 +128,7 @@ public class IntroFragment extends Fragment
         View view = inflater.inflate(R.layout.intro_fragment, container, false);
         scrollView = (ScrollView) view.findViewById(R.id.intro_anchor);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_intro);
+        introLogoTitleContainer = (RelativeLayout) view.findViewById(R.id.intro_title_logo_container);
         upperIntroContainer = (LinearLayout) view.findViewById(R.id.upper_intro_container);
         lowerIntroContainer = (LinearLayout) view.findViewById(R.id.lower_intro_container);
         loadingProgress = (ProgressBar) view.findViewById(R.id.intro_loading_progress);
@@ -147,6 +149,9 @@ public class IntroFragment extends Fragment
         if (scrollToTopBtn != null) {
             scrollToTopBtn.setOnClickListener(this);
         }
+
+        // hide title logo container
+        setIntroTitleLogoContainer(false);
 
         // already has model, stop loading
         if (model != null) {
@@ -269,6 +274,8 @@ public class IntroFragment extends Fragment
         Log.d("Intro", "Reloading");
         isSendingRequest = true;
         currentRequestId = IntroModelFragment.FIRST_REQUEST_ID;
+        // hide title logo container
+        setIntroTitleLogoContainer(false);
         model = null;
         if (upperIntroContainer != null) {
             upperIntroContainer.removeAllViews();
@@ -299,6 +306,9 @@ public class IntroFragment extends Fragment
         // clear all child views
         upperIntroContainer.removeAllViews();
         lowerIntroContainer.removeAllViews();
+
+        // show title logo container
+        setIntroTitleLogoContainer(true);
 
         // if the location index is not set, the video will be placed last
         final int videoLocationIndex = model.getVideoLocationIndex() == null ?
@@ -376,6 +386,22 @@ public class IntroFragment extends Fragment
         if (scrollView != null) {
             scrollView.scrollTo(0, 0);
         }
+    }
+
+    private void setIntroTitleLogoContainer(final boolean isVisible) {
+        if (getActivity() == null) {
+            return;
+        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (introLogoTitleContainer == null) {
+                    return;
+                }
+                introLogoTitleContainer.setVisibility(isVisible ?
+                        View.VISIBLE : View.GONE);
+            }
+        });
     }
 
     private YouTubePlayer.OnFullscreenListener fullscreenListener = new YouTubePlayer.OnFullscreenListener() {
