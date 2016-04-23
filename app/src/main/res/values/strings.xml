@@ -31,8 +31,8 @@
     <string name="meeting_minutes_taker_str_format">會議記錄：%s</string>
     <string name="no_more_meeting">沒有更多活動/會議情形</string>
 
-    <string name="meeting_detail_title">Meeting Detail</string>
-    <string name="meeting_info_detail_title">Meeting Info Detail</string>
+    <string name="meeting_detail_title">活動/會議情形</string>
+    <string name="meeting_info_detail_title">活動/會議訊息</string>
     <string name="related_files_title">相關檔案</string>
     <string name="default_related_file_label">檔案〈線上觀看〉</string>
     <string name="default_related_file_title">檔案</string>
@@ -61,11 +61,11 @@
 
     <string name="setting_title">設定</string>
     <string name="pref_scroll_detection_key">niciScrollDetectionEnabled</string>
-    <string name="pref_scroll_detection_title">Scroll Detection</string>
-    <string name="pref_scroll_detection_summary">Hide/Show Toolbars When Scrolling</string>
+    <string name="pref_scroll_detection_title">滑動偵測</string>
+    <string name="pref_scroll_detection_summary">根據滑動方向自動隱藏/顯示工具條</string>
     <string name="pref_display_choice_key">niciDisplayChoice</string>
-    <string name="pref_display_choice_title">Display Choice</string>
-    <string name="pref_display_choice_summary">Modify the Size of Contents</string>
+    <string name="pref_display_choice_title">顯示選項</string>
+    <string name="pref_display_choice_summary">調整顯示內容的大小</string>
 
     <string name="about_title">關於</string>
 </resources>
