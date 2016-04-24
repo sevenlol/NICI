@@ -20,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -392,9 +393,17 @@ public class MeetingInfoFragment extends Fragment implements ListView.OnItemClic
         @Override
         public void run() {
             Log.d("MeetingInfo", "Request Timeout");
+            makeShortToast(R.string.request_timeout);
             clearRequestFlags();
         }
     };
+
+    private void makeShortToast(int resourceId) {
+        Toast.makeText(
+                getContext(),
+                getString(resourceId),
+                Toast.LENGTH_SHORT).show();
+    }
 
     private void startRequestTimer() {
         if (handler != null) {

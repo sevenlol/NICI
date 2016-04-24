@@ -398,9 +398,17 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
         @Override
         public void run() {
             Log.d("Info", "Request Timeout");
+            makeShortToast(R.string.request_timeout);
             clearRequestFlags();
         }
     };
+
+    private void makeShortToast(int resourceId) {
+        Toast.makeText(
+                getContext(),
+                getString(resourceId),
+                Toast.LENGTH_SHORT).show();
+    }
 
     private void startRequestTimer() {
         if (handler != null) {

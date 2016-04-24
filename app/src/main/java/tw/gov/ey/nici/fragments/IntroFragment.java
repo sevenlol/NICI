@@ -462,6 +462,7 @@ public class IntroFragment extends Fragment
         @Override
         public void run() {
             Log.d("Intro", "Request Timeout");
+            makeShortToast(R.string.request_timeout);
             clearRequestFlags();
         }
     };

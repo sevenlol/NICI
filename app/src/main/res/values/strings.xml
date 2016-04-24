@@ -18,6 +18,7 @@
     <string name="no_project_file">計畫檔案不存在</string>
     <string name="download_complete">下載檔案成功</string>
     <string name="download_failed">下載檔案失敗</string>
+    <string name="download_timeout">下載檔案逾時</string>
     <string name="already_downloading">檔案已經在下載中</string>
 
     <string name="info_date_format">yyyy-MM-dd</string>
@@ -57,7 +58,9 @@
     <string name="bottom_bar_info_title">資訊分享</string>
     <string name="bottom_bar_facebook_title">社團</string>
 
-    <string name="doc_viewer_title">View Document</string>
+    <string name="doc_viewer_title">檢視檔案</string>
+
+    <string name="request_timeout">資料取得逾時</string>
 
     <string name="setting_title">設定</string>
     <string name="pref_scroll_detection_key">niciScrollDetectionEnabled</string>

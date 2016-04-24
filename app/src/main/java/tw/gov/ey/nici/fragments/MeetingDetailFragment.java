@@ -301,6 +301,7 @@ public class MeetingDetailFragment extends Fragment
         @Override
         public void run() {
             Log.d("MeetingDetail", "Request Timeout");
+            makeShortToast(R.string.request_timeout);
             clearRequestFlags();
         }
     };

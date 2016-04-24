@@ -555,6 +555,7 @@ public class ProjectFragment extends Fragment
         @Override
         public void run() {
             Log.d("Project", "Request Timeout");
+            makeShortToast(R.string.request_timeout);
             clearRequestFlags();
         }
     };
@@ -563,6 +564,7 @@ public class ProjectFragment extends Fragment
         @Override
         public void run() {
             Log.d("Project", "Download Timeout");
+            makeShortToast(R.string.download_timeout);
             resetDownloadFlags();
         }
     };
