@@ -184,9 +184,12 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
         if (event == null) {
             return;
         }
+        if (!isSendingRequest || currentRequestId == null) {
+            return;
+        }
 
         // the id is not matched, exit
-        if (currentRequestId != null && !currentRequestId.equals(event.getId())) {
+        if (!currentRequestId.equals(event.getId())) {
             return;
         }
 
@@ -195,6 +198,9 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
             // TODO disable show more info action and only allow reload
             // TODO show error text
         }
+
+        // notify user request failed
+        makeShortToast(R.string.request_failed);
 
         // stop request timer and clear flags
         stopRequestTimer();
@@ -340,6 +346,7 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
         total = 0;
         // will be using the pull down refresh icon when reloading
         setShowMoreInfoBtnProgressBar(false, false);
+        startRequestTimer();
         if (getActivity() != null &&
                 getActivity() instanceof NICIMainActivity) {
             ((NICIMainActivity) getActivity()).reloadCurrentModel();
@@ -404,6 +411,9 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
     };
 
     private void makeShortToast(int resourceId) {
+        if (getActivity() == null) {
+            return;
+        }
         Toast.makeText(
                 getContext(),
                 getString(resourceId),

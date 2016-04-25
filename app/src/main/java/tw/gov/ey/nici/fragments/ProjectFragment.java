@@ -224,9 +224,12 @@ public class ProjectFragment extends Fragment
         if (event == null) {
             return;
         }
+        if (!isSendingRequest || currentRequestId == null) {
+            return;
+        }
 
         // the id is not matched, exit
-        if (currentRequestId != null && !currentRequestId.equals(event.getId())) {
+        if (!currentRequestId.equals(event.getId())) {
             return;
         }
 
@@ -234,6 +237,9 @@ public class ProjectFragment extends Fragment
         if (ProjectModelFragment.FIRST_REQUEST_ID.equals(currentRequestId)) {
             // TODO show error text to let user know how to reload
         }
+
+        // notify user request failed
+        makeShortToast(R.string.request_failed);
 
         // stop request timer and clear flags
         stopRequestTimer();
@@ -610,6 +616,9 @@ public class ProjectFragment extends Fragment
     }
 
     private void makeShortToast(int resourceId) {
+        if (getActivity() == null) {
+            return;
+        }
         Toast.makeText(
                 getContext(),
                 getString(resourceId),

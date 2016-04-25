@@ -153,6 +153,17 @@ public class NiciClientFactory {
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {}
+
+            // timeout test
+//            try {
+//                Thread.sleep(4000);
+//            } catch (InterruptedException e) {}
+
+            // failed
+//            if (contentList.size() > 0) {
+//                throw new RuntimeException();
+//            }
+
             return new NiciIntro()
                     .setContentList(contentList)
                     .setVideoId("Gx1emgAKkh0")
@@ -234,6 +245,16 @@ public class NiciClientFactory {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {}
 
+            // timeout test
+//            try {
+//                Thread.sleep(4000);
+//            } catch (InterruptedException e) {}
+
+            // failed
+//            if (items.size() > 0) {
+//                throw new RuntimeException();
+//            }
+
             return new NiciProject().setProjectFileUrl("http://dev.iifun.com.tw/nici/WebTools/File" +
                     "sDownload.ashx?Siteid=1&MmmID=31&fd=Messagess_Files&Pname=1.docx")
                     .setContentList(contentList);
@@ -260,6 +281,16 @@ public class NiciClientFactory {
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {}
+
+            // timeout test
+//            try {
+//                Thread.sleep(4000);
+//            } catch (InterruptedException e) {}
+
+            // failed
+//            if (result.size() > 0) {
+//                throw new RuntimeException();
+//            }
             return result;
         }
 
@@ -316,6 +347,17 @@ public class NiciClientFactory {
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {}
+
+            // timeout test
+//            try {
+//                Thread.sleep(4000);
+//            } catch (InterruptedException e) {}
+
+            // failed
+//            if (contentList.size() > 0) {
+//                throw new RuntimeException();
+//            }
+
             return new NiciEvent()
                     .setId(eventId)
                     .setEventContentList(contentList)
@@ -343,6 +385,16 @@ public class NiciClientFactory {
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {}
+
+            // timeout test
+//            try {
+//                Thread.sleep(4000);
+//            } catch (InterruptedException e) {}
+
+            // failed
+//            if (result.size() > 0) {
+//                throw new RuntimeException();
+//            }
 //            if (skip >= 9) {
 //                throw new RuntimeException();
 //            }
@@ -403,6 +455,17 @@ public class NiciClientFactory {
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {}
+
+            // timeout test
+//            try {
+//                Thread.sleep(4000);
+//            } catch (InterruptedException e) {}
+
+            // failed
+//            if (contentList.size() > 0) {
+//                throw new RuntimeException();
+//            }
+
             return new NiciEventInfo()
                     .setId(eventInfoId)
                     .setEventInfoContentList(contentList)
@@ -431,6 +494,16 @@ public class NiciClientFactory {
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {}
+
+            // timeout test
+//            try {
+//                Thread.sleep(4000);
+//            } catch (InterruptedException e) {}
+
+            // failed
+//            if (result.size() > 0) {
+//                throw new RuntimeException();
+//            }
             // add exception for testing
 //            if (skip >= 10) {
 //                throw new RuntimeException();

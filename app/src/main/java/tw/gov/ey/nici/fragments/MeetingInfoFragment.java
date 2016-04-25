@@ -220,9 +220,12 @@ public class MeetingInfoFragment extends Fragment implements ListView.OnItemClic
         if (event == null) {
             return;
         }
+        if (!isSendingRequest || currentRequestId == null) {
+            return;
+        }
 
         // the id is not matched, exit
-        if (currentRequestId != null && !currentRequestId.equals(event.getId())) {
+        if (!currentRequestId.equals(event.getId())) {
             return;
         }
 
@@ -231,6 +234,9 @@ public class MeetingInfoFragment extends Fragment implements ListView.OnItemClic
             // TODO disable show more meeting action and only allow reload
             // TODO show error text
         }
+
+        // notify user request failed
+        makeShortToast(R.string.request_failed);
 
         // stop request timer and clear flags
         stopRequestTimer();
@@ -335,6 +341,7 @@ public class MeetingInfoFragment extends Fragment implements ListView.OnItemClic
         total = 0;
         // will be using the pull down refresh icon when reloading
         setShowMoreMeetingBtnProgressBar(false, false);
+        startRequestTimer();
         if (getActivity() != null &&
                 getActivity() instanceof NICIMainActivity) {
             ((NICIMainActivity) getActivity()).reloadCurrentModel();
@@ -399,6 +406,9 @@ public class MeetingInfoFragment extends Fragment implements ListView.OnItemClic
     };
 
     private void makeShortToast(int resourceId) {
+        if (getActivity() == null) {
+            return;
+        }
         Toast.makeText(
                 getContext(),
                 getString(resourceId),

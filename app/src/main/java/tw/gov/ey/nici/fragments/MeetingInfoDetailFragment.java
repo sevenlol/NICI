@@ -415,8 +415,10 @@ public class MeetingInfoDetailFragment extends Fragment
                 Log.d("MeetingInfoDetail", "Exception: " + e.getMessage());
                 requestSucceeded = false;
             } finally {
-                if (!requestSucceeded) {
+                if (!requestSucceeded && isSendingRequest) {
                     // TODO load data error, display error message
+                    // notify user request failed
+                    makeShortToast(R.string.request_failed);
                 }
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(new Runnable() {
@@ -449,11 +451,19 @@ public class MeetingInfoDetailFragment extends Fragment
         }
     }
 
-    private void makeShortToast(int resourceId) {
-        Toast.makeText(
-                getContext(),
-                getString(resourceId),
-                Toast.LENGTH_SHORT).show();
+    private void makeShortToast(final int resourceId) {
+        if (getActivity() == null) {
+            return;
+        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(
+                        getContext(),
+                        getString(resourceId),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private MeetingInfoDetailFragment setClient(NiciClient client) {
