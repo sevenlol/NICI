@@ -17,7 +17,10 @@ import tw.gov.ey.nici.models.NiciEvent;
 import tw.gov.ey.nici.network.NiciClient;
 
 public class MeetingModelFragment extends Fragment {
-    public static final int DEFAULT_INIT_LOAD_COUNT = 8;
+    public static final int DEFAULT_SHOW_MORE_DATA_COUNT = 4;
+    public static final int DEFAULT_INIT_LOAD_PAGE_COUNT = 2;
+    public static final int DEFAULT_INIT_LOAD_COUNT =
+            DEFAULT_INIT_LOAD_PAGE_COUNT * DEFAULT_SHOW_MORE_DATA_COUNT;
     public static final String FIRST_REQUEST_ID = "first_meeting_request";
 
     private int initLoadCount = DEFAULT_INIT_LOAD_COUNT;

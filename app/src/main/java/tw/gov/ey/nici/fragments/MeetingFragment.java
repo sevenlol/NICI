@@ -42,7 +42,7 @@ import tw.gov.ey.nici.views.NiciEventAdapter;
 
 public class MeetingFragment extends Fragment  implements ListView.OnItemClickListener,
         SwipeRefreshLayout.OnRefreshListener, ListView.OnScrollListener, View.OnClickListener {
-    public static final int DEFAULT_SHOW_MORE_DATA_COUNT = 3;
+    public static final int DEFAULT_SHOW_MORE_DATA_COUNT = MeetingModelFragment.DEFAULT_SHOW_MORE_DATA_COUNT;
     public static final int DEFAULT_EVENT_ID_LENGTH = 20;
     public static final int DEFAULT_REQUEST_TIMEOUT = 5000;
     public static final boolean DEFAULT_SCROLL_DETECTION_ENABLED = false;
