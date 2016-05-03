@@ -213,7 +213,8 @@ public class NICIMainActivity extends AppCompatActivity
                 }
                 replaceCurrentFragment(MeetingFragment.newInstance()
                         .setModel(meetingModelFragment.getModel())
-                        .setTotal(meetingModelFragment.getTotal()));
+                        .setTotal(meetingModelFragment.getTotal())
+                        .setCurrentPageCount(meetingModelFragment.getCurrentPageCount()));
                 setActionBarTitle(R.string.meeting_page_title);
                 break;
             case R.id.bottomBarMeetingInfo:
@@ -228,7 +229,8 @@ public class NICIMainActivity extends AppCompatActivity
                 }
                 replaceCurrentFragment(MeetingInfoFragment.newInstance()
                     .setModel(meetingInfoModelFragment.getModel())
-                    .setTotal(meetingInfoModelFragment.getTotal()));
+                    .setTotal(meetingInfoModelFragment.getTotal())
+                    .setCurrentPageCount(meetingInfoModelFragment.getCurrentPageCount()));
                 setActionBarTitle(R.string.meeting_info_page_title);
                 break;
             case R.id.bottomBarInfo:
@@ -244,7 +246,8 @@ public class NICIMainActivity extends AppCompatActivity
                 }
                 replaceCurrentFragment(InfoFragment.newInstance()
                         .setModel(infoModelFragment.getModel())
-                        .setTotal(infoModelFragment.getTotal()));
+                        .setTotal(infoModelFragment.getTotal())
+                        .setCurrentPageCount(infoModelFragment.getCurrentPageCount()));
                 setActionBarTitle(R.string.info_page_title);
                 break;
             case R.id.bottomBarFacebook:
