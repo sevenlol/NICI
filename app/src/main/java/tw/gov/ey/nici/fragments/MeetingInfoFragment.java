@@ -53,6 +53,7 @@ public class MeetingInfoFragment extends Fragment implements ListView.OnItemClic
     private ListView listView = null;
     private FloatingActionButton scrollToTopBtn = null;
 
+    private int currentPageCount = 0;
     private int total = 0;
     private ArrayAdapter<NiciEventInfo> adapter = null;
     private ArrayList<NiciEventInfo> model = null;
@@ -121,11 +122,11 @@ public class MeetingInfoFragment extends Fragment implements ListView.OnItemClic
                 .inflate(R.layout.list_footer, null);
         showMoreMeetingInfoLabel = (TextView) footerLayout.findViewById(R.id.show_more_label);
         showMoreMeetingInfoProgress = (ProgressBar) footerLayout.findViewById(R.id.show_more_progress);
-        if (model != null && model.size() > 0) {
+        if (model != null && currentPageCount > 0) {
             // some data is already loaded
             setShowMoreMeetingBtnProgressBar(true, false);
 
-            if (model.size() >= total) {
+            if (currentPageCount * DEFAULT_SHOW_MORE_DATA_COUNT >= total) {
                 setShowMoreLabelText(getString(R.string.no_more_meeting_info));
             }
 
@@ -134,7 +135,7 @@ public class MeetingInfoFragment extends Fragment implements ListView.OnItemClic
         }
 
         // start request timer in case the first request timeout
-        if (model != null && model.size() == 0) {
+        if (model != null && model.size() == 0 && currentPageCount == 0) {
             startRequestTimer();
         }
 
@@ -189,6 +190,12 @@ public class MeetingInfoFragment extends Fragment implements ListView.OnItemClic
     // receive new meeting data
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(MeetingInfoDataReadyEvent event) {
+        if (currentPageCount == 0) {
+            currentPageCount += MeetingInfoModelFragment.DEFAULT_INIT_LOAD_PAGE_COUNT;
+        } else {
+            currentPageCount += 1;
+        }
+
         // update total and model
         // and set show more btn status
         if (event != null) {
@@ -200,12 +207,12 @@ public class MeetingInfoFragment extends Fragment implements ListView.OnItemClic
                 for (int i = 0; i < event.getEventInfoList().size(); i++) {
                     adapter.add(event.getEventInfoList().get(i));
                 }
-
-                // set show more btn availablity
-                if (model.size() >= total) {
-                    setShowMoreLabelText(getString(R.string.no_more_meeting_info));
-                }
             }
+        }
+
+        // set show more btn availablity
+        if (currentPageCount * DEFAULT_SHOW_MORE_DATA_COUNT >= total) {
+            setShowMoreLabelText(getString(R.string.no_more_meeting_info));
         }
 
         // TODO add id verification for data ready event
@@ -280,6 +287,9 @@ public class MeetingInfoFragment extends Fragment implements ListView.OnItemClic
             int total) {
         int totalItems = firstVisibleIndex + visibleItemCount;
         if (totalItems == total && !isSendingRequest) {
+            if (model != null && total < model.size()) {
+                return;
+            }
             showMoreMeetingInfoData();
         }
     }
@@ -303,11 +313,15 @@ public class MeetingInfoFragment extends Fragment implements ListView.OnItemClic
         return this;
     }
 
+    public MeetingInfoFragment setCurrentPageCount(int currentPageCount) {
+        this.currentPageCount = currentPageCount; return this;
+    }
+
     private void showMoreMeetingInfoData() {
         if (total <= 0) {
             return;
         }
-        if (model != null && model.size() >= total) {
+        if (currentPageCount * DEFAULT_SHOW_MORE_DATA_COUNT >= total) {
             return;
         }
         if (isSendingRequest) {
@@ -339,6 +353,7 @@ public class MeetingInfoFragment extends Fragment implements ListView.OnItemClic
         currentRequestId = MeetingInfoModelFragment.FIRST_REQUEST_ID;
         adapter.clear();
         total = 0;
+        currentPageCount = 0;
         // will be using the pull down refresh icon when reloading
         setShowMoreMeetingBtnProgressBar(false, false);
         startRequestTimer();

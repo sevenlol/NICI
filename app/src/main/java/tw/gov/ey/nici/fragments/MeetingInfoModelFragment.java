@@ -25,6 +25,7 @@ public class MeetingInfoModelFragment extends Fragment {
 
     private int initLoadCount = DEFAULT_INIT_LOAD_COUNT;
     private NiciClient client = null;
+    private int currentPageCount = 0;
     private Integer total = null;
     private ArrayList<NiciEventInfo> model = new ArrayList<NiciEventInfo>();
     private boolean isStarting = false;
@@ -68,6 +69,8 @@ public class MeetingInfoModelFragment extends Fragment {
 
     public Integer getTotal() { return total; }
 
+    public int getCurrentPageCount() { return currentPageCount; }
+
     public ArrayList<NiciEventInfo> getModel() {
         return new ArrayList<NiciEventInfo>(model);
     }
@@ -88,7 +91,7 @@ public class MeetingInfoModelFragment extends Fragment {
         private int count;
 
         public LoadMeetingInfoDataThread(int count) {
-            if (count <= 0) {
+            if (count <= 0 || count % DEFAULT_SHOW_MORE_DATA_COUNT != 0) {
                 throw new IllegalArgumentException();
             }
             this.count = count;
@@ -103,9 +106,16 @@ public class MeetingInfoModelFragment extends Fragment {
             }
 
             try {
-                total = client.getNiciEventInfoCount();
-                int skip = model == null ? 0 : model.size();
+
+                // another bad design, should use pagination parameters in the first place
+                int skip = currentPageCount * DEFAULT_SHOW_MORE_DATA_COUNT;
                 List<NiciEventInfo> result = client.getNiciEventInfo(skip, count);
+
+                // get total, has to be called after the api call due to bad design
+                total = client.getNiciEventInfoCount();
+
+                // request succeeded, increase current page index
+                currentPageCount += count / DEFAULT_SHOW_MORE_DATA_COUNT;
 
                 // post data ready event
                 EventBus.getDefault().post(new MeetingInfoDataReadyEvent(skip, total, result));
