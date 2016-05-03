@@ -19,14 +19,18 @@ import tw.gov.ey.nici.models.NiciParagraph;
 import tw.gov.ey.nici.models.NiciProject;
 
 public class NiciClientFactory {
+    private static final String SERVER_URL = "http://api.dcoffice.lab.oincloud.com/";
+
     public enum ClientType {
-        TESTING
+        TESTING, SERVER
     }
 
     public static NiciClient getClient(ClientType type) {
         switch (type) {
             case TESTING:
                 return getTestingClient();
+            case SERVER:
+                return getServerClient();
             default:
         }
         return null;
@@ -34,6 +38,10 @@ public class NiciClientFactory {
 
     private static NiciClient getTestingClient() {
         return new FakeNiciClient();
+    }
+
+    private static NiciClient getServerClient() {
+        return new NiciClientImpl(SERVER_URL);
     }
 
     private static class FakeNiciClient implements NiciClient {
