@@ -7,7 +7,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,7 +50,8 @@ public class NICIMainActivity extends AppCompatActivity
     }
 
     private BottomBar mBottomBar;
-    private NiciClient niciClient;
+    private NiciClient niciTestClient;
+    private NiciClient niciServerClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +59,8 @@ public class NICIMainActivity extends AppCompatActivity
         setContentView(R.layout.nici_main);
 
         // get nici client
-        niciClient = NiciClientFactory.getClient(NiciClientFactory.ClientType.TESTING);
+        niciTestClient = NiciClientFactory.getClient(NiciClientFactory.ClientType.TESTING);
+        niciServerClient = NiciClientFactory.getClient(NiciClientFactory.ClientType.SERVER);
 
         // initiate action bar
         Toolbar actionBar = (Toolbar) findViewById(R.id.main_action_bar);
@@ -176,7 +177,7 @@ public class NICIMainActivity extends AppCompatActivity
                 IntroModelFragment introModelFragment = (IntroModelFragment)
                         getFragmentFromTag(INTRO_MODEL_FRAGMENT_TAG);
                 if (introModelFragment == null) {
-                    introModelFragment = IntroModelFragment.newInstance(niciClient);
+                    introModelFragment = IntroModelFragment.newInstance(niciServerClient);
                     getSupportFragmentManager()
                         .beginTransaction()
                         .add(introModelFragment, INTRO_MODEL_FRAGMENT_TAG)
@@ -191,7 +192,7 @@ public class NICIMainActivity extends AppCompatActivity
                 ProjectModelFragment projectModelFragment = (ProjectModelFragment)
                         getFragmentFromTag(PROJECT_MODEL_FRAGMENT_TAG);
                 if (projectModelFragment == null) {
-                    projectModelFragment = ProjectModelFragment.newInstance(niciClient);
+                    projectModelFragment = ProjectModelFragment.newInstance(niciServerClient);
                     getSupportFragmentManager()
                             .beginTransaction()
                             .add(projectModelFragment, PROJECT_MODEL_FRAGMENT_TAG)
@@ -205,7 +206,7 @@ public class NICIMainActivity extends AppCompatActivity
                 MeetingModelFragment meetingModelFragment = (MeetingModelFragment)
                         getFragmentFromTag(MEETING_MODEL_FRAGMENT_TAG);
                 if (meetingModelFragment == null) {
-                    meetingModelFragment = MeetingModelFragment.newInstance(niciClient);
+                    meetingModelFragment = MeetingModelFragment.newInstance(niciServerClient);
                     getSupportFragmentManager()
                             .beginTransaction()
                             .add(meetingModelFragment, MEETING_MODEL_FRAGMENT_TAG)
@@ -221,7 +222,7 @@ public class NICIMainActivity extends AppCompatActivity
                 MeetingInfoModelFragment meetingInfoModelFragment = (MeetingInfoModelFragment)
                         getFragmentFromTag(MEETING_INFO_MODEL_FRAGMENT_TAG);
                 if (meetingInfoModelFragment == null) {
-                    meetingInfoModelFragment = MeetingInfoModelFragment.newInstance(niciClient);
+                    meetingInfoModelFragment = MeetingInfoModelFragment.newInstance(niciServerClient);
                     getSupportFragmentManager()
                             .beginTransaction()
                             .add(meetingInfoModelFragment, MEETING_INFO_MODEL_FRAGMENT_TAG)
@@ -238,7 +239,7 @@ public class NICIMainActivity extends AppCompatActivity
                 InfoModelFragment infoModelFragment = (InfoModelFragment)
                         getFragmentFromTag(INFO_MODEL_FRAGMENT_TAG);
                 if (infoModelFragment == null) {
-                    infoModelFragment = InfoModelFragment.newInstance(niciClient);
+                    infoModelFragment = InfoModelFragment.newInstance(niciServerClient);
                     getSupportFragmentManager()
                             .beginTransaction()
                             .add(infoModelFragment, INFO_MODEL_FRAGMENT_TAG)
@@ -275,7 +276,7 @@ public class NICIMainActivity extends AppCompatActivity
                         .remove(introModelFragment)
                         .commit();
                 }
-                introModelFragment = IntroModelFragment.newInstance(niciClient);
+                introModelFragment = IntroModelFragment.newInstance(niciServerClient);
                 getSupportFragmentManager()
                     .beginTransaction()
                     .add(introModelFragment, INTRO_MODEL_FRAGMENT_TAG)
@@ -290,7 +291,7 @@ public class NICIMainActivity extends AppCompatActivity
                         .remove(projectModelFragment)
                         .commit();
                 }
-                projectModelFragment = ProjectModelFragment.newInstance(niciClient);
+                projectModelFragment = ProjectModelFragment.newInstance(niciServerClient);
                 getSupportFragmentManager()
                         .beginTransaction()
                         .add(projectModelFragment, PROJECT_MODEL_FRAGMENT_TAG)
@@ -305,7 +306,7 @@ public class NICIMainActivity extends AppCompatActivity
                         .remove(meetingModelFragment)
                         .commit();
                 }
-                meetingModelFragment = MeetingModelFragment.newInstance(niciClient);
+                meetingModelFragment = MeetingModelFragment.newInstance(niciServerClient);
                 getSupportFragmentManager()
                         .beginTransaction()
                         .add(meetingModelFragment, MEETING_MODEL_FRAGMENT_TAG)
@@ -320,7 +321,7 @@ public class NICIMainActivity extends AppCompatActivity
                             .remove(meetingInfoModelFragment)
                             .commit();
                 }
-                meetingInfoModelFragment = MeetingInfoModelFragment.newInstance(niciClient);
+                meetingInfoModelFragment = MeetingInfoModelFragment.newInstance(niciServerClient);
                 getSupportFragmentManager()
                         .beginTransaction()
                         .add(meetingInfoModelFragment, MEETING_INFO_MODEL_FRAGMENT_TAG)
@@ -335,7 +336,7 @@ public class NICIMainActivity extends AppCompatActivity
                         .remove(infoModelFragment)
                         .commit();
                 }
-                infoModelFragment = InfoModelFragment.newInstance(niciClient);
+                infoModelFragment = InfoModelFragment.newInstance(niciServerClient);
                 getSupportFragmentManager()
                         .beginTransaction()
                         .add(infoModelFragment, INFO_MODEL_FRAGMENT_TAG)

@@ -22,7 +22,7 @@ public class MeetingDetailActivity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.meeting_detail_activity);
 
         // get client
-        niciClient = NiciClientFactory.getClient(NiciClientFactory.ClientType.TESTING);
+        niciClient = NiciClientFactory.getClient(NiciClientFactory.ClientType.SERVER);
 
         // initiate action bar
         Toolbar actionBar = (Toolbar) findViewById(R.id.meeting_action_bar);
