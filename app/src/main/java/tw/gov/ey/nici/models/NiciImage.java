@@ -71,6 +71,13 @@ public class NiciImage extends NiciText {
         return imageLayout;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Image: Url: %s, Desc: %s",
+                imageUrl == null ? "NULL" : imageUrl,
+                imageDescription == null ? "NULL" : imageDescription);
+    }
+
     private ImageView getBaseImageView(Context context) {
         ImageView view = new ImageView(context);
         return view;

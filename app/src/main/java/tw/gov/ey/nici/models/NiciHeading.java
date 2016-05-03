@@ -45,6 +45,11 @@ public class NiciHeading extends NiciText {
         return textView;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Heading: %s", heading == null ? "NULL" : heading);
+    }
+
     private int getMargin() {
         switch (setting) {
             case SMALL:

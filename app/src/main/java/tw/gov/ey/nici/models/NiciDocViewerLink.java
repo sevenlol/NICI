@@ -27,6 +27,7 @@ public class NiciDocViewerLink extends NiciText {
         this.fileTitle = fileTitle;
         this.linkLabel = linkLabel;
     }
+
     @Override
     public View getView(Context context) {
         check(context);
@@ -50,6 +51,14 @@ public class NiciDocViewerLink extends NiciText {
         linkBtn.setMinimumWidth(0);
 
         return linkBtn;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("NiciLink: Url: %s, Title: %s, Label: %s",
+                fileUrl == null ? "NULL" : fileUrl,
+                fileTitle == null ? "NULL" : fileTitle,
+                linkLabel == null ? "NULL" :linkLabel);
     }
 
     public Button getLinkButton(Context context) {

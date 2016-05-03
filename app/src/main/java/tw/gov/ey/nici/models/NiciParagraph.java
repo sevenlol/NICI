@@ -35,6 +35,11 @@ public class NiciParagraph extends NiciText {
         return textView;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Paragraph: %s", paragraph == null ? "NULL" : paragraph.toString());
+    }
+
     private int getMargin() {
         switch (setting) {
             case SMALL:
