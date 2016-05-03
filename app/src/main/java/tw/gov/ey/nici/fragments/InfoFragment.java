@@ -55,6 +55,7 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
     private ListView listView = null;
     private FloatingActionButton scrollToTopBtn = null;
 
+    private int currentPageCount = 0;
     private int total = 0;
     private ArrayAdapter<NiciInfo> adapter = null;
     private ArrayList<NiciInfo> model = null;
@@ -122,11 +123,11 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
                 .inflate(R.layout.list_footer, null);
         showMoreInfoLabel = (TextView) footerLayout.findViewById(R.id.show_more_label);
         showMoreInfoProgress = (ProgressBar) footerLayout.findViewById(R.id.show_more_progress);
-        if (model != null && model.size() > 0) {
+        if (model != null && currentPageCount > 0) {
             // some data is already loaded
             setShowMoreInfoBtnProgressBar(true, false);
 
-            if (model.size() >= total) {
+            if (currentPageCount * DEFAULT_SHOW_MORE_DATA_COUNT >= total) {
                 setShowMoreLabelText(getString(R.string.no_more_info));
             }
 
@@ -135,7 +136,7 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
         }
 
         // start request timer in case the first request timeout
-        if (model != null && model.size() == 0) {
+        if (model != null && model.size() == 0 && currentPageCount == 0) {
             startRequestTimer();
         }
 
@@ -153,6 +154,12 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
     // receive new info data
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(InfoDataReadyEvent event) {
+        if (currentPageCount == 0) {
+            currentPageCount += InfoModelFragment.DEFAULT_INIT_LOAD_PAGE_COUNT;
+        } else {
+            currentPageCount += 1;
+        }
+
         // update total and model
         // and set show more btn status
         if (event != null) {
@@ -164,12 +171,12 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
                 for (int i = 0; i < event.getInfoList().size(); i++) {
                     adapter.add(event.getInfoList().get(i));
                 }
-
-                // set show more btn availablity
-                if (model.size() >= total) {
-                    setShowMoreLabelText(getString(R.string.no_more_info));
-                }
             }
+        }
+
+        // set show more btn availablity
+        if (currentPageCount * DEFAULT_SHOW_MORE_DATA_COUNT >= total) {
+            setShowMoreLabelText(getString(R.string.no_more_info));
         }
 
         // TODO add id verification for data ready event
@@ -281,6 +288,9 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
             int total) {
         int totalItems = firstVisibleIndex + visibleItemCount;
         if (totalItems == total && !isSendingRequest) {
+            if (model != null && total < model.size()) {
+                return;
+            }
             showMoreInfoData();
         }
     }
@@ -305,6 +315,10 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
         return this;
     }
 
+    public InfoFragment setCurrentPageCount(int currentPageCount) {
+        this.currentPageCount = currentPageCount; return this;
+    }
+
     private void showMoreInfoData() {
         Log.d("Info Event", "Total: " + total);
         Log.d("Info Event", "IsSendingReq: " + isSendingRequest);
@@ -312,7 +326,7 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
         if (total <= 0) {
             return;
         }
-        if (model != null && model.size() >= total) {
+        if (currentPageCount * DEFAULT_SHOW_MORE_DATA_COUNT >= total) {
             return;
         }
         if (isSendingRequest) {
@@ -344,6 +358,7 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
         currentRequestId = InfoModelFragment.FIRST_REQUEST_ID;
         adapter.clear();
         total = 0;
+        currentPageCount = 0;
         // will be using the pull down refresh icon when reloading
         setShowMoreInfoBtnProgressBar(false, false);
         startRequestTimer();
