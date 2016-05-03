@@ -56,7 +56,7 @@ public class ProjectFragment extends Fragment
         ViewTreeObserver.OnScrollChangedListener {
     public static final int DEFAULT_EVENT_ID_LENGTH = 20;
     public static final int DEFAULT_DOWNLOAD_TIMEOUT = 30000;
-    public static final int DEFAULT_REQUEST_TIMEOUT = 5000;
+    public static final int DEFAULT_REQUEST_TIMEOUT = 10000;
     public static final int DEFAULT_SCROLL_WINDOW_SIZE = 15;
     public static final int DEFAULT_SCROLL_TIMEOUT = 5000;
     public static final boolean DEFAULT_SCROLL_DETECTION_ENABLED = false;
@@ -204,8 +204,7 @@ public class ProjectFragment extends Fragment
             return;
         }
         NiciProject project = event.getProject();
-        if (project.getContentList() == null ||
-            project.getProjectFileUrl() == null) {
+        if (project.getContentList() == null) {
             return;
         }
         model = project;

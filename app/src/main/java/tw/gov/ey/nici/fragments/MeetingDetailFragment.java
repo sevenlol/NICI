@@ -40,7 +40,7 @@ import tw.gov.ey.nici.utils.NiciContentUtils;
 public class MeetingDetailFragment extends Fragment
         implements SwipeRefreshLayout.OnRefreshListener, ViewTreeObserver.OnScrollChangedListener,
             View.OnClickListener {
-    public static final int DEFAULT_REQUEST_TIMEOUT = 5000;
+    public static final int DEFAULT_REQUEST_TIMEOUT = 10000;
     public static final int DEFAULT_SCROLL_WINDOW_SIZE = 15;
     public static final int DEFAULT_SCROLL_TIMEOUT = 5000;
     public static final boolean DEFAULT_SCROLL_DETECTION_ENABLED = false;

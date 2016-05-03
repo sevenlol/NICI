@@ -49,7 +49,7 @@ public class IntroFragment extends Fragment
         implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener,
             ViewTreeObserver.OnScrollChangedListener {
     public static final String YOUTUBE_API_KEY = "AIzaSyA2e_42-4z4KElVeurPFjsESmjzz0PFVfc";
-    public static final int DEFAULT_REQUEST_TIMEOUT = 5000;
+    public static final int DEFAULT_REQUEST_TIMEOUT = 10000;
     public static final int DEFAULT_SCROLL_WINDOW_SIZE = 15;
     public static final int DEFAULT_SCROLL_TIMEOUT = 5000;
     public static final boolean DEFAULT_SCROLL_DETECTION_ENABLED = false;

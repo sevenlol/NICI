@@ -42,7 +42,7 @@ public class MeetingInfoFragment extends Fragment implements ListView.OnItemClic
         SwipeRefreshLayout.OnRefreshListener, ListView.OnScrollListener, View.OnClickListener {
     public static final int DEFAULT_SHOW_MORE_DATA_COUNT = MeetingInfoModelFragment.DEFAULT_SHOW_MORE_DATA_COUNT;
     public static final int DEFAULT_EVENT_ID_LENGTH = 20;
-    public static final int DEFAULT_REQUEST_TIMEOUT = 5000;
+    public static final int DEFAULT_REQUEST_TIMEOUT = 10000;
     public static final boolean DEFAULT_SCROLL_DETECTION_ENABLED = false;
 
     private Handler handler = new Handler();
