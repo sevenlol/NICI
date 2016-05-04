@@ -235,6 +235,7 @@ public class NiciEvent {
                     file.fileUrl = url;
                     file.fileLabel = key;
                     file.fileTitle = key;
+                    relatedFiles.add(file);
                 }
             }
 
