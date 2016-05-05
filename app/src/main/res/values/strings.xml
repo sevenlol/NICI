@@ -3,11 +3,11 @@
     <string name="action_settings">設定</string>
     <string name="action_about">關於</string>
 
-    <string name="show_intro_page">小組簡介</string>
-    <string name="show_project_page">方案計畫</string>
-    <string name="show_meeting_page">活動/會議情形</string>
-    <string name="show_meeting_info_page">活動/會議訊息</string>
-    <string name="show_info_page">資訊分享</string>
+    <string name="show_intro_page">關於我們</string>
+    <string name="show_project_page">數位匯流</string>
+    <string name="show_meeting_page">活動花絮</string>
+    <string name="show_meeting_info_page">近期活動</string>
+    <string name="show_info_page">最新消息</string>
 
     <string name="show_facebook_page">FACEBOOK</string>
 
@@ -44,19 +44,19 @@
 
     <string name="no_more_meeting_info">沒有更多活動/會議訊息</string>
 
-    <string name="intro_page_title">小組簡介</string>
-    <string name="project_page_title">方案計畫</string>
-    <string name="meeting_page_title">活動/會議情形</string>
-    <string name="meeting_info_page_title">活動/會議訊息</string>
-    <string name="info_page_title">資訊分享</string>
+    <string name="intro_page_title">關於我們</string>
+    <string name="project_page_title">數位匯流</string>
+    <string name="meeting_page_title">活動花絮</string>
+    <string name="meeting_info_page_title">近期活動</string>
+    <string name="info_page_title">最新消息</string>
     <string name="facebook_page_title">FACEBOOK</string>
 
-    <string name="bottom_bar_intro_title">小組簡介</string>
-    <string name="bottom_bar_project_title">方案計畫</string>
-    <string name="bottom_bar_meeting_title">會議情形</string>
-    <string name="bottom_bar_meeting_info_title">會議訊息</string>
-    <string name="bottom_bar_info_title">資訊分享</string>
-    <string name="bottom_bar_facebook_title">社團</string>
+    <string name="bottom_bar_intro_title">關於我們</string>
+    <string name="bottom_bar_project_title">數位匯流</string>
+    <string name="bottom_bar_meeting_title">活動花絮</string>
+    <string name="bottom_bar_meeting_info_title">近期活動</string>
+    <string name="bottom_bar_info_title">最新消息</string>
+    <string name="bottom_bar_facebook_title">FACEBOOK</string>
 
     <string name="doc_viewer_title">檢視檔案</string>
 
