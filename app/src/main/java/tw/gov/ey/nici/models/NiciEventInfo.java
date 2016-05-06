@@ -19,6 +19,7 @@ public class NiciEventInfo {
     private Date date;
     private String location;
     private String description;
+    private String coverImageUrl;
     private List<NiciContent> eventInfoContentList;
     private List<RelatedLink> relatedLinkList;
     private List<RelatedFile> relatedFileList;
@@ -30,6 +31,7 @@ public class NiciEventInfo {
     public Date getDate() { return date; }
     public String getLocation() { return location; }
     public String getDescription() { return description; }
+    public String getCoverImageUrl() { return coverImageUrl; }
     public List<NiciContent> getEventInfoContentList() { return eventInfoContentList; }
     public List<RelatedLink> getRelatedLinkList() { return relatedLinkList; }
     public List<RelatedFile> getRelatedFileList() { return relatedFileList; }
@@ -52,6 +54,10 @@ public class NiciEventInfo {
 
     public NiciEventInfo setDescription(String description) {
         this.description = description; return this;
+    }
+
+    public NiciEventInfo setCoverImageUrl(String coverImageUrl) {
+        this.coverImageUrl = coverImageUrl; return this;
     }
 
     public NiciEventInfo setEventInfoContentList(List<NiciContent> eventInfoContentList) {
@@ -243,6 +249,7 @@ public class NiciEventInfo {
 
             return new NiciEventInfo()
                     .setId(JsonUtil.getStringFromObject(obj, JsonKey.ID))
+                    .setCoverImageUrl(JsonUtil.getStringFromObject(obj, JsonKey.PHOTO))
                     .setTitle(JsonUtil.getStringFromObject(obj, JsonKey.TITLE))
                     .setDate(NiciDateUtil.parseMeetingDateStr(meetingDateStr))
                     .setLocation(JsonUtil.getStringFromObject(obj, JsonKey.MEETING_LOCATION))
