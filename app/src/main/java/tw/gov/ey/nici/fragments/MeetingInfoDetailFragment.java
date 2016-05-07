@@ -227,6 +227,18 @@ public class MeetingInfoDetailFragment extends Fragment
         // clear all child views
         meetingInfoDetailContainer.removeAllViews();
 
+        // set cover image
+        if (model.getCoverImageUrl() != null && !model.getCoverImageUrl().equals("")) {
+            NiciImage coverImage = new NiciImage(model.getCoverImageUrl(), null);
+            View view = coverImage.getView(getContext(), displayChoice);
+            if (view != null) {
+                meetingInfoDetailContainer.addView(view);
+                Picasso.with(getActivity())
+                        .load(coverImage.getImageUrl())
+                        .into(coverImage.getImageView(getActivity()));
+            }
+        }
+
         List<NiciImage> imageList = new ArrayList<>();
         for (NiciContent content : model.getEventInfoContentList()) {
             if (content == null) {
