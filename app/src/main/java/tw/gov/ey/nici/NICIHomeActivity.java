@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.redbooth.WelcomeCoordinatorLayout;
@@ -38,12 +39,12 @@ public class NICIHomeActivity extends AppCompatActivity implements View.OnClickL
             getSupportActionBar().setTitle(getString(R.string.app_name));
         }
 
-        FloatingActionButton showIntroBtn = (FloatingActionButton) findViewById(R.id.show_intro_btn);
-        FloatingActionButton showProjectBtn = (FloatingActionButton) findViewById(R.id.show_project_btn);
-        FloatingActionButton showMeetingBtn = (FloatingActionButton) findViewById(R.id.show_meeting_btn);
-        FloatingActionButton showMeetingInfoBtn = (FloatingActionButton) findViewById(R.id.show_meeting_info_btn);
-        FloatingActionButton showInfoBtn = (FloatingActionButton) findViewById(R.id.show_info_btn);
-        FloatingActionButton showFacebookBtn = (FloatingActionButton) findViewById(R.id.show_facebook_btn);
+        ImageButton showIntroBtn = (ImageButton) findViewById(R.id.show_intro_btn);
+        ImageButton showProjectBtn = (ImageButton) findViewById(R.id.show_project_btn);
+        ImageButton showMeetingBtn = (ImageButton) findViewById(R.id.show_meeting_btn);
+        ImageButton showMeetingInfoBtn = (ImageButton) findViewById(R.id.show_meeting_info_btn);
+        ImageButton showInfoBtn = (ImageButton) findViewById(R.id.show_info_btn);
+        ImageButton showFacebookBtn = (ImageButton) findViewById(R.id.show_facebook_btn);
         if (showIntroBtn != null) {
             showIntroBtn.setOnClickListener(this);
         }

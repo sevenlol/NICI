@@ -38,14 +38,13 @@
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_horizontal"
                     android:layout_width="0dp">
-                    <android.support.design.widget.FloatingActionButton
+                    <ImageButton
                         android:id="@+id/show_intro_btn"
-                        android:src="@drawable/ic_home_white_24dp"
-                        app:backgroundTint="@color/showIntroIcon"
-                        app:elevation="@dimen/show_icon_elevation"
-                        android:elevation="@dimen/show_icon_elevation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:src="@drawable/show_intro_icon"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:layout_width="@dimen/show_icon_width"
+                        android:layout_height="@dimen/show_icon_height"
+                        android:scaleType="fitCenter"/>
                     <TextView
                         android:text="@string/show_intro_page"
                         android:layout_width="wrap_content"
@@ -57,14 +56,13 @@
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_horizontal"
                     android:layout_width="0dp">
-                    <android.support.design.widget.FloatingActionButton
+                    <ImageButton
                         android:id="@+id/show_project_btn"
-                        android:src="@drawable/ic_home_white_24dp"
-                        app:backgroundTint="@color/showProjectIcon"
-                        app:elevation="@dimen/show_icon_elevation"
-                        android:elevation="@dimen/show_icon_elevation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:src="@drawable/show_project_icon"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:layout_width="@dimen/show_icon_width"
+                        android:layout_height="@dimen/show_icon_height"
+                        android:scaleType="fitCenter"/>
                     <TextView
                         android:text="@string/show_project_page"
                         android:layout_width="wrap_content"
@@ -79,14 +77,13 @@
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_horizontal"
                     android:layout_width="0dp">
-                    <android.support.design.widget.FloatingActionButton
+                    <ImageButton
                         android:id="@+id/show_meeting_btn"
-                        android:src="@drawable/ic_home_white_24dp"
-                        app:backgroundTint="@color/showMeetingIcon"
-                        app:elevation="@dimen/show_icon_elevation"
-                        android:elevation="@dimen/show_icon_elevation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:src="@drawable/show_meeting_icon"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:layout_width="@dimen/show_icon_width"
+                        android:layout_height="@dimen/show_icon_height"
+                        android:scaleType="fitCenter"/>
                     <TextView
                         android:text="@string/show_meeting_page"
                         android:layout_width="wrap_content"
@@ -98,14 +95,13 @@
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_horizontal"
                     android:layout_width="0dp">
-                    <android.support.design.widget.FloatingActionButton
+                    <ImageButton
                         android:id="@+id/show_meeting_info_btn"
-                        android:src="@drawable/ic_home_white_24dp"
-                        app:backgroundTint="@color/showInfoIcon"
-                        app:elevation="@dimen/show_icon_elevation"
-                        android:elevation="@dimen/show_icon_elevation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:src="@drawable/show_meeting_info_icon"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:layout_width="@dimen/show_icon_width"
+                        android:layout_height="@dimen/show_icon_height"
+                        android:scaleType="fitCenter"/>
                     <TextView
                         android:text="@string/show_meeting_info_page"
                         android:layout_width="wrap_content"
@@ -120,14 +116,13 @@
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_horizontal"
                     android:layout_width="0dp">
-                    <android.support.design.widget.FloatingActionButton
+                    <ImageButton
                         android:id="@+id/show_info_btn"
-                        android:src="@drawable/ic_home_white_24dp"
-                        app:backgroundTint="@color/showInfoIcon"
-                        app:elevation="@dimen/show_icon_elevation"
-                        android:elevation="@dimen/show_icon_elevation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:src="@drawable/show_info_icon"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:layout_width="@dimen/show_icon_width"
+                        android:layout_height="@dimen/show_icon_height"
+                        android:scaleType="fitCenter"/>
                     <TextView
                         android:text="@string/show_info_page"
                         android:layout_width="wrap_content"
@@ -139,14 +134,13 @@
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_horizontal"
                     android:layout_width="0dp">
-                    <android.support.design.widget.FloatingActionButton
+                    <ImageButton
                         android:id="@+id/show_facebook_btn"
-                        android:src="@drawable/ic_home_white_24dp"
-                        app:backgroundTint="@color/showFacebookIcon"
-                        app:elevation="@dimen/show_icon_elevation"
-                        android:elevation="@dimen/show_icon_elevation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:src="@drawable/show_facebook_icon"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:layout_width="@dimen/show_icon_width"
+                        android:layout_height="@dimen/show_icon_height"
+                        android:scaleType="fitCenter"/>
                     <TextView
                         android:text="@string/show_facebook_page"
                         android:layout_width="wrap_content"
