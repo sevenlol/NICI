@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#FA7841</color>
+    <color name="colorPrimaryDark">#E64A19</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="bottomBarIntro">@color/colorPrimaryDark</color>
-    <color name="bottomBarProject">@color/colorAccent</color>
-    <color name="bottomBarMeeting">@color/colorAccent</color>
+    <color name="bottomBarIntro">@color/colorPrimary</color>
+    <color name="bottomBarProject">@color/colorPrimary</color>
+    <color name="bottomBarMeeting">@color/colorPrimary</color>
     <color name="bottomBarMeetingInfo">@color/colorPrimary</color>
     <color name="bottomBarInfo">@color/colorPrimary</color>
-    <color name="bottomBarFacebook">@color/colorPrimaryDark</color>
+    <color name="bottomBarFacebook">@color/colorPrimary</color>
 
-    <color name="showIntroIcon">@color/colorPrimary</color>
-    <color name="showProjectIcon">@color/colorAccent</color>
-    <color name="showMeetingIcon">@color/colorAccent</color>
-    <color name="showMeetingInfoIcon">@color/colorPrimaryDark</color>
-    <color name="showInfoIcon">@color/colorPrimary</color>
-    <color name="showFacebookIcon">@color/colorAccent</color>
+    <color name="showIntroIcon">@android:color/transparent</color>
+    <color name="showProjectIcon">@android:color/transparent</color>
+    <color name="showMeetingIcon">@android:color/transparent</color>
+    <color name="showMeetingInfoIcon">@android:color/transparent</color>
+    <color name="showInfoIcon">@android:color/transparent</color>
+    <color name="showFacebookIcon">@android:color/transparent</color>
 
     <color name="showFacebookPageBtn">#3B5998</color>
     <color name="showFacebookPageText">#FFFFFF</color>

@@ -14,6 +14,8 @@
     <dimen name="project_title_fig_width">186dp</dimen>
     <dimen name="project_title_fig_height">56dp</dimen>
 
+    <dimen name="show_icon_width">64dp</dimen>
+    <dimen name="show_icon_height">64dp</dimen>
     <dimen name="show_icon_table_vertical_margin">48dp</dimen>
     <dimen name="show_icon_row_bottom_margin">24dp</dimen>
     <dimen name="show_icon_elevation">0dp</dimen>
