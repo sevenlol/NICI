@@ -4,6 +4,11 @@
     <color name="colorPrimaryDark">#E64A19</color>
     <color name="colorAccent">#FF4081</color>
 
+    <!-- override the bottom bar library color-->
+    <color name="activeBottomBarColor">#616161</color>
+    <color name="bb_inActiveBottomBarItemColor">#FFFFFF</color>
+    <color name="bb_darkBackgroundColor">@color/colorPrimary</color>
+
     <color name="bottomBarIntro">@color/colorPrimary</color>
     <color name="bottomBarProject">@color/colorPrimary</color>
     <color name="bottomBarMeeting">@color/colorPrimary</color>

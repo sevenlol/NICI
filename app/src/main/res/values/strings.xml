@@ -51,12 +51,12 @@
     <string name="info_page_title">最新消息</string>
     <string name="facebook_page_title">FACEBOOK</string>
 
-    <string name="bottom_bar_intro_title">數位匯流</string>
-    <string name="bottom_bar_project_title">關於我們</string>
-    <string name="bottom_bar_meeting_title">活動花絮</string>
-    <string name="bottom_bar_meeting_info_title">近期活動</string>
-    <string name="bottom_bar_info_title">最新消息</string>
-    <string name="bottom_bar_facebook_title">FACEBOOK</string>
+    <string name="bottom_bar_intro_title"></string>
+    <string name="bottom_bar_project_title"></string>
+    <string name="bottom_bar_meeting_title"></string>
+    <string name="bottom_bar_meeting_info_title"></string>
+    <string name="bottom_bar_info_title"></string>
+    <string name="bottom_bar_facebook_title"></string>
 
     <string name="doc_viewer_title">檢視檔案</string>
 

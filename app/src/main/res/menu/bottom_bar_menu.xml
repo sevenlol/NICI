@@ -3,7 +3,8 @@
     <item
         android:id="@+id/bottomBarIntro"
         android:icon="@drawable/intro_icon_inactive"
-        android:title="@string/bottom_bar_intro_title" />
+        android:title="@string/bottom_bar_intro_title"
+        />
     <item
         android:id="@+id/bottomBarProject"
         android:icon="@drawable/project_icon_inactive"

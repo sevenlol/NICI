@@ -81,7 +81,18 @@ public class NICIMainActivity extends AppCompatActivity
         // initiate bottom bar
         mBottomBar = BottomBar.attach(this, savedInstanceState);
         mBottomBar.useOnlyStatusBarTopOffset();
+        mBottomBar.useFixedMode();
+        mBottomBar.useDarkTheme();
+        mBottomBar.setActiveTabColor(ContextCompat.getColor(this, R.color.activeBottomBarColor));
         mBottomBar.setItemsFromMenu(R.menu.bottom_bar_menu, this);
+
+        // set tab's background color
+        mBottomBar.mapColorForTab(PageType.INTRO.position, ContextCompat.getColor(this, R.color.bottomBarIntro));
+        mBottomBar.mapColorForTab(PageType.PROJECT.position, ContextCompat.getColor(this, R.color.bottomBarProject));
+        mBottomBar.mapColorForTab(PageType.MEETING.position, ContextCompat.getColor(this, R.color.bottomBarMeeting));
+        mBottomBar.mapColorForTab(PageType.MEETING_INFO.position, ContextCompat.getColor(this, R.color.bottomBarInfo));
+        mBottomBar.mapColorForTab(PageType.INFO.position, ContextCompat.getColor(this, R.color.bottomBarMeeting));
+        mBottomBar.mapColorForTab(PageType.FACEBOOK.position, ContextCompat.getColor(this, R.color.bottomBarInfo));
 
         // setup the default tab
         // Note: the default position has to be set before setting background colors
@@ -110,14 +121,6 @@ public class NICIMainActivity extends AppCompatActivity
             }
             mBottomBar.setDefaultTabPosition(position);
         }
-
-        // set tab's background color
-        mBottomBar.mapColorForTab(PageType.INTRO.position, ContextCompat.getColor(this, R.color.bottomBarIntro));
-        mBottomBar.mapColorForTab(PageType.PROJECT.position, ContextCompat.getColor(this, R.color.bottomBarProject));
-        mBottomBar.mapColorForTab(PageType.MEETING.position, ContextCompat.getColor(this, R.color.bottomBarMeeting));
-        mBottomBar.mapColorForTab(PageType.MEETING_INFO.position, ContextCompat.getColor(this, R.color.bottomBarInfo));
-        mBottomBar.mapColorForTab(PageType.INFO.position, ContextCompat.getColor(this, R.color.bottomBarMeeting));
-        mBottomBar.mapColorForTab(PageType.FACEBOOK.position, ContextCompat.getColor(this, R.color.bottomBarInfo));
 
         // update model for orientation change
         updateModelForCurrentFragment();
