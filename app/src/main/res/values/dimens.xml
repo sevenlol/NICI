@@ -4,15 +4,18 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="logo_title_bar_vertical_margin">8dp</dimen>
-    <dimen name="logo_title_bar_right_margin">-50dp</dimen>
+    <dimen name="logo_title_bar_right_margin">-60dp</dimen>
 
-    <dimen name="nici_logo_full_width">120dp</dimen>
-    <dimen name="nici_logo_full_height">96dp</dimen>
+    <dimen name="nici_logo_full_width">96dp</dimen>
+    <dimen name="nici_logo_full_height">72dp</dimen>
 
     <dimen name="video_vertical_margin">24dp</dimen>
 
+    <dimen name="intro_title_fig_width">186dp</dimen>
+    <dimen name="intro_title_fig_height">64dp</dimen>
+
     <dimen name="project_title_fig_width">186dp</dimen>
-    <dimen name="project_title_fig_height">56dp</dimen>
+    <dimen name="project_title_fig_height">64dp</dimen>
 
     <dimen name="show_icon_width">64dp</dimen>
     <dimen name="show_icon_height">64dp</dimen>

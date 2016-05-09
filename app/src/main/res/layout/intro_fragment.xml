@@ -32,8 +32,8 @@
                     <ImageView
                         android:id="@+id/intro_title"
                         android:src="@drawable/intro_title"
-                        android:layout_width="@dimen/project_title_fig_width"
-                        android:layout_height="@dimen/project_title_fig_height"
+                        android:layout_width="@dimen/intro_title_fig_width"
+                        android:layout_height="@dimen/intro_title_fig_height"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"/>
