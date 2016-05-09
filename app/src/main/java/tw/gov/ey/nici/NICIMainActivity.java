@@ -69,7 +69,7 @@ public class NICIMainActivity extends AppCompatActivity
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.home_icon_white);
             getSupportActionBar().setShowHideAnimationEnabled(true);
         }
 
