@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#FA7841</color>
     <color name="colorPrimaryDark">#E64A19</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#03A9F4</color>
 
     <!-- override the bottom bar library color-->
     <color name="activeBottomBarColor">#616161</color>
