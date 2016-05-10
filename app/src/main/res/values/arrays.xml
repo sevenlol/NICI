@@ -10,4 +10,27 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
+
+    <string-array name="about_website_group_title">
+        <item>經濟部</item>
+        <item>中華民國交通部</item>
+        <item>國家通訊傳播委員會</item>
+        <item>財團法人台灣網路資通中心</item>
+        <item>台灣電信產業發展協會</item>
+        <item>中華民國電視學會</item>
+        <item>電視事業商業同業公會</item>
+        <item>財團法人台灣數位電視協會</item>
+        <item>台灣有線寬頻產業協會</item>
+    </string-array>
+    <string-array name="about_website_group_url">
+        <item>http://www.moea.gov.tw/MNS/populace/home/Home.aspx</item>
+        <item>http://www.motc.gov.tw/ch/index.jsp</item>
+        <item>http://www.ncc.gov.tw/chinese/index.aspx</item>
+        <item>http://www.twnic.net.tw</item>
+        <item>http://www.ttida.org.tw</item>
+        <item>http://www.attnt.org.tw/default.asp</item>
+        <item>http://www.stba.org.tw</item>
+        <item>http://www.dtvc.org.tw/index.aspx</item>
+        <item>http://cbit.org.tw/index_pc.html</item>
+    </string-array>
 </resources>
