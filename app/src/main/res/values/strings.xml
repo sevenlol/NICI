@@ -24,13 +24,13 @@
     <string name="info_date_format">yyyy-MM-dd</string>
     <string name="info_date_str_format">時間：%s</string>
     <string name="info_published_by_str_format">發表：%s</string>
-    <string name="no_more_info">沒有更多資訊</string>
+    <string name="no_more_info">沒有更多消息</string>
 
     <string name="meeting_date_format">yyyy-MM-dd</string>
     <string name="meeting_date_str_format">時間：%s</string>
     <string name="meeting_location_str_format">地點：%s</string>
     <string name="meeting_minutes_taker_str_format">會議記錄：%s</string>
-    <string name="no_more_meeting">沒有更多活動/會議情形</string>
+    <string name="no_more_meeting">沒有更多活動花絮</string>
 
     <string name="meeting_detail_title">活動/會議情形</string>
     <string name="meeting_info_detail_title">活動/會議訊息</string>
@@ -42,7 +42,7 @@
     <string name="default_related_link_label">連結</string>
     <string name="view_link_failed">開啟連結失敗</string>
 
-    <string name="no_more_meeting_info">沒有更多活動/會議訊息</string>
+    <string name="no_more_meeting_info">沒有更多近期活動</string>
 
     <string name="intro_page_title">數位匯流</string>
     <string name="project_page_title">關於我們</string>
@@ -72,4 +72,7 @@
     <string name="pref_display_choice_summary">調整顯示內容的大小</string>
 
     <string name="about_title">關於</string>
+    <string name="about_description">國家資訊通信發展推動 (NICI) 小組</string>
+    <string name="about_website_group">相關連結</string>
+    <string name="about_version_format">版本：%s</string>
 </resources>
