@@ -19,8 +19,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +52,7 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
     private Handler handler = new Handler();
 
     private SwipeRefreshLayout swipeRefreshLayout = null;
+    private RelativeLayout headerLayout = null;
     private TextView showMoreInfoLabel = null;
     private ProgressBar showMoreInfoProgress = null;
     private ListView listView = null;
@@ -118,6 +121,14 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
             scrollToTopBtn.setOnClickListener(this);
         }
 
+        // inflate header layout
+        headerLayout = (RelativeLayout) LayoutInflater.from(getContext())
+                .inflate(R.layout.list_header, null);
+        ImageView titleImage = (ImageView) headerLayout.findViewById(R.id.list_title);
+        if (titleImage != null) {
+            titleImage.setImageResource(R.drawable.info_title);
+        }
+
         // inflate footer layout
         FrameLayout footerLayout = (FrameLayout) LayoutInflater.from(getContext())
                 .inflate(R.layout.list_footer, null);
@@ -126,6 +137,7 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
         if (model != null && currentPageCount > 0) {
             // some data is already loaded
             setShowMoreInfoBtnProgressBar(true, false);
+            setListHeader(true);
 
             if (currentPageCount * DEFAULT_SHOW_MORE_DATA_COUNT >= total) {
                 setShowMoreLabelText(getString(R.string.no_more_info));
@@ -146,6 +158,7 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
         listView.setOnItemClickListener(this);
         listView.setOnScrollListener(this);
         listView.setAdapter(adapter);
+        listView.addHeaderView(headerLayout);
         listView.addFooterView(footerLayout);
 
         return root;
@@ -299,9 +312,10 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
     public void onClick(View v) {
         if (listView != null) {
             // instant top
-            listView.setSelectionAfterHeaderView();
+            Log.d("Info", "ScrollToTop");
+//            listView.setSelectionAfterHeaderView();
             // smooth scroll
-//            listView.smoothScrollToPosition(0);
+            listView.smoothScrollToPosition(0);
         }
     }
 
@@ -361,6 +375,7 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
         currentPageCount = 0;
         // will be using the pull down refresh icon when reloading
         setShowMoreInfoBtnProgressBar(false, false);
+        setListHeader(false);
         startRequestTimer();
         if (getActivity() != null &&
                 getActivity() instanceof NICIMainActivity) {
@@ -378,9 +393,24 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
         isSendingRequest = false;
         currentRequestId = null;
         setShowMoreInfoBtnProgressBar(true, false);
+        setListHeader(true);
         if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setRefreshing(false);
         }
+    }
+
+    private void setListHeader(final boolean isVisible) {
+        if (getActivity() == null) {
+            return;
+        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (headerLayout != null) {
+                    headerLayout.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+                }
+            }
+        });
     }
 
     private void setShowMoreInfoBtnProgressBar(

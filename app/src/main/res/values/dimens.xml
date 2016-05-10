@@ -6,6 +6,9 @@
     <dimen name="logo_title_bar_vertical_margin">8dp</dimen>
     <dimen name="logo_title_bar_right_margin">-60dp</dimen>
 
+    <dimen name="list_logo_title_bar_vertical_margin">8dp</dimen>
+    <dimen name="list_logo_title_bar_right_margin">-17dp</dimen>
+
     <dimen name="nici_logo_full_width">96dp</dimen>
     <dimen name="nici_logo_full_height">72dp</dimen>
 

@@ -17,8 +17,10 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +50,7 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
     private Handler handler = new Handler();
 
     private SwipeRefreshLayout swipeRefreshLayout = null;
+    private RelativeLayout headerLayout = null;
     private TextView showMoreMeetingLabel = null;
     private ProgressBar showMoreMeetingProgress = null;
     private ListView listView = null;
@@ -117,6 +120,14 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
             scrollToTopBtn.setOnClickListener(this);
         }
 
+        // inflate header layout
+        headerLayout = (RelativeLayout) LayoutInflater.from(getContext())
+                .inflate(R.layout.list_header, null);
+        ImageView titleImage = (ImageView) headerLayout.findViewById(R.id.list_title);
+        if (titleImage != null) {
+            titleImage.setImageResource(R.drawable.meeting_info_title);
+        }
+
         // inflate footer layout
         FrameLayout footerLayout = (FrameLayout) LayoutInflater.from(getContext())
                 .inflate(R.layout.list_footer, null);
@@ -125,6 +136,7 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
         if (model != null && currentPageCount > 0) {
             // some data is already loaded
             setShowMoreMeetingBtnProgressBar(true, false);
+            setListHeader(true);
 
             if (currentPageCount * DEFAULT_SHOW_MORE_DATA_COUNT >= total) {
                 setShowMoreLabelText(getString(R.string.no_more_meeting));
@@ -147,6 +159,7 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
         listView.setOnItemClickListener(this);
         listView.setOnScrollListener(this);
         listView.setAdapter(adapter);
+        listView.addHeaderView(headerLayout);
         listView.addFooterView(footerLayout);
 
         return root;
@@ -300,9 +313,9 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
     public void onClick(View v) {
         if (listView != null) {
             // instant top
-            listView.setSelectionAfterHeaderView();
+//            listView.setSelectionAfterHeaderView();
             // smooth scroll
-//            listView.smoothScrollToPosition(0);
+            listView.smoothScrollToPosition(0);
         }
     }
 
@@ -358,6 +371,7 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
         currentPageCount = 0;
         // will be using the pull down refresh icon when reloading
         setShowMoreMeetingBtnProgressBar(false, false);
+        setListHeader(false);
         startRequestTimer();
         if (getActivity() != null &&
                 getActivity() instanceof NICIMainActivity) {
@@ -375,9 +389,24 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
         isSendingRequest = false;
         currentRequestId = null;
         setShowMoreMeetingBtnProgressBar(true, false);
+        setListHeader(true);
         if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setRefreshing(false);
         }
+    }
+
+    private void setListHeader(final boolean isVisible) {
+        if (getActivity() == null) {
+            return;
+        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (headerLayout != null) {
+                    headerLayout.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+                }
+            }
+        });
     }
 
     private void setShowMoreMeetingBtnProgressBar(
