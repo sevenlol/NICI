@@ -214,7 +214,7 @@ public class NiciEvent {
             if (photoElement != null && photoElement.isJsonObject()) {
                 Map<String, String> photoMap = JsonUtil.getStringMapFromObject(
                         photoElement.getAsJsonObject());
-                NiciContentUtil.addPhotos(contents, photoMap, true);
+                NiciContentUtil.addPhotos(contents, photoMap, false);
             }
 
             // parse attachment list

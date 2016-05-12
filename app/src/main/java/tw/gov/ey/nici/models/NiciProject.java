@@ -91,11 +91,17 @@ public class NiciProject {
             if (attachmentElement != null && attachmentElement.isJsonObject()) {
                 Map<String, String> attachmentMap = JsonUtil.getStringMapFromObject(
                         attachmentElement.getAsJsonObject());
+                /*
                 NiciContentUtil.addAttachments(
                         contents, attachmentMap,
                         false, // show heading when no attachment
                         true, true, // show key as title, label
                         ATTACHMENT_HEADING, null, null); // default heading, title, label
+                */
+                NiciContentUtil.addFileActionBars(
+                        contents, attachmentMap,
+                        true, // show heading when no attachment
+                        ATTACHMENT_HEADING); // default heading, title, label
             }
             return new NiciProject().setContentList(contents);
         }
