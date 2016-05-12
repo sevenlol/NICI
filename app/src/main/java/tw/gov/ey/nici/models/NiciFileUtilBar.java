@@ -14,10 +14,10 @@ public class NiciFileUtilBar extends NiciText {
     private static final int DEFAULT_SMALL_MARGIN = 20;
     private static final int DEFAULT_MEDIUM_MARGIN = 30;
     private static final int DEFAULT_LARGE_MARGIN = 40;
-    public static final String VIEW_LABEL = "線上瀏覽";
+    public static final String VIEW_LABEL = "線上閱讀";
     public static final String DOWNLOAD_LABEL = "下載檔案";
 
-    public static final int DEFAULT_VIEW_ICON = R.drawable.ic_pageview_black_24dp;
+    public static final int DEFAULT_VIEW_ICON = R.drawable.preview_glasses;
     public static final int DEFAULT_DOWNLOAD_ICON = R.drawable.ic_file_download_black_24dp;
 
     public static final int DEFAULT_DRAWABLE_PADDING = 20;
