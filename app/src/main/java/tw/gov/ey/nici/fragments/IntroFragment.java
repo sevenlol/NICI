@@ -1,6 +1,7 @@
 package tw.gov.ey.nici.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -36,11 +37,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import tw.gov.ey.nici.DocViewerActivity;
 import tw.gov.ey.nici.NICIMainActivity;
 import tw.gov.ey.nici.R;
 import tw.gov.ey.nici.events.IntroDataErrorEvent;
 import tw.gov.ey.nici.events.IntroDataReadyEvent;
 import tw.gov.ey.nici.models.NiciContent;
+import tw.gov.ey.nici.models.NiciDocViewerLink;
 import tw.gov.ey.nici.models.NiciImage;
 import tw.gov.ey.nici.models.NiciIntro;
 import tw.gov.ey.nici.utils.NiciContentUtils;
@@ -68,6 +71,8 @@ public class IntroFragment extends Fragment
     private RelativeLayout youtubeLayout = null;
 
     private NiciIntro model = null;
+
+    private List<NiciDocViewerLink> docViewerLinks = new ArrayList<>();
 
     private boolean isSendingRequest = true;
     private String currentRequestId = IntroModelFragment.FIRST_REQUEST_ID;
@@ -173,7 +178,22 @@ public class IntroFragment extends Fragment
 
     @Override
     public void onClick(View v) {
-        scrollToTop();
+        if (v == scrollToTopBtn) {
+            scrollToTop();
+            return;
+        }
+
+        // doc viewer link
+        for (NiciDocViewerLink link : docViewerLinks) {
+            if (link == null || link.getFileUrl() == null) {
+                continue;
+            }
+
+            if (v == link.getLinkButton(getContext())) {
+                viewDoc(link.getFileUrl(), link.getFileTitle());
+                return;
+            }
+        }
     }
 
     @Override
@@ -348,6 +368,15 @@ public class IntroFragment extends Fragment
                     imageList.add(image);
                 }
             }
+
+            // doc viewer links
+            if (content instanceof NiciDocViewerLink) {
+                NiciDocViewerLink link = (NiciDocViewerLink) content;
+                docViewerLinks.add(link);
+                if (link.getLinkButton(getContext()) != null) {
+                    link.getLinkButton(getContext()).setOnClickListener(this);
+                }
+            }
         }
 
         // TODO change image setting and check url
@@ -494,6 +523,21 @@ public class IntroFragment extends Fragment
     private void stopRequestTimer() {
         if (handler != null) {
             handler.removeCallbacks(requestTimer);
+        }
+    }
+
+    private void viewDoc(String fileUrl, String fileTitle) {
+        if (fileUrl == null || fileUrl.equals("")) {
+            return;
+        }
+
+        Intent intent = new Intent(getContext(), DocViewerActivity.class);
+        intent.putExtra(DocViewerActivity.DOC_URL_KEY, fileUrl);
+        if (fileTitle != null && !fileTitle.equals("")) {
+            intent.putExtra(DocViewerActivity.DOC_TITLE_KEY, fileTitle);
+        }
+        if (getActivity() != null) {
+            getActivity().startActivity(intent);
         }
     }
 
