@@ -7,6 +7,7 @@ import java.util.Map;
 import okhttp3.HttpUrl;
 import tw.gov.ey.nici.models.NiciContent;
 import tw.gov.ey.nici.models.NiciDocViewerLink;
+import tw.gov.ey.nici.models.NiciFileUtilBar;
 import tw.gov.ey.nici.models.NiciHeading;
 import tw.gov.ey.nici.models.NiciImage;
 import tw.gov.ey.nici.models.NiciParagraph;
@@ -120,6 +121,41 @@ public class NiciContentUtil {
                     url,
                     showKeyAsTitle ? key : DEFAULT_TITLE,
                     showKeyAsLabel ? key : DEFAULT_LABEL));
+        }
+    }
+
+    public static void addFileActionBars(
+            List<NiciContent> contentList,
+            Map<String, String> attachmentMap,
+            boolean showHeadingWhenNoAttachment,
+            String defaultHeading) {
+        if (contentList == null || attachmentMap == null) {
+            return;
+        }
+        if (defaultHeading == null) {
+            return;
+        }
+
+        // add heading
+        if (showHeadingWhenNoAttachment || attachmentMap.size() > 0) {
+            contentList.add(new NiciHeading(defaultHeading));
+        }
+
+        for (String key : attachmentMap.keySet()) {
+            if (key == null || key.equals("")) {
+                continue;
+            }
+            String url = attachmentMap.get(key);
+            if (url == null || url.equals("")) {
+                continue;
+            }
+            // file name
+            contentList.add(new NiciParagraph(key));
+            // file util bar
+            contentList.add(new NiciFileUtilBar(
+                    true, true,
+                    url,
+                    key));
         }
     }
 }
