@@ -1,5 +1,7 @@
 package tw.gov.ey.nici.models;
 
+import android.util.Log;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 

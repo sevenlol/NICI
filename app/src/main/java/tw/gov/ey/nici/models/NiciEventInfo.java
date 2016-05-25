@@ -1,5 +1,7 @@
 package tw.gov.ey.nici.models;
 
+import android.util.Log;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -184,6 +186,7 @@ public class NiciEventInfo {
             static final String CONTENT = "Content";
             static final String ATTACHMENT_LIST = "AttachmentList";
             static final String PHOTO_LIST = "PhotoList";
+            static final String LINK_LIST = "LinkList";
         }
 
         public static NiciEventInfo parse(JsonElement item) {
@@ -245,7 +248,26 @@ public class NiciEventInfo {
                 }
             }
 
-            // TODO parse related link list
+            // parse related link list
+            JsonElement linkElement = obj.get(JsonKey.LINK_LIST);
+            List<NiciEventInfo.RelatedLink> relatedLinks = new ArrayList<>();
+            if (linkElement != null && linkElement.isJsonObject()) {
+                Map<String, String> linkMap = JsonUtil.getStringMapFromObject(
+                        linkElement.getAsJsonObject());
+                for (String key : linkMap.keySet()) {
+                    if (key == null || key.equals("")) {
+                        continue;
+                    }
+                    String url = linkMap.get(key);
+                    if (url == null || url.equals("")) {
+                        continue;
+                    }
+                    NiciEventInfo.RelatedLink link = new NiciEventInfo.RelatedLink();
+                    link.linkUrl = url;
+                    link.linkLabel = key;
+                    relatedLinks.add(link);
+                }
+            }
 
             return new NiciEventInfo()
                     .setId(JsonUtil.getStringFromObject(obj, JsonKey.ID))
@@ -254,7 +276,8 @@ public class NiciEventInfo {
                     .setDate(NiciDateUtil.parseMeetingDateStr(meetingDateStr))
                     .setLocation(JsonUtil.getStringFromObject(obj, JsonKey.MEETING_LOCATION))
                     .setEventInfoContentList(contents)
-                    .setRelatedFileList(relatedFiles);
+                    .setRelatedFileList(relatedFiles)
+                    .setRelatedLinkList(relatedLinks);
         }
     }
 }
