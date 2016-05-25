@@ -19,7 +19,8 @@ import tw.gov.ey.nici.models.NiciParagraph;
 import tw.gov.ey.nici.models.NiciProject;
 
 public class NiciClientFactory {
-    private static final String SERVER_URL = "http://api.dcoffice.lab.oincloud.com/";
+    private static final String SERVER_URL = "http://www.dcoffice.com.tw/";
+//    private static final String SERVER_URL = "http://192.168.1.104:8080/";
 
     public enum ClientType {
         TESTING, SERVER
