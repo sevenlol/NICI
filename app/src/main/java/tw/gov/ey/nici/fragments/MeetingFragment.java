@@ -232,11 +232,12 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
     // meeting item clicked
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d("Meeting Event", "Item Position: " + position);
-        if (model == null || model.size() <= position) {
+        // Note position include header
+        if (model == null || model.size() <= position - 1) {
             return;
         }
 
-        NiciEvent event = model.get(position);
+        NiciEvent event = model.get(position - 1);
         if (event == null || event.getId() == null) {
             return;
         }

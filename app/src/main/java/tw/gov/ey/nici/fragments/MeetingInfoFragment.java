@@ -267,11 +267,11 @@ public class MeetingInfoFragment extends Fragment implements ListView.OnItemClic
     // meeting item clicked
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d("Meeting Event", "Item Position: " + position);
-        if (model == null || model.size() <= position) {
+        if (model == null || model.size() <= position - 1) {
             return;
         }
 
-        NiciEventInfo eventInfo = model.get(position);
+        NiciEventInfo eventInfo = model.get(position - 1);
         if (eventInfo == null || eventInfo.getId() == null) {
             return;
         }

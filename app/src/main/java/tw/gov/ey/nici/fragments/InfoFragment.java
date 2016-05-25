@@ -231,11 +231,11 @@ public class InfoFragment extends Fragment implements ListView.OnItemClickListen
     // info item clicked
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d("Info Event", "Item Position: " + position);
-        if (model == null || model.size() <= position) {
+        if (model == null || model.size() <= position - 1) {
             return;
         }
 
-        NiciInfo info = model.get(position);
+        NiciInfo info = model.get(position - 1);
         if (info == null || info.getLinkUrl() == null) {
             return;
         }
