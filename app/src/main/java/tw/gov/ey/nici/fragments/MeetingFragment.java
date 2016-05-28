@@ -125,7 +125,7 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
                 .inflate(R.layout.list_header, null);
         ImageView titleImage = (ImageView) headerLayout.findViewById(R.id.list_title);
         if (titleImage != null) {
-            titleImage.setImageResource(R.drawable.meeting_info_title);
+            titleImage.setImageResource(R.drawable.meeting_title);
         }
 
         // inflate footer layout
