@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import java.net.URLEncoder;
 
 import tw.gov.ey.nici.R;
 
@@ -51,7 +54,13 @@ public class DocViewerFragment extends Fragment implements View.OnClickListener 
             if (webView.getSettings() != null) {
                 webView.getSettings().setJavaScriptEnabled(true);
             }
-            webView.loadUrl(String.format(DOC_VIEWER_URL_FORMAT, docUrl));
+            try {
+                webView.loadUrl(String.format(
+                        DOC_VIEWER_URL_FORMAT,
+                        URLEncoder.encode(docUrl, "utf-8")));
+            } catch (Exception e) {
+                Log.e("Doc Viewer", e.toString());
+            }
         }
 
         scrollToTopBtn = (FloatingActionButton) root.findViewById(R.id.scroll_to_top_btn);
