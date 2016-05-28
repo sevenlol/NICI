@@ -51,6 +51,8 @@ public class NiciInfoAdapter extends ArrayAdapter<NiciInfo> {
         viewHolder.publishedBy.setText(String.format(
                 getContext().getString(R.string.info_published_by_str_format),
                 info.getPublishedBy() == null ? "" : info.getPublishedBy()));
+        // disable publish field
+        viewHolder.publishedBy.setVisibility(View.GONE);
         String dateStr = "";
         if (info.getDate() != null) {
             try {
