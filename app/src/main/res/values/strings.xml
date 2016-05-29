@@ -72,7 +72,7 @@
     <string name="pref_display_choice_summary">調整顯示內容的大小</string>
 
     <string name="about_title">關於</string>
-    <string name="about_description">國家資訊通信發展推動 (NICI) 小組</string>
+    <string name="about_description">數位匯流辦公室</string>
     <string name="about_website_group">相關連結</string>
     <string name="about_version_format">版本：%s</string>
 </resources>
