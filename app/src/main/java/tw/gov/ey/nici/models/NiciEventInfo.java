@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 import tw.gov.ey.nici.utils.JsonUtil;
 import tw.gov.ey.nici.utils.NiciContentUtil;
@@ -185,6 +187,10 @@ public class NiciEventInfo {
 
             static final String CONTENT = "Content";
             static final String ATTACHMENT_LIST = "AttachmentList";
+            static final String ATTACHMENT_NAME = "name";
+            static final String ATTACHMENT_URL = "url";
+            static final String LINK_NAME = "name";
+            static final String LINK_URL = "url";
             static final String PHOTO_LIST = "PhotoList";
             static final String LINK_LIST = "LinkList";
         }
@@ -220,18 +226,29 @@ public class NiciEventInfo {
 
             // parse photo list
             JsonElement photoElement = obj.get(JsonKey.PHOTO_LIST);
-            if (photoElement != null && photoElement.isJsonObject()) {
-                Map<String, String> photoMap = JsonUtil.getStringMapFromObject(
-                        photoElement.getAsJsonObject());
+            if (photoElement != null && photoElement.isJsonArray()) {
+                // cuz idiots changing API on their own
+//                Map<String, String> photoMap = JsonUtil.getStringMapFromObject(
+//                        photoElement.getAsJsonObject());
+                Set<String> photoSet = JsonUtil.getStringSetFromArray(photoElement.getAsJsonArray());
+                Map<String, String> photoMap = new TreeMap<>();
+                for (String url : photoSet) {
+                    photoMap.put(url, url);
+                }
                 NiciContentUtil.addPhotos(contents, photoMap, false);
             }
 
             // parse attachment list
             JsonElement attachmentElement = obj.get(JsonKey.ATTACHMENT_LIST);
             List<NiciEventInfo.RelatedFile> relatedFiles = new ArrayList<>();
-            if (attachmentElement != null && attachmentElement.isJsonObject()) {
-                Map<String, String> attachmentMap = JsonUtil.getStringMapFromObject(
-                        attachmentElement.getAsJsonObject());
+            if (attachmentElement != null && attachmentElement.isJsonArray()) {
+                /*Map<String, String> attachmentMap = JsonUtil.getStringMapFromObject(
+                        attachmentElement.getAsJsonObject());*/
+                // cuz idiots changing API on their own
+                Map<String, String> attachmentMap = JsonUtil.getStringMapFromArray(
+                        attachmentElement.getAsJsonArray(),
+                        JsonKey.ATTACHMENT_NAME,
+                        JsonKey.ATTACHMENT_URL);
                 for (String key : attachmentMap.keySet()) {
                     if (key == null || key.equals("")) {
                         continue;
@@ -251,9 +268,14 @@ public class NiciEventInfo {
             // parse related link list
             JsonElement linkElement = obj.get(JsonKey.LINK_LIST);
             List<NiciEventInfo.RelatedLink> relatedLinks = new ArrayList<>();
-            if (linkElement != null && linkElement.isJsonObject()) {
-                Map<String, String> linkMap = JsonUtil.getStringMapFromObject(
-                        linkElement.getAsJsonObject());
+            if (linkElement != null && linkElement.isJsonArray()) {
+                // cuz idiots changing API on their own
+//                Map<String, String> linkMap = JsonUtil.getStringMapFromObject(
+//                        linkElement.getAsJsonObject());
+                Map<String, String> linkMap = JsonUtil.getStringMapFromArray(
+                        linkElement.getAsJsonArray(),
+                        JsonKey.LINK_NAME,
+                        JsonKey.LINK_URL);
                 for (String key : linkMap.keySet()) {
                     if (key == null || key.equals("")) {
                         continue;
