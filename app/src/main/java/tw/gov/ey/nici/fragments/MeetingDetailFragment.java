@@ -2,6 +2,7 @@ package tw.gov.ey.nici.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -10,10 +11,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -225,15 +228,37 @@ public class MeetingDetailFragment extends Fragment
         // clear all child views
         meetingDetailContainer.removeAllViews();
 
+        // get parent width
+        // get parent width
+        int width = -1;
+        if (getActivity() != null &&
+            getActivity().getWindowManager() != null) {
+            Display display = getActivity()
+                    .getWindowManager()
+                    .getDefaultDisplay();
+            if (display != null) {
+                Point size = new Point();
+                display.getSize(size);
+                width = size.x;
+            }
+        }
+
         // set cover image
         if (model.getCoverImageUrl() != null && !model.getCoverImageUrl().equals("")) {
             NiciImage coverImage = new NiciImage(model.getCoverImageUrl(), null);
             View view = coverImage.getView(getContext(), displayChoice);
             if (view != null) {
                 meetingDetailContainer.addView(view);
-                Picasso.with(getActivity())
-                        .load(coverImage.getImageUrl())
-                        .into(coverImage.getImageView(getActivity()));
+                if (width > 0) {
+                    Picasso.with(getActivity())
+                            .load(coverImage.getImageUrl())
+                            .resize(width, 0)
+                            .into(coverImage.getImageView(getActivity()));
+                } else {
+                    Picasso.with(getActivity())
+                            .load(coverImage.getImageUrl())
+                            .into(coverImage.getImageView(getActivity()));
+                }
             }
         }
 
@@ -246,7 +271,6 @@ public class MeetingDetailFragment extends Fragment
             if (view == null) {
                 continue;
             }
-            meetingDetailContainer.addView(view);
 
             // save NiciImage to a list
             if (content instanceof NiciImage) {
@@ -256,6 +280,8 @@ public class MeetingDetailFragment extends Fragment
                     imageList.add(image);
                 }
             }
+
+            meetingDetailContainer.addView(view);
         }
 
         // set related files
@@ -288,9 +314,16 @@ public class MeetingDetailFragment extends Fragment
 
         // TODO change image setting and check url
         for (NiciImage image : imageList) {
-            Picasso.with(getActivity())
-                    .load(image.getImageUrl())
-                    .into(image.getImageView(getActivity()));
+            if (width > 0) {
+                Picasso.with(getActivity())
+                        .load(image.getImageUrl())
+                        .resize(width, 0)
+                        .into(image.getImageView(getActivity()));
+            } else {
+                Picasso.with(getActivity())
+                        .load(image.getImageUrl())
+                        .into(image.getImageView(getActivity()));
+            }
         }
     }
 

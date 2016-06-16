@@ -2,6 +2,7 @@ package tw.gov.ey.nici.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -227,15 +229,36 @@ public class MeetingInfoDetailFragment extends Fragment
         // clear all child views
         meetingInfoDetailContainer.removeAllViews();
 
+        // get parent width
+        int width = -1;
+        if (getActivity() != null &&
+            getActivity().getWindowManager() != null) {
+            Display display = getActivity()
+                    .getWindowManager()
+                    .getDefaultDisplay();
+            if (display != null) {
+                Point size = new Point();
+                display.getSize(size);
+                width = size.x;
+            }
+        }
+
         // set cover image
         if (model.getCoverImageUrl() != null && !model.getCoverImageUrl().equals("")) {
             NiciImage coverImage = new NiciImage(model.getCoverImageUrl(), null);
             View view = coverImage.getView(getContext(), displayChoice);
             if (view != null) {
                 meetingInfoDetailContainer.addView(view);
-                Picasso.with(getActivity())
-                        .load(coverImage.getImageUrl())
-                        .into(coverImage.getImageView(getActivity()));
+                if (width > 0) {
+                    Picasso.with(getActivity())
+                            .load(coverImage.getImageUrl())
+                            .resize(width, 0)
+                            .into(coverImage.getImageView(getActivity()));
+                } else {
+                    Picasso.with(getActivity())
+                            .load(coverImage.getImageUrl())
+                            .into(coverImage.getImageView(getActivity()));
+                }
             }
         }
 
@@ -315,9 +338,16 @@ public class MeetingInfoDetailFragment extends Fragment
 
         // TODO change image setting and check url
         for (NiciImage image : imageList) {
-            Picasso.with(getActivity())
-                    .load(image.getImageUrl())
-                    .into(image.getImageView(getActivity()));
+            if (width > 0) {
+                Picasso.with(getActivity())
+                        .load(image.getImageUrl())
+                        .resize(width, 0)
+                        .into(image.getImageView(getActivity()));
+            } else {
+                Picasso.with(getActivity())
+                        .load(image.getImageUrl())
+                        .into(image.getImageView(getActivity()));
+            }
         }
     }
 
