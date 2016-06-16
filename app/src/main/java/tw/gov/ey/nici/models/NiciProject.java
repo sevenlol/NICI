@@ -58,6 +58,8 @@ public class NiciProject {
             static final String CONTENT = "Content";
             static final String POST_DATE = "PostDate";
             static final String ATTACHMENT_LIST = "AttachmentList";
+            static final String ATTACHMENT_NAME = "name";
+            static final String ATTACHMENT_URL = "url";
         }
 
         public static NiciProject parse(JsonElement data) {
@@ -88,16 +90,15 @@ public class NiciProject {
 
             // parse attachment list, do nothing atm
             JsonElement attachmentElement = obj.get(NiciProject.Parser.JsonKey.ATTACHMENT_LIST);
-            if (attachmentElement != null && attachmentElement.isJsonObject()) {
-                Map<String, String> attachmentMap = JsonUtil.getStringMapFromObject(
+            if (attachmentElement != null && attachmentElement.isJsonArray()) {
+                // cuz idiots changing API on their own
+                /*Map<String, String> attachmentMap = JsonUtil.getStringMapFromObject(
                         attachmentElement.getAsJsonObject());
-                /*
-                NiciContentUtil.addAttachments(
-                        contents, attachmentMap,
-                        false, // show heading when no attachment
-                        true, true, // show key as title, label
-                        ATTACHMENT_HEADING, null, null); // default heading, title, label
                 */
+                Map<String, String> attachmentMap = JsonUtil.getStringMapFromArray(
+                        attachmentElement.getAsJsonArray(),
+                        JsonKey.ATTACHMENT_NAME,
+                        JsonKey.ATTACHMENT_URL);
                 NiciContentUtil.addFileActionBars(
                         contents, attachmentMap,
                         true, // show heading when no attachment
