@@ -63,6 +63,8 @@ public class NiciIntro {
             static final String CONTENT = "Content";
             static final String POST_DATE = "PostDate";
             static final String ATTACHMENT_LIST = "AttachmentList";
+            static final String ATTACHMENT_NAME = "name";
+            static final String ATTACHMENT_URL = "url";
             static final String VIDEO = "Video";
         }
 
@@ -98,9 +100,15 @@ public class NiciIntro {
 
             // parse attachment list, do nothing atm
             JsonElement attachmentElement = obj.get(JsonKey.ATTACHMENT_LIST);
-            if (attachmentElement != null && attachmentElement.isJsonObject()) {
-                Map<String, String> attachmentMap = JsonUtil.getStringMapFromObject(
+            if (attachmentElement != null && attachmentElement.isJsonArray()) {
+                // cuz idiots changing API on their own
+                /*Map<String, String> attachmentMap = JsonUtil.getStringMapFromObject(
                         attachmentElement.getAsJsonObject());
+                */
+                Map<String, String> attachmentMap = JsonUtil.getStringMapFromArray(
+                        attachmentElement.getAsJsonArray(),
+                        JsonKey.ATTACHMENT_NAME,
+                        JsonKey.ATTACHMENT_URL);
                 NiciContentUtil.addAttachments(
                         contents, attachmentMap,
                         false, // show heading when no attachment
