@@ -158,9 +158,9 @@ public class MeetingFragment extends Fragment  implements ListView.OnItemClickLi
         listView = (ListView) root.findViewById(R.id.meeting_list);
         listView.setOnItemClickListener(this);
         listView.setOnScrollListener(this);
-        listView.setAdapter(adapter);
         listView.addHeaderView(headerLayout);
         listView.addFooterView(footerLayout);
+        listView.setAdapter(adapter);
 
         return root;
     }
