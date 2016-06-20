@@ -16,6 +16,7 @@ import java.util.TreeMap;
 import tw.gov.ey.nici.utils.JsonUtil;
 import tw.gov.ey.nici.utils.NiciContentUtil;
 import tw.gov.ey.nici.utils.NiciDateUtil;
+import tw.gov.ey.nici.utils.URLUtil;
 
 public class NiciEventInfo {
     private String id;
@@ -233,7 +234,7 @@ public class NiciEventInfo {
                 Set<String> photoSet = JsonUtil.getStringSetFromArray(photoElement.getAsJsonArray());
                 Map<String, String> photoMap = new TreeMap<>();
                 for (String url : photoSet) {
-                    photoMap.put(url, url);
+                    photoMap.put(URLUtil.handleChineseUrl(url), URLUtil.handleChineseUrl(url));
                 }
                 NiciContentUtil.addPhotos(contents, photoMap, false);
             }
@@ -293,7 +294,8 @@ public class NiciEventInfo {
 
             return new NiciEventInfo()
                     .setId(JsonUtil.getStringFromObject(obj, JsonKey.ID))
-                    .setCoverImageUrl(JsonUtil.getStringFromObject(obj, JsonKey.PHOTO))
+                    .setCoverImageUrl(URLUtil.handleChineseUrl(
+                            JsonUtil.getStringFromObject(obj, JsonKey.PHOTO)))
                     .setTitle(JsonUtil.getStringFromObject(obj, JsonKey.TITLE))
                     .setDate(NiciDateUtil.parseMeetingDateStr(meetingDateStr))
                     .setLocation(JsonUtil.getStringFromObject(obj, JsonKey.MEETING_LOCATION))

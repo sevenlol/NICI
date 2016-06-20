@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -249,14 +250,15 @@ public class MeetingInfoDetailFragment extends Fragment
             View view = coverImage.getView(getContext(), displayChoice);
             if (view != null) {
                 meetingInfoDetailContainer.addView(view);
+                String coverUrl = coverImage.getImageUrl();
                 if (width > 0) {
                     Picasso.with(getActivity())
-                            .load(coverImage.getImageUrl())
+                            .load(coverUrl)
                             .resize(width, 0)
                             .into(coverImage.getImageView(getActivity()));
                 } else {
                     Picasso.with(getActivity())
-                            .load(coverImage.getImageUrl())
+                            .load(coverUrl)
                             .into(coverImage.getImageView(getActivity()));
                 }
             }
